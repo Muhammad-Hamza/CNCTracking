@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="2dp">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:id="@+id/right_icon_layout"
+    >
+
+    <ImageView
+        android:id="@+id/iconImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0px"
+
+        android:src="@mipmap/stop_device"></ImageView>
+
+    <TextView
+        android:id="@+id/lasttime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/button_color"
+
+        android:textAlignment="center"
+        android:text=""
+        android:textSize="14dp"
+        android:layout_below="@id/iconImage"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="40dp"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:id="@+id/middle_data"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/right_icon_layout"
+        >
+    <TextView
+        android:id="@+id/label1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123"
+        android:textStyle="bold"
+        android:textSize="14dp"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:id="@+id/label2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:textSize="14dp"
+        android:layout_marginTop="2dp"
+        >
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/label3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/button_color"
+        android:text="123"
+        android:textSize="12dp"
+        android:layout_marginTop="2dp"
+        android:drawableLeft="@drawable/ic_baseline_access_time_24"
+
+        >
+    </TextView>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/eyes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_outline_remove_red_eye_24" />
+
+</RelativeLayout>

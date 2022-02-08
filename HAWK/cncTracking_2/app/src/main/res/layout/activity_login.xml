@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context=".ui.login.Login">
+
+
+
+
+    <LinearLayout
+        android:id="@+id/userlogin"
+        android:layout_width="match_parent"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/logo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@mipmap/logofull"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:transitionName="logo1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="24dp"
+            android:layout_marginBottom="20dp"
+            android:text="Sing In"
+            android:textColor="@color/light_blue_A400" />
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignLeft="@+id/editText2"
+            android:layout_above="@+id/editText2"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000"
+            android:hint="Username"
+            android:ems="12"
+            android:background="@drawable/border_white"
+            />
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignLeft="@+id/editText2"
+            android:layout_above="@+id/editText2"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:ems="12"
+            android:background="@drawable/border_white"
+            />
+
+        <LinearLayout
+            android:id="@+id/remember"
+            android:layout_width="match_parent"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ></CheckBox>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentRight="true"
+            android:textColor="#000"
+            android:text="Remember me" />
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/forget"
+            android:layout_width="match_parent"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/loginbutton"
+            android:layout_centerHorizontal="true"
+            android:text=" Login "
+            android:textColor="@android:color/white"
+            android:textSize="12sp" >
+        </Button>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:id="@+id/forget_psw"
+                android:layout_centerVertical="true"
+
+                android:text="Forgot password"
+                android:textColor="@color/black_overlay" />
+        </RelativeLayout>
+    </LinearLayout>
+        <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
+
+</LinearLayout>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "81523534200",
+    "project_id": "cnc-tracking-47ead",
+    "storage_bucket": "cnc-tracking-47ead.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81523534200:android:3d74056c311a33e575c08d",
+        "android_client_info": {
+          "package_name": "com.cnc.hawki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81523534200-84gk4640d028845lt3q9492o6lue56m6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cnc.hawki",
+            "certificate_hash": "46c3cfd8ad05f2726117d236ff0be4fe5a08af6b"
+          }
+        },
+        {
+          "client_id": "81523534200-elqum9fsgu3ogidcojrsbu61t77mse8e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-BJ22tAiCT9H-MRdWiyZl4ZavXZ9chZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81523534200-elqum9fsgu3ogidcojrsbu61t77mse8e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

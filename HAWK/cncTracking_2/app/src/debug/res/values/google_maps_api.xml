@@ -1,0 +1,27 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=1C:09:66:4B:0A:D9:7E:4B:12:28:1E:4A:B8:8F:7E:3C:C9:28:A3:66%3Bcom.example.cnctracking_2.ui.map
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.example.cnctracking_2.ui.map
+
+    SHA-1 certificate fingerprint:
+    1C:09:66:4B:0A:D9:7E:4B:12:28:1E:4A:B8:8F:7E:3C:C9:28:A3:66
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    AIzaSyA-B7VASkLM735Uwav422i9XXiR3HLLT1k
+    AIzaSyAOK9MP8idJbYXDge7dJ6QH3GhK1a5wMDU on playstore consol api
+    AIzaSyDgj0Gxntc8oyENh3nxPssWLLfzr6z5OEw
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAOK9MP8idJbYXDge7dJ6QH3GhK1a5wMDU</string>
+</resources>

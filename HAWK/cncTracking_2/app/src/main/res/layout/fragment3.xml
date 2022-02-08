@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <fragment
+        android:id="@+id/myMap"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        />
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/map_hybrid"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Satellite"
+        android:textAllCaps="false"
+        android:background="#80ffffff"
+        android:textColor="#000"/>
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/map_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Map"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/map_hybrid"
+        android:layout_toRightOf="@+id/map_hybrid"
+        android:textAllCaps="false"
+        android:background="#80ffffff"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/redCircle"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="65dp"
+        android:layout_marginLeft="25dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="END POINT"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/redCircle"
+        android:layout_marginBottom="65dp" />
+
+
+    <TextView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/greenCircle"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="90dp"
+        android:layout_marginLeft="25dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IGNITION ON"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/redCircle"
+        android:layout_marginBottom="90dp"/>
+</RelativeLayout>

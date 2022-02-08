@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+
+    android:orientation="vertical">
+
+>
+
+    <RelativeLayout
+        android:id="@+id/total"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Choose Date: "
+            android:textSize="12dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/change_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentRight="true"
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/ic_baseline_calendar_month_24"
+            android:text="0"
+            android:textSize="16dp"></TextView>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/oneColumn"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/total"
+        android:gravity="center"
+        android:weightSum="3"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/totaldistancebox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:clickable="true"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/vImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:src="@mipmap/distancetotal" />
+
+            <TextView
+                android:id="@+id/distance_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:textColor="@color/button_color"
+                android:textStyle="bold"
+                android:text="-" />
+            <TextView
+                android:id="@+id/runningduration_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/button_color"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:text="-" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/trips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:clickable="true"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/tImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:src="@mipmap/redpin" />
+
+            <TextView
+                android:id="@+id/stop_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:textColor="@color/design_default_color_error"
+                android:textStyle="bold"
+                android:text="-" />
+            <TextView
+                android:id="@+id/stopduration_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/design_default_color_error"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:text=" " />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bell_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/t3Img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:src="@mipmap/bell" />
+
+            <TextView
+                android:id="@+id/alerts_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="-" />
+            <TextView
+                android:id="@+id/alerts_total_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:text=" " />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/heading_row"
+        android:layout_below="@id/oneColumn"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:layout_marginTop="@dimen/list_item_spacing_half"
+        >
+
+        <TextView
+            android:id="@+id/labelh1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance / Duration"
+            android:layout_marginLeft="5dp"
+
+            android:textColor="@color/black"
+            android:textSize="13dp"  />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="11dp"
+            android:id="@+id/heading_bar"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true">
+        <TextView
+            android:id="@+id/labelh2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time "
+            android:drawableLeft="@drawable/ic_baseline_access_time_24"
+            android:textColor="@color/black"
+            android:layout_marginRight="7dp"
+            android:textSize="13dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top Speed"
+            android:drawableLeft="@drawable/ic_baseline_speed_24"
+            android:textColor="@color/black"
+            android:layout_toRightOf="@id/labelh2"
+            android:textSize="13dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/heading_bar"
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                android:text=""/>
+        </LinearLayout>
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/heading_row"
+        android:layout_marginTop="4dp"
+        android:textSize="13dp"
+        android:dividerHeight="1dp" />
+
+
+
+</RelativeLayout>

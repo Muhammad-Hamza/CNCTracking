@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.map.ui.InfoFragment"
+
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/images_row"
+        android:layout_marginHorizontal="10dp"
+        android:layout_below="@+id/oneColumn"
+        android:gravity="center"
+        android:weightSum="3"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/infoicon"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_white"
+            android:clickable="true"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+            <ImageView
+                android:id="@+id/info_device_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/stop_device_d" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13dp"
+                android:text=" "
+                android:layout_marginTop="4dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/controlicon"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_white"
+            android:clickable="true"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/speedometer" />
+            <TextView
+                android:id="@+id/speed_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:text="-"
+                android:layout_marginTop="4dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/historyicon"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_white"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:gravity="center"
+
+            android:orientation="vertical" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/clock" />
+            <TextView
+                android:id="@+id/last_packet_time_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:text=" "
+                android:layout_marginTop="4dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/grey"
+                android:text=""/>
+        </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/adressHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:text="Address" />
+
+        <TextView
+            android:id="@+id/adress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/adressHeading"
+            android:layout_alignParentRight="true"
+            android:text="-"
+            android:textColor="@color/black_overlay" />
+
+
+
+        <TextView
+            android:id="@+id/sortsection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/adress"
+            android:textSize="14dp"
+            android:text="Short Section"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/share"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@id/adress"
+            android:id="@+id/like"
+            android:background="@mipmap/like" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@id/configure"
+            android:layout_marginRight="20dp"
+            android:layout_below="@id/adress"
+            android:id="@+id/share"
+            android:background="@mipmap/share" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/adress"
+            android:id="@+id/configure"
+            android:background="@mipmap/settings" />
+
+
+
+        <TextView
+            android:id="@+id/satelliteheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/sortsection"
+            android:text="Satellite"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/satellite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/sortsection"
+            android:text="-"/>
+
+        <TextView
+            android:id="@+id/dateheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/satelliteheading"
+            android:text="Date/Time"
+            android:layout_marginTop="4dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:textColor="@color/button_color"
+            android:drawableLeft="@drawable/ic_baseline_access_time_24"
+            android:layout_below="@id/satellite"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentRight="true"
+            android:text="-"/>
+
+        <TextView
+             android:id="@+id/odoheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/dateheading"
+            android:layout_marginTop="4dp"
+            android:text="Odo Meter"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/odo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/date"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentRight="true"
+            android:text="-"/>
+
+        <TextView
+            android:id="@+id/batteryh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/odoheading"
+            android:text="Vehicle Battery"
+            android:layout_marginTop="4dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/battery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/odo"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentRight="true"
+            android:text="-"/>
+
+        <TextView
+            android:id="@+id/driverh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/batteryh"
+            android:layout_marginTop="4dp"
+            android:text="Driver"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/driver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/battery"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentRight="true"
+            android:text="-"/>
+
+        <TextView
+            android:id="@+id/temph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/driverh"
+            android:layout_marginTop="4dp"
+            android:text="Temperature"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/driver"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentRight="true"
+            android:text="-"/>
+
+        <TextView
+            android:id="@+id/fuelh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/temph"
+            android:text="Fuel"
+            android:layout_marginTop="4dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/fuel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:layout_below="@id/temph"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentRight="true"
+            android:text="-"/>
+    </RelativeLayout>
+    </LinearLayout>
+</FrameLayout>
