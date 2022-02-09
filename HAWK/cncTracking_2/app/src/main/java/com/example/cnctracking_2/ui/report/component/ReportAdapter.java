@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cnctracking_2.R;
+import com.example.cnctracking_2.data.model.DataItem;
+import com.example.cnctracking_2.data.model.DataPointsItem;
 import com.example.cnctracking_2.data.model.WeeklyReportsItem;
 import com.example.cnctracking_2.data.model.local.ChartModel;
 import com.github.mikephil.charting.charts.BarChart;
@@ -34,17 +36,20 @@ import com.google.android.material.transition.Hold;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
+public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder>
+{
 
     private List<WeeklyReportsItem> list;
 
-    public ReportAdapter(List<WeeklyReportsItem> model) {
+    public ReportAdapter(List<WeeklyReportsItem> model)
+    {
         this.list = model;
     }
 
     @NonNull
     @Override
-    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_report, parent, false);
         return new Holder(v);
 //        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_report, parent, false));
@@ -52,28 +57,67 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int position) {
+    public void onBindViewHolder(@NonNull Holder holder, int position)
+    {
         holder.loadBarChart(list.get(position), position);
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return list.size();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder
+    {
 
         BarChart chart;
         TextView tvTitle;
 
-        public Holder(View itemView) {
+        public Holder(View itemView)
+        {
             super(itemView);
             chart = itemView.findViewById(R.id.barChart);
             tvTitle = itemView.findViewById(R.id.tvTitle);
         }
 
-        protected void loadBarChart(WeeklyReportsItem chartModel, int position) {
-            tvTitle.setText(chartModel.getTitle().getText());
+        private int getTotalValue(WeeklyReportsItem item)
+        {
+            int sum = 0;
+            for (DataPointsItem dataItem : item.getDataPoints())
+            {
+                sum += Integer.parseInt(dataItem.getY());
+            }
+
+            return sum;
+        }
+
+        private String getGraphText(String text, Context context, WeeklyReportsItem item)
+        {
+            switch (text)
+            {
+                case "Mileage Covered":
+                    return context.getString(R.string.txtMileageCovered, getTotalValue(item));
+                case "Trips Count":
+                    return context.getString(R.string.txtTotalTrips, getTotalValue(item));
+                case "Fuel Used":
+                    return context.getString(R.string.txtTotalFuel, getTotalValue(item));
+                case "Speed Graph":
+                    return context.getString(R.string.txtTotalSpeed, getTotalValue(item));
+                case "Max Speed":
+                    return context.getString(R.string.txtMaxSpeed, getTotalValue(item));
+                case "Idling Count":
+                    return context.getString(R.string.txtIdlingCount, getTotalValue(item));
+                case "Fence Count":
+                    return context.getString(R.string.txtFenceCount, getTotalValue(item));
+                default:
+                    return "Text Not Found";
+            }
+        }
+
+        protected void loadBarChart(WeeklyReportsItem chartModel, int position)
+        {
+            tvTitle.setText(getGraphText(chartModel.getTitle().getText(), itemView.getContext(), chartModel));
             chart.setDrawBarShadow(false);
             chart.setDrawValueAboveBar(true);
 
@@ -99,10 +143,12 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             xAxis.setLabelCount(7);
             xAxis.setTextSize(8f);
 //            final String xVal[]={"Val1","Val2","Val3"};
-            xAxis.setValueFormatter(new IndexAxisValueFormatter() {
+            xAxis.setValueFormatter(new IndexAxisValueFormatter()
+            {
                 @Override
-                public String getFormattedValue(float value) {
-                    return chartModel.getData().get(0).getDataPoints().get((int) value).getLabel();//super.getFormattedValue(value);
+                public String getFormattedValue(float value)
+                {
+                    return chartModel.getDataPoints().get((int) value).getLabel();//super.getFormattedValue(value);
                 }
 
 //                @Override
@@ -117,7 +163,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 //
             YAxis leftAxis = chart.getAxisLeft();
 //            leftAxis.setTypeface(tfLight);
-            leftAxis.setLabelCount(chartModel.getData().size(), false);
+            leftAxis.setLabelCount(chartModel.getDataPoints().size(), false);
 //            leftAxis.setValueFormatter(custom);
             leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
             leftAxis.setSpaceTop(15f);
@@ -127,7 +173,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             YAxis rightAxis = chart.getAxisRight();
             rightAxis.setDrawGridLines(false);
 //            rightAxis.setTypeface(tfLight);
-            rightAxis.setLabelCount(chartModel.getData().size(), false);
+            rightAxis.setLabelCount(chartModel.getDataPoints().size(), false);
 //            rightAxis.setValueFormatter(custom);
             rightAxis.setSpaceTop(15f);
             rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
@@ -143,7 +189,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             l.setTextSize(11f);
             l.setXEntrySpace(4f);
 
-            initData(chartModel, itemView.getContext(),position);
+            initData(chartModel, itemView.getContext(), position);
 //            XYMarkerView mv = new XYMarkerView(this, xAxisFormatter);
 //            mv.setChartView(chart); // For bounds control
 //            chart.setMarker(mv); // Set the marker to the chart
@@ -205,15 +251,16 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 //            barChart.invalidate();
         }
 
-        private void initData(WeeklyReportsItem chartModel, Context context, int position) {
+        private void initData(WeeklyReportsItem chartModel, Context context, int position)
+        {
 
             ArrayList<BarEntry> values = new ArrayList<>();
 
-            for (int i = 0; i < chartModel.getData().get(0).getDataPoints().size(); i++) {
+            for (int i = 0; i < chartModel.getDataPoints().size(); i++)
+            {
 
 //                    values.add(new BarEntry(i, val, context.getResources().getDrawable(R.drawable.star)));
-                values.add(new BarEntry(i, Float.parseFloat(chartModel.getData().get(0).getDataPoints().get(i).getY()),
-                        chartModel.getData().get(0).getDataPoints().get(i).getY()));
+                values.add(new BarEntry(i, Float.parseFloat(chartModel.getDataPoints().get(i).getY()), chartModel.getData().get(0).getDataPoints().get(i).getY()));
             }
 
             BarDataSet set1;
@@ -244,8 +291,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
         }
     }
 
-    private int getColorId(int position, Context context) {
-        switch (position) {
+    private int getColorId(int position, Context context)
+    {
+        switch (position)
+        {
             case 0:
                 return Color.RED;
             case 1:

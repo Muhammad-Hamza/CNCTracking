@@ -1,11 +1,26 @@
 package com.example.cnctracking_2.data.model;
 
 import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
 public class DataItem{
-	private List<DataPointsItem> dataPoints;
-	private String type;
+
+	@SerializedName("name")
 	private String name;
+
+	@SerializedName("dataPoints")
+	private List<DataPointsItem> dataPoints;
+
+	@SerializedName("type")
+	private String type;
+
+	public void setName(String name){
+		this.name = name;
+	}
+
+	public String getName(){
+		return name;
+	}
 
 	public void setDataPoints(List<DataPointsItem> dataPoints){
 		this.dataPoints = dataPoints;
@@ -23,11 +38,13 @@ public class DataItem{
 		return type;
 	}
 
-	public void setName(String name){
-		this.name = name;
-	}
-
-	public String getName(){
-		return name;
-	}
+	@Override
+ 	public String toString(){
+		return 
+			"DataItem{" + 
+			"name = '" + name + '\'' + 
+			",dataPoints = '" + dataPoints + '\'' + 
+			",type = '" + type + '\'' + 
+			"}";
+		}
 }

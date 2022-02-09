@@ -48,12 +48,12 @@
     <string name="menu_report">Report</string>
     <string name="default_notification_channel_id">CNC_TRACKING_CHANNEL</string>
     <string name="txt_mark_done"><u>Mark Done</u></string>
-    <string name="txtMileageCovered">Do you know you have driven %1$s kilometers in the past 7 days</string>
-    <string name="txtTotalTrips">Do you know you have %1$s total trips in the past 7 days</string>
-    <string name="txtTotalSpeed">Do you know you had average speed of %1$s Km/hr in the past 7 days</string>
-    <string name="txtTotalFuel">Do you know you have user %1$s liters fuel in the past 7 days</string>
-    <string name="txtMaxSpeed">Do you know you have driven your vehicle at average maximum speed of %1$s km/hr in the past 7 days</string>
-    <string name="txtIdlingCount">Do you know your idling count is %1$s for the past 7 days</string>
-    <string name="txtFenceCount">Do you know your fence count is %1$s for the past 7 days</string>
+    <string name="txtMileageCovered">Do you know you have driven %1$d kilometers in the past 7 days</string>
+    <string name="txtTotalTrips">Do you know you have %1$d total trips in the past 7 days</string>
+    <string name="txtTotalSpeed">Do you know you had average speed of %1$d Km/hr in the past 7 days</string>
+    <string name="txtTotalFuel">Do you know you have user %1$d liters fuel in the past 7 days</string>
+    <string name="txtMaxSpeed">Do you know you have driven your vehicle at average maximum speed of %1$d km/hr in the past 7 days</string>
+    <string name="txtIdlingCount">Do you know your idling count is %1$d for the past 7 days</string>
+    <string name="txtFenceCount">Do you know your fence count is %1$d for the past 7 days</string>
     <string name="txtSeeGraph">See the chart below for past 7 days.</string>
 </resources>
