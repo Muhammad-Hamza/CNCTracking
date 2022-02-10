@@ -11,6 +11,9 @@ public class DataItem{
 	@SerializedName("dataPoints")
 	private List<DataPointsItem> dataPoints;
 
+	@SerializedName("color")
+	private String color;
+
 	@SerializedName("type")
 	private String type;
 
@@ -36,6 +39,10 @@ public class DataItem{
 
 	public String getType(){
 		return type;
+	}
+
+	public String getColor() {
+		return color;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.example.cnctracking_2.data.model.local;
 
+import com.example.cnctracking_2.data.model.DataItem;
 import com.example.cnctracking_2.data.model.DataPointsItem;
 
 import java.util.List;
@@ -11,17 +12,19 @@ public class NewGraphModel {
     private String barLabel;
     private boolean isMultipleAdded;
     private String details;
-    private Map<String, List<DataPointsItem>> multipleMapping;
+    //    private Map<String, List<DataPointsItem>> multipleMapping;
     private List<DataPointsItem> listOfDataPoint;
     private String color;
     private String firstHeading;
     private String secondHeading;
 
+    private List<DataItem> dataItems;
 
-    public NewGraphModel(int id, String title, String details, boolean isMultipleAdded, Map<String, List<DataPointsItem>> multipleMapping) {
+    public NewGraphModel(int id, String title, String details, boolean isMultipleAdded, List<DataItem> dataItems) {
         this.id = id;
         this.title = title;
-        this.multipleMapping = multipleMapping;
+        this.dataItems = dataItems;
+//        this.multipleMapping = multipleMapping;
         this.isMultipleAdded = isMultipleAdded;
         this.details = details;
     }
@@ -69,9 +72,13 @@ public class NewGraphModel {
         return isMultipleAdded;
     }
 
-    public Map<String, List<DataPointsItem>> getMultipleMapping() {
-        return multipleMapping;
+    public List<DataItem> getDataItems() {
+        return dataItems;
     }
+
+    //    public Map<String, List<DataPointsItem>> getMultipleMapping() {
+//        return multipleMapping;
+//    }
 
     public List<DataPointsItem> getListOfDataPoint() {
         return listOfDataPoint;

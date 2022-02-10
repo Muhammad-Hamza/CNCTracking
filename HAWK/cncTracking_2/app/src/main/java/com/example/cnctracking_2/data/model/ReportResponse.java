@@ -57,21 +57,21 @@ public class ReportResponse {
     public List<NewGraphModel> getAllData() {
         List<NewGraphModel> list = new ArrayList<>();
         if (driverBehavior != null && driverBehavior.getData() != null && driverBehavior.getData().size() > 0) {
-            Map<String, List<DataPointsItem>> mapDriverBehaviour = new HashMap<>();
-            for (int i = 0; i < driverBehavior.getData().size(); i++) {
-                for (int j = 0; j < driverBehavior.getData().get(i).getDataPoints().size(); j++) {
-                    if (mapDriverBehaviour.containsKey(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel())) {
-                        List<DataPointsItem> nestedGraphListNew = mapDriverBehaviour.get(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel());
-                        nestedGraphListNew.add(driverBehavior.getData().get(i).getDataPoints().get(j));
-                        mapDriverBehaviour.put(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel(), nestedGraphListNew);
-                    } else {
-                        List<DataPointsItem> nestedGraphList = new ArrayList<>();
-                        nestedGraphList.add(driverBehavior.getData().get(i).getDataPoints().get(j));
-                        mapDriverBehaviour.put(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel(), nestedGraphList);
-                    }
-                }
-            }
-            list.add(new NewGraphModel(0, driverBehavior.getTitle().getText(), "Driver Behaviour Details", true, mapDriverBehaviour));
+//            Map<String, List<DataPointsItem>> mapDriverBehaviour = new HashMap<>();
+//            for (int i = 0; i < driverBehavior.getData().size(); i++) {
+//                for (int j = 0; j < driverBehavior.getData().get(i).getDataPoints().size(); j++) {
+//                    if (mapDriverBehaviour.containsKey(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel())) {
+//                        List<DataPointsItem> nestedGraphListNew = mapDriverBehaviour.get(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel());
+//                        nestedGraphListNew.add(driverBehavior.getData().get(i).getDataPoints().get(j));
+//                        mapDriverBehaviour.put(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel(), nestedGraphListNew);
+//                    } else {
+//                        List<DataPointsItem> nestedGraphList = new ArrayList<>();
+//                        nestedGraphList.add(driverBehavior.getData().get(i).getDataPoints().get(j));
+//                        mapDriverBehaviour.put(driverBehavior.getData().get(i).getDataPoints().get(j).getLabel(), nestedGraphList);
+//                    }
+//                }
+//            }
+            list.add(new NewGraphModel(0, driverBehavior.getTitle().getText(), "Driver Behaviour Details", true, driverBehavior.getData()));
         }
         if (weeklyReports != null && weeklyReports.size() > 0) {
             for (int i = 0; i < weeklyReports.size(); i++) {

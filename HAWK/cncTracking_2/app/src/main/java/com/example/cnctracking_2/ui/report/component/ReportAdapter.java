@@ -30,12 +30,15 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.transition.Hold;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
@@ -122,7 +125,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 
             // if more than 60 entries are displayed in the chart, no values will be
             // drawn
-            chart.setMaxVisibleValueCount(chartModel.getMultipleMapping().size());
+            // TODO: 2/10/2022  chart.setMaxVisibleValueCount(chartModel.getMultipleMapping().size());
 
             // scaling can now only be done on x- and y-axis separately
             chart.setPinchZoom(false);
@@ -141,8 +144,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             xAxis.setTextSize(8f);
             YAxis leftAxis = chart.getAxisLeft();
 //            leftAxis.setTypeface(tfLight);
-            leftAxis.setLabelCount(chartModel.getMultipleMapping().size(), false);
-//            leftAxis.setValueFormatter(custom);
+
+            // TODO: 2/10/2022  leftAxis.setLabelCount(chartModel.getMultipleMapping().size(), false);
+
+            //            leftAxis.setValueFormatter(custom);
             leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
             leftAxis.setSpaceTop(15f);
             leftAxis.setTextSize(8f);
@@ -151,8 +156,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             YAxis rightAxis = chart.getAxisRight();
             rightAxis.setDrawGridLines(false);
 //            rightAxis.setTypeface(tfLight);
-            rightAxis.setLabelCount(chartModel.getMultipleMapping().size(), false);
-//            rightAxis.setValueFormatter(custom);
+
+            // TODO: 2/10/2022  rightAxis.setLabelCount(chartModel.getMultipleMapping().size(), false);
+
+            //            rightAxis.setValueFormatter(custom);
             rightAxis.setSpaceTop(15f);
             rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
             rightAxis.setEnabled(false);
@@ -173,27 +180,60 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
         private void initStackData(NewGraphModel chartModel, Context context, int position) {
 
             ArrayList<BarEntry> values = new ArrayList<>();
-            List<String> listOfKeys = new ArrayList<String>(chartModel.getMultipleMapping().keySet());
+            Map<String, List<Float>> map = new HashMap<>();
+            int[] colorStr = new int[chartModel.getDataItems().size()];
+            String[] dataStackLabel = new String[chartModel.getDataItems().size()];
+            for (int i = 0; i < chartModel.getDataItems().size(); i++) {
+                dataStackLabel[i] = chartModel.getDataItems().get(i).getName();
+                colorStr[i] = Color.parseColor(chartModel.getDataItems().get(i).getColor());
+            }
+            Map<String, List<DataPointsItem>> mapDriverBehaviour = new HashMap<>();
+            for (int i = 0; i < chartModel.getDataItems().size(); i++) {
+                for (int j = 0; j < chartModel.getDataItems().size(); j++) {
+                    if (mapDriverBehaviour.containsKey(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel())) {
+                        List<DataPointsItem> nestedGraphListNew = mapDriverBehaviour.get(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel());
+                        nestedGraphListNew.add(chartModel.getDataItems().get(i).getDataPoints().get(j));
+                        mapDriverBehaviour.put(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel(), nestedGraphListNew);
+                    } else {
+                        List<DataPointsItem> nestedGraphList = new ArrayList<>();
+                        nestedGraphList.add(chartModel.getDataItems().get(i).getDataPoints().get(j));
+                        mapDriverBehaviour.put(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel(), nestedGraphList);
+                    }
+                }
+            }
+
+            List<String> listOfKeys = new ArrayList<String>(mapDriverBehaviour.keySet());
             for (int i = 0; i < listOfKeys.size(); i++) {
-                float[] dataFloat = new float[chartModel.getMultipleMapping().get(listOfKeys.get(i)).size()];
-                for (int j = 0; j < chartModel.getMultipleMapping().get(listOfKeys.get(i)).size(); j++) {
-                    dataFloat[j] = chartModel.getMultipleMapping().get(listOfKeys.get(i)).get(j).getY();
+                float[] dataFloat = new float[mapDriverBehaviour.get(listOfKeys.get(i)).size()];
+                for (int j = 0; j < mapDriverBehaviour.get(listOfKeys.get(i)).size(); j++) {
+                    dataFloat[j] = mapDriverBehaviour.get(listOfKeys.get(i)).get(j).getY();
                 }
                 values.add(new BarEntry(
                         i,
-                        dataFloat, chartModel.getMultipleMapping().get(listOfKeys.get(i)).get(0).getLabel()));
+                        dataFloat, mapDriverBehaviour.get(listOfKeys.get(i)).get(0).getLabel()));
             }
 
             BarDataSet set1;
 
             set1 = new BarDataSet(values, chartModel.getTitle());
             set1.setDrawIcons(false);
-            set1.setColors(getColors());
-            String[] dataStackLabel = new String[listOfKeys.size()];
+            set1.setColors(colorStr);
 //            for (int i = 0; i < chartModel.getListOfDataPoint().get(i); i++) {
 //                dataStackLabel[i] = chartModel.getMultipleMapping().get(listOfKeys.get(i)).
 //            }
-//            set1.setStackLabels(new String[]{});
+            set1.setStackLabels(dataStackLabel);
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+            ValueFormatter formatter = new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return listOfKeys.get((int) value);
+                }
+            };
+
+
+            xAxis.setValueFormatter(formatter);
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
@@ -305,13 +345,18 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 
             BarDataSet set1;
 
-//            if (chart.getData() != null && chart.getData().getDataSetCount() > 0) {
-//                set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
-//                set1.setValues(values);
-//                chart.getData().notifyDataChanged();
-//                chart.notifyDataSetChanged();
-//
-//            } else {
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+            ValueFormatter formatter = new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return chartModel.getListOfDataPoint().get((int) value).getLabel();
+                }
+            };
+
+
+            xAxis.setValueFormatter(formatter);
             set1 = new BarDataSet(values, chartModel.getTitle());
 
             set1.setDrawIcons(false);
