@@ -2,6 +2,7 @@ package com.example.cnctracking_2.ui.report.component;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,22 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
+import com.anychart.core.Base;
+import com.anychart.core.cartesian.series.Bar;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.data.Mapping;
+import com.anychart.data.Set;
+import com.anychart.enums.Anchor;
+import com.anychart.enums.Orientation;
+import com.anychart.enums.Position;
+import com.anychart.enums.ScaleStackMode;
+import com.anychart.enums.TooltipDisplayMode;
+import com.anychart.scales.Linear;
 import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.data.model.DataItem;
 import com.example.cnctracking_2.data.model.DataPointsItem;
@@ -34,12 +51,17 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.transition.Hold;
+import com.anychart.core.cartesian.series.Line;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 
@@ -75,6 +97,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
     public class Holder extends RecyclerView.ViewHolder {
 
         BarChart chart;
+        AnyChartView anyBarChart;
         TextView tvTitle;
         TextView tvSeeChart;
 
@@ -83,6 +106,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             chart = itemView.findViewById(R.id.barChart);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvSeeChart = itemView.findViewById(R.id.tvSeeChart);
+            anyBarChart = itemView.findViewById(R.id.anyBarChart);
         }
 
         private int getTotalValue(WeeklyReportsItem item) {
@@ -116,77 +140,33 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
         }
 
         protected void loadStackBarChart(NewGraphModel chartModel, int position) {
+            chart.setVisibility(View.GONE);
+            anyBarChart.setVisibility(View.VISIBLE);
+
             tvTitle.setText(chartModel.getTitle());
             tvSeeChart.setText(chartModel.getDetails());
-            chart.setDrawBarShadow(false);
-            chart.setDrawValueAboveBar(true);
 
-            chart.getDescription().setEnabled(false);
+            Cartesian cartesian = AnyChart.cartesian();
 
-            // if more than 60 entries are displayed in the chart, no values will be
-            // drawn
-            // TODO: 2/10/2022  chart.setMaxVisibleValueCount(chartModel.getMultipleMapping().size());
+            cartesian.animation(true);
 
-            // scaling can now only be done on x- and y-axis separately
-            chart.setPinchZoom(false);
+            cartesian.yScale().stackMode(ScaleStackMode.VALUE);
 
-            chart.setDrawGridBackground(false);
-            // chart.setDrawYLabels(false);
+            cartesian.yAxis(0).labels().padding(0d, 0d, 0d, 5d).format("{%Value}{type:number, decimalsCount:2}");
+            cartesian.yAxis(true);
 
-//            IAxisValueFormatter xAxisFormatter = new DefaultAxisValueFormatter(chart);
+            List<DataEntry> data = new ArrayList<>();
 
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//            xAxis.setTypeface(tfLight);
-            xAxis.setDrawGridLines(false);
-            xAxis.setGranularity(1f); // only intervals of 1 day
-            xAxis.setLabelCount(7);
-            xAxis.setTextSize(8f);
-            YAxis leftAxis = chart.getAxisLeft();
-//            leftAxis.setTypeface(tfLight);
-
-            // TODO: 2/10/2022  leftAxis.setLabelCount(chartModel.getMultipleMapping().size(), false);
-
-            //            leftAxis.setValueFormatter(custom);
-            leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-            leftAxis.setSpaceTop(15f);
-            leftAxis.setTextSize(8f);
-            leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-
-            YAxis rightAxis = chart.getAxisRight();
-            rightAxis.setDrawGridLines(false);
-//            rightAxis.setTypeface(tfLight);
-
-            // TODO: 2/10/2022  rightAxis.setLabelCount(chartModel.getMultipleMapping().size(), false);
-
-            //            rightAxis.setValueFormatter(custom);
-            rightAxis.setSpaceTop(15f);
-            rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-            rightAxis.setEnabled(false);
-
-            Legend l = chart.getLegend();
-            l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-            l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-            l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-            l.setDrawInside(false);
-            l.setForm(Legend.LegendForm.SQUARE);
-            l.setFormSize(5f);
-            l.setTextSize(11f);
-            l.setXEntrySpace(4f);
-
-            initStackData(chartModel, itemView.getContext(), position);
-        }
-
-        private void initStackData(NewGraphModel chartModel, Context context, int position) {
-
-            ArrayList<BarEntry> values = new ArrayList<>();
-            Map<String, List<Float>> map = new HashMap<>();
             int[] colorStr = new int[chartModel.getDataItems().size()];
-            String[] dataStackLabel = new String[chartModel.getDataItems().size()];
+
+            ArrayList<String> dataStackLabel = new ArrayList<>();//[chartModel.getDataItems().size()];
+
             for (int i = 0; i < chartModel.getDataItems().size(); i++) {
-                dataStackLabel[i] = chartModel.getDataItems().get(i).getName();
+                dataStackLabel.add(chartModel.getDataItems().get(i).getName());
                 colorStr[i] = Color.parseColor(chartModel.getDataItems().get(i).getColor());
             }
+
+
             Map<String, List<DataPointsItem>> mapDriverBehaviour = new HashMap<>();
             for (int i = 0; i < chartModel.getDataItems().size(); i++) {
                 for (int j = 0; j < chartModel.getDataItems().size(); j++) {
@@ -202,49 +182,49 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
                 }
             }
 
+            Set set = com.anychart.data.Set.instantiate();
             List<String> listOfKeys = new ArrayList<String>(mapDriverBehaviour.keySet());
+            sortArray(listOfKeys);
             for (int i = 0; i < listOfKeys.size(); i++) {
                 float[] dataFloat = new float[mapDriverBehaviour.get(listOfKeys.get(i)).size()];
                 for (int j = 0; j < mapDriverBehaviour.get(listOfKeys.get(i)).size(); j++) {
                     dataFloat[j] = mapDriverBehaviour.get(listOfKeys.get(i)).get(j).getY();
+                    ValueDataEntry custom = new ValueDataEntry(
+                            listOfKeys.get(i),
+                            (int) dataFloat[j]);
+                    data.add(custom);
                 }
-                values.add(new BarEntry(
-                        i,
-                        dataFloat, mapDriverBehaviour.get(listOfKeys.get(i)).get(0).getLabel()));
+
+                String ValuesData = "value";
+
+                Mapping columnData = set.mapAs("{ x: 'x', value: '" + ValuesData + "' }");
+
+                Column column = cartesian.column(columnData);
+
+                column.name(dataStackLabel.get(i))
+                        .color(chartModel.getDataItems().get(i).getColor());
+
+                column.tooltip()
+                        .displayMode(TooltipDisplayMode.UNION)
+                        .titleFormat("{%X}")
+                        .position(Position.CENTER_BOTTOM)
+                        .anchor(Anchor.CENTER_BOTTOM)
+                        .offsetX(0d)
+                        .offsetY(5d)
+                        .position("right");
             }
 
-            BarDataSet set1;
+            cartesian.xAxis(true).labels().format("{%x}");
 
-            set1 = new BarDataSet(values, chartModel.getTitle());
-            set1.setDrawIcons(false);
-            set1.setColors(colorStr);
-//            for (int i = 0; i < chartModel.getListOfDataPoint().get(i); i++) {
-//                dataStackLabel[i] = chartModel.getMultipleMapping().get(listOfKeys.get(i)).
-//            }
-            set1.setStackLabels(dataStackLabel);
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            cartesian.crosshair(true);
+            set.data(data);
 
-            ValueFormatter formatter = new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return listOfKeys.get((int) value);
-                }
-            };
-
-
-            xAxis.setValueFormatter(formatter);
-
-            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(dataSets);
-//                data.setValueFormatter(new MyValueFormatter());
-            data.setValueTextColor(Color.WHITE);
-
-            chart.setData(data);
-
-            chart.setFitBars(true);
+            cartesian.legend(true);
+            cartesian.legend().enabled(true);
+            cartesian.legend().inverted(true);
+            cartesian.legend().fontSize(10d);
+            cartesian.legend().padding(0d, 0d, 20d, 0d);
+            anyBarChart.setChart(cartesian);
         }
 
         private int[] getColors() {
@@ -258,6 +238,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
         }
 
         protected void loadBarChart(NewGraphModel chartModel, int position) {
+            anyBarChart.setVisibility(View.GONE);
+            chart.setVisibility(View.VISIBLE);
             tvTitle.setText(chartModel.getFirstHeading());
             tvSeeChart.setText(chartModel.getSecondHeading());
             chart.setDrawBarShadow(false);
@@ -373,6 +355,27 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 
             chart.setData(data);
 //            }
+        }
+
+    }
+
+    private void sortArray(List<String> arraylist) {
+        Collections.sort(arraylist, new sortCompare());
+    }
+
+    class sortCompare implements Comparator<String> {
+        // Method of this class
+        @Override
+        public int compare(String a, String b) {
+            try {
+                Date aDate = new SimpleDateFormat("dd-MM-yy").parse(a);
+                Date bDate = new SimpleDateFormat("dd-MM-yy").parse(b);
+                /* Returns sorted data in ascending order */
+                return aDate.compareTo(bDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return -1;
         }
     }
 

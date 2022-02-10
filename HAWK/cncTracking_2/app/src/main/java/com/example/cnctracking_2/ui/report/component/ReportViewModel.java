@@ -27,20 +27,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReportViewModel extends AndroidViewModel
-{
+public class ReportViewModel extends AndroidViewModel {
 
 
-    public ReportViewModel(@NonNull Application application)
-    {
+    public ReportViewModel(@NonNull Application application) {
         super(application);
     }
 
 
-    public void getReportsData(Activity activity,ReportFetchListener mListener){
+    public void getReportsData(Activity activity, ReportFetchListener mListener) {
         //  Log.d("getHistory", "1");
         SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
-        int userId= sp.getInt("userId", 0);
+        int userId = sp.getInt("userId", 0);
         String regNo = sp.getString("regNo", "N/A");
         String deviceType = sp.getString("deviceType", "N/A");
         int moduleId = sp.getInt("moduleId", 0);
@@ -58,12 +56,12 @@ public class ReportViewModel extends AndroidViewModel
                             JSONObject jsonResponse;
                             // Log.d("Frag1_1", "2");
                             try {
-                                ReportResponse reportResponse = new Gson().fromJson(response,ReportResponse.class);
+                                ReportResponse reportResponse = new Gson().fromJson(response, ReportResponse.class);
 
                                 mListener.onRequestComplete(reportResponse);
 //                                showArrayList();
 
-                            }catch(Exception e){
+                            } catch (Exception e) {
                             }
 
                         }
@@ -75,14 +73,14 @@ public class ReportViewModel extends AndroidViewModel
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
-//                    params.put("name", loginName);
-                    params.put("name", "ZEESHAN");
-//                    params.put("psw", password);
-                    params.put("psw", "1234");
-//                    params.put("fleetName", deviceType);
-                    params.put("fleetName", "BUE-745");
-//                    params.put("moduleId", ""+moduleId );
-                    params.put("moduleId", "452" );
+                    params.put("name", loginName);
+//                    params.put("name", "ZEESHAN");
+                    params.put("psw", password);
+//                    params.put("psw", "1234");
+                    params.put("fleetName", deviceType);
+//                    params.put("fleetName", "BUE-745");
+                    params.put("moduleId", "" + moduleId);
+//                    params.put("moduleId", "452" );
                     return params;
                 }
 

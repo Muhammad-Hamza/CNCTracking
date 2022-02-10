@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class ReportFragment extends Fragment {
 
     private ReportViewModel mViewModel;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,9 +43,12 @@ public class ReportFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_report, container, false);
         setTitleFrag();
         recyclerView = root.findViewById(R.id.recyclerView);
+        progressBar = root.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         mViewModel.getReportsData(getActivity(), new ReportViewModel.ReportFetchListener() {
             @Override
             public void onRequestComplete(ReportResponse response) {
+                progressBar.setVisibility(View.GONE);
                 if (!TextUtils.isEmpty(response.getMessage())) {
                     Toast.makeText(requireContext(), "" + response.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
