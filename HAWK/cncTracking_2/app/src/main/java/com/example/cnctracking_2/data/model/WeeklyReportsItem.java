@@ -11,6 +11,15 @@ public class WeeklyReportsItem{
 	@SerializedName("title")
 	private Title title;
 
+	@SerializedName("color")
+	private String color;
+
+	@SerializedName("secondHeading")
+	private String secondHeading;
+
+	@SerializedName("firstHeading")
+	private String firstHeading;
+
 	@SerializedName("type")
 	private String type;
 
@@ -36,6 +45,18 @@ public class WeeklyReportsItem{
 
 	public String getType(){
 		return type;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public String getFirstHeading() {
+		return firstHeading;
+	}
+
+	public String getSecondHeading() {
+		return secondHeading;
 	}
 
 	@Override

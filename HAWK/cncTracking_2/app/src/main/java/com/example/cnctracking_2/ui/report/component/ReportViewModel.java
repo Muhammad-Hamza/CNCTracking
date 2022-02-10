@@ -60,8 +60,8 @@ public class ReportViewModel extends AndroidViewModel
                             try {
                                 ReportResponse reportResponse = new Gson().fromJson(response,ReportResponse.class);
 
-//                                mListener.onRequestComplete(reportResponse);
-                                //showArrayList();
+                                mListener.onRequestComplete(reportResponse);
+//                                showArrayList();
 
                             }catch(Exception e){
                             }
@@ -75,10 +75,14 @@ public class ReportViewModel extends AndroidViewModel
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("name", loginName);
-                    params.put("psw", password);
-                    params.put("fleetName", deviceType);
-                    params.put("moduleId", ""+moduleId );
+//                    params.put("name", loginName);
+                    params.put("name", "ZEESHAN");
+//                    params.put("psw", password);
+                    params.put("psw", "1234");
+//                    params.put("fleetName", deviceType);
+                    params.put("fleetName", "BUE-745");
+//                    params.put("moduleId", ""+moduleId );
+                    params.put("moduleId", "452" );
                     return params;
                 }
 

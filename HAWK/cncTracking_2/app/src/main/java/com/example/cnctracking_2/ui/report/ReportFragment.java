@@ -9,11 +9,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.data.model.ReportResponse;
@@ -39,12 +41,14 @@ public class ReportFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_report, container, false);
         setTitleFrag();
         recyclerView = root.findViewById(R.id.recyclerView);
-        mViewModel.getReportsData(getActivity(), new ReportViewModel.ReportFetchListener()
-        {
+        mViewModel.getReportsData(getActivity(), new ReportViewModel.ReportFetchListener() {
             @Override
-            public void onRequestComplete(ReportResponse response)
-            {
-                initAdapter(response);
+            public void onRequestComplete(ReportResponse response) {
+                if (!TextUtils.isEmpty(response.getMessage())) {
+                    Toast.makeText(requireContext(), "" + response.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    initAdapter(response);
+                }
             }
         });
         return root;
@@ -56,7 +60,9 @@ public class ReportFragment extends Fragment {
     }
 
     private void initAdapter(ReportResponse response) {
-        ReportAdapter reportAdapter = new ReportAdapter(response.getWeeklyReports());
+        response.getAllData();
+//        ReportAdapter reportAdapter = new ReportAdapter(response.getWeeklyReports());
+        ReportAdapter reportAdapter = new ReportAdapter(response.getAllData());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(reportAdapter);

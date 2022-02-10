@@ -1,5 +1,7 @@
 package com.example.cnctracking_2.data.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 public class DataPointsItem{
@@ -14,7 +16,13 @@ public class DataPointsItem{
 		this.Y = Y;
 	}
 
-	public String getY(){
+	public float getY(){
+		if (TextUtils.isEmpty(Y)){
+			return 0.0f;
+		}
+		return Float.parseFloat(Y);
+	}
+	public String getStrY(){
 		return Y;
 	}
 
