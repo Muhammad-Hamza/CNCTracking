@@ -228,7 +228,9 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             ValueFormatter formatter = new ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    return listOfKeys.get((int) value);
+                    if (listOfKeys.size() > (int) value)
+                        return listOfKeys.get((int) value);
+                    return "";
                 }
             };
 
@@ -351,7 +353,9 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             ValueFormatter formatter = new ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    return chartModel.getListOfDataPoint().get((int) value).getLabel();
+                    if (chartModel.getListOfDataPoint().size() > (int) value)
+                        return chartModel.getListOfDataPoint().get((int) value).getLabel();
+                    return "";
                 }
             };
 
