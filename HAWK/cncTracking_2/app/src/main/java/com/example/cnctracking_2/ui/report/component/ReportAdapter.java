@@ -189,7 +189,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             }
             Map<String, List<DataPointsItem>> mapDriverBehaviour = new HashMap<>();
             for (int i = 0; i < chartModel.getDataItems().size(); i++) {
-                for (int j = 0; j < chartModel.getDataItems().size(); j++) {
+                for (int j = 0; j < chartModel.getDataItems().get(i).getDataPoints().size(); j++) {
                     if (mapDriverBehaviour.containsKey(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel())) {
                         List<DataPointsItem> nestedGraphListNew = mapDriverBehaviour.get(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel());
                         nestedGraphListNew.add(chartModel.getDataItems().get(i).getDataPoints().get(j));
