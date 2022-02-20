@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -41,6 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:layout_toRightOf="@id/right_icon_layout"
         android:layout_weight="1"
         android:orientation="vertical"
@@ -51,6 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="123"
             android:textSize="14dp"
             android:textStyle="bold" />
@@ -60,6 +65,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text=" "
             android:textSize="14dp" />
 
@@ -70,6 +77,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:drawableLeft="@drawable/ic_baseline_access_time_24"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="123"
             android:textColor="@color/button_color"
             android:textSize="12dp" />
@@ -80,8 +89,6 @@
         android:id="@+id/llThird"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:gravity="center_vertical|end|right"
         android:orientation="vertical">
@@ -94,17 +101,16 @@
 
         <Button
             android:id="@+id/btnHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
             android:layout_below="@id/eyes"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:background="?borderlessButtonStyle"
-            android:text="Show History"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#FFFFFF"
+            android:text="History"
             android:textColor="@color/text_color_dark"
-            android:textSize="9sp" />
+            android:textSize="8sp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
-
 
 </LinearLayout>

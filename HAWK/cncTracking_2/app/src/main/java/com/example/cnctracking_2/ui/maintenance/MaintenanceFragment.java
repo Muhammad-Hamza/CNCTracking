@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.cnctracking_2.R;
+import com.example.cnctracking_2.data.model.MaintenanceModel;
 import com.example.cnctracking_2.ui.maintenance.component.MaintenanceAdapter;
 import com.example.cnctracking_2.ui.maintenance.component.MaintenanceViewModel;
 import com.example.cnctracking_2.ui.report.component.ReportViewModel;
@@ -47,10 +48,17 @@ public class MaintenanceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        mAdapter = new MaintenanceAdapter(ConstantUtil.getMaintenanceList());
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter);
+        mViewModel.getReportsData(getActivity(), new MaintenanceViewModel.MaintenanceFetchListener() {
+            @Override
+            public void onRequestComplete(Object response) {
+                if (response instanceof MaintenanceModel) {
+                    mAdapter = new MaintenanceAdapter(((MaintenanceModel) response).getMaintenanceDue());
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setAdapter(mAdapter);
+                }
+            }
+        });
     }
 
     public void setTitleFrag() {

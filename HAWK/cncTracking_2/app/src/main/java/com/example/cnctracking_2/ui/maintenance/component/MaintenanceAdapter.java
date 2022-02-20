@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cnctracking_2.R;
-import com.example.cnctracking_2.data.model.local.MaintenanceModel;
+import com.example.cnctracking_2.data.model.MaintenanceModel;
 import com.example.cnctracking_2.ui.report.component.ReportAdapter;
 
 import java.util.List;
 
 public class MaintenanceAdapter extends RecyclerView.Adapter<MaintenanceAdapter.Holder> {
 
-    private List<MaintenanceModel> list;
+    private List<MaintenanceModel.MaintenanceDue> list;
 
-    public MaintenanceAdapter(List<MaintenanceModel> list) {
+    public MaintenanceAdapter(List<MaintenanceModel.MaintenanceDue> list) {
         this.list = list;
     }
 
@@ -33,7 +33,7 @@ public class MaintenanceAdapter extends RecyclerView.Adapter<MaintenanceAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        if (list.get(position).isShowMarkAction()) {
+        if (!list.get(position).getStatus().equalsIgnoreCase("done")) {
             holder.btnMarkDone.setVisibility(View.VISIBLE);
             holder.ivType.setImageResource(R.mipmap.ic_due_icon);
         } else {
@@ -46,13 +46,13 @@ public class MaintenanceAdapter extends RecyclerView.Adapter<MaintenanceAdapter.
 //            holder.vBottom.setVisibility(View.GONE);
 //        }
 //        holder.tvId.setText("" + (position + 1));
-        holder.tvTitle.setText(list.get(position).getTitle());
-        holder.tvDue.setText(list.get(position).getDueOn());
-        holder.tvRemaining.setText(list.get(position).getRemainingDays());
+        holder.tvTitle.setText(list.get(position).getLabel());
+        holder.tvDue.setText(list.get(position).getDate());
+        holder.tvRemaining.setText(list.get(position).getThreshold());
         holder.btnMarkDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list.get(position).setShowMarkAction(false);
+                list.get(position).setStatus("done");
                 notifyItemChanged(position);
             }
         });

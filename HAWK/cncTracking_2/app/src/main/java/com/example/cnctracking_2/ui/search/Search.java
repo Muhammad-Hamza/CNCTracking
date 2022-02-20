@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.cnctracking_2.MainActivity;
 import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.config.APIManager;
 import com.example.cnctracking_2.data.model.Customer;
@@ -38,6 +39,8 @@ import com.example.cnctracking_2.data.model.Unit;
 import com.example.cnctracking_2.data.model.Vehicle;
 import com.example.cnctracking_2.ui.SearchArrayAdapter;
 import com.example.cnctracking_2.ui.map.LocationWithDetailAct;
+import com.example.cnctracking_2.ui.report.ReportFragment;
+import com.example.cnctracking_2.util.ConstantUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +57,7 @@ import java.util.Map;
  * Use the {@link Search#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Search extends Fragment {
+public class Search extends Fragment implements SearchArrayAdapter.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,13 +75,14 @@ public class Search extends Fragment {
     String password, loginName, userRole, search, regNo, name, name1;
     static int userCode, unitID, userId;
     ProgressBar progressBar;
-    String return_text="";
+    String return_text = "";
     ArrayList unitList = new ArrayList();
     SearchArrayAdapter adapter;
     private static final String KEY_INDEX = "index";
     ListView list;
     public static final String DEFAULT = "N/A";
-    int chartClick=0;
+    int chartClick = 0;
+
     public Search() {
         // Required empty public constructor
     }
@@ -117,10 +121,9 @@ public class Search extends Fragment {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
 
 
-
         list = (ListView) v.findViewById(R.id.listView);
         searchText = (EditText) v.findViewById(R.id.searchText);
-       searchBtn = (Button) v.findViewById(R.id.searchBtn);
+        searchBtn = (Button) v.findViewById(R.id.searchBtn);
 
 
         searchText.setText("");
@@ -143,19 +146,19 @@ public class Search extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-       setTitleFrag();
+        setTitleFrag();
 
-        adapter = new SearchArrayAdapter(getActivity(), unitList, userRole);
-        if(unitList.size() > 0)
+        adapter = new SearchArrayAdapter(getActivity(), unitList, userRole, this);
+        if (unitList.size() > 0)
             showArrayList();
 
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    chartClick= 0;
-                getDevicesData();
-                return true;
+                    chartClick = 0;
+                    getDevicesData();
+                    return true;
                 }
                 return false;
             }
@@ -168,37 +171,38 @@ public class Search extends Fragment {
                 Log.d("test1", "t1");
 
                 progressBar.setVisibility(View.VISIBLE);
-                if(unitList.size() > 0){
+                if (unitList.size() > 0) {
                     Collections.reverse(unitList);
                     showArrayList();
                 }
                 progressBar.setVisibility(View.GONE);
-               // getDevicesData();
+                // getDevicesData();
             }
         });
         Bundle args = getArguments();
         String index = null;
-        try{
+        try {
             index = args.getString("index", DEFAULT);
-            if(index != null && index.equals("CLICK")){
+            if (index != null && index.equals("CLICK")) {
                 chartClick = args.getInt("CLICK", 0);
             }
-            Log.d("Search","chartClick="+ chartClick+"&"+ "index="+ index+"&"+ "search="+ search);
-        }catch(Exception e){}
+            Log.d("Search", "chartClick=" + chartClick + "&" + "index=" + index + "&" + "search=" + search);
+        } catch (Exception e) {
+        }
 
         getDevicesData();
         return v;
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putParcelableArrayList(KEY_INDEX, unitList);
 
     }
 
-    public void showArrayList(){
+    public void showArrayList() {
 
 
         list.setAdapter(adapter);
@@ -218,7 +222,7 @@ public class Search extends Fragment {
                 Customer customer = (Customer) obj[2];
                 Parameters prm = (Parameters) obj[3];
 
-                String Slecteditem= ""+veh.getRegNo();
+                String Slecteditem = "" + veh.getRegNo();
                 //Toast.makeText(getActivity(), Slecteditem, Toast.LENGTH_SHORT).show();
 
 
@@ -240,14 +244,14 @@ public class Search extends Fragment {
                 editor.putString("dateTime", prm.getStrDateTime());
                 editor.putString("deviceType", unt.getUnitType());
                 editor.putFloat("speed", (float) prm.getSpeed());
-                editor.putBoolean("isNr",veh.isNr());
+                editor.putBoolean("isNr", veh.isNr());
                 editor.putInt("moduleId", (int) unt.getUnitId());
 
                 editor.commit();
 
                 //Toast.makeText(getApplicationContext(), "data save", Toast.LENGTH_LONG).show();
 
-               final Intent i = new Intent(getActivity(), LocationWithDetailAct.class);
+                final Intent i = new Intent(getActivity(), LocationWithDetailAct.class);
 
                /*
                         i.putExtra("unitID", unt.getUnitId());
@@ -271,7 +275,7 @@ public class Search extends Fragment {
                                 view.setAlpha(1);
 
 
-                              startActivity(i);
+                                startActivity(i);
 
                             }
                         });
@@ -281,121 +285,139 @@ public class Search extends Fragment {
 
 
     }
+
     public void setTitleFrag() {
         try {
             TextView txt = getActivity().findViewById(R.id.toolbar_title);
             txt.setText("Search");
             getActivity().setTitle("");
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
-public void getDevicesData(){
-    search = searchText.getText().toString();
-    Log.d("test1_user", userRole);
-    if(!userRole.equalsIgnoreCase("CUSTOMER") && search.length()< 3 && chartClick==0) {
-        Log.d("test1", "t2");
-        progressBar.setVisibility(View.GONE);
-        Toast.makeText(getActivity(), "Search Field is empty", Toast.LENGTH_LONG).show();
-    }else{
-        progressBar.setVisibility(View.VISIBLE);
-        String url = APIManager.getSearchFleetsAPI();
-        Log.d("test1", "t3");
-        StringRequest sr = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
+    public void getDevicesData() {
+        search = searchText.getText().toString();
+        Log.d("test1_user", userRole);
+        if (!userRole.equalsIgnoreCase("CUSTOMER") && search.length() < 3 && chartClick == 0) {
+            Log.d("test1", "t2");
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getActivity(), "Search Field is empty", Toast.LENGTH_LONG).show();
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            String url = APIManager.getSearchFleetsAPI();
+            Log.d("test1", "t3");
+            StringRequest sr = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
+                        @Override
+                        public void onResponse(String response) {
 
-                        progressBar.setVisibility(View.GONE);
-
-                        JSONObject jsonResponse;
-
-                        unitList.clear();
-
-                        try {
-                            jsonResponse = new JSONObject(response);
-                            Log.d("Search_", "t4"+response);
-                            JSONArray jsonArray = jsonResponse.optJSONArray("searchResult");
-
-                            if( jsonArray == null){
-                                jsonArray = new JSONArray();
-                            }
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-
-                                JSONObject jb = jsonArray.getJSONObject(i);
-
-                                Unit unt = new Unit();
-                                unt.setUnitId( jb.optInt("moduleId"));
-                                unt.setUnitType( jb.optString("name"));
-
-                                Vehicle veh = new Vehicle();
-                                veh.setRegNo(jb.optString("regNo").toString());
-
-                                veh.setNr(jb.optInt("active") ==0);
-                                // veh.setEngineNo(rs.getString("vech_engineNo"))
-
-                                Customer cust = new Customer();
-                                cust.setFirstName(jb.optString("clientName").toString());
-
-                                Parameters prm = new Parameters();
-                                 prm.setMessage(jb.optString("location").toString());
-                                prm.setLongitude(jb.optDouble("longitude"));
-                                prm.setLatitude(jb.optDouble("latitude"));
-                                prm.setStrDateTime(jb.optString("RecieveDate").toString());
-                                prm.setSpeed(jb.optDouble("speed"));
-                                prm.setDiffTime(jb.optString("rcvdTimeDiffer").toString());
-
-                                prm.setStatusId(jb.optInt("statusId"));
-                                //prm.setHeading(jb.optInt("heading"));
-                               // prm.setDirectionAllow((Boolean) jb.optBoolean("isDirectionAllow"));
-                                unitList.add(new Object[]{unt, veh, cust, prm});
-
-                            }
-                            if(unitList.size()>0)
-                                Toast.makeText(getActivity(), "Size: "+unitList.size() ,Toast.LENGTH_LONG).show();
-                            else
-                                Toast.makeText(getActivity(), "Not Found!" ,Toast.LENGTH_SHORT).show();
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), "Not Found!" ,Toast.LENGTH_SHORT).show();
+
+                            JSONObject jsonResponse;
+
+                            unitList.clear();
+
+                            try {
+                                jsonResponse = new JSONObject(response);
+                                Log.d("Search_", "t4" + response);
+                                JSONArray jsonArray = jsonResponse.optJSONArray("searchResult");
+
+                                if (jsonArray == null) {
+                                    jsonArray = new JSONArray();
+                                }
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+
+                                    JSONObject jb = jsonArray.getJSONObject(i);
+
+                                    Unit unt = new Unit();
+                                    unt.setUnitId(jb.optInt("moduleId"));
+                                    unt.setUnitType(jb.optString("name"));
+
+                                    Vehicle veh = new Vehicle();
+                                    veh.setRegNo(jb.optString("regNo").toString());
+
+                                    veh.setNr(jb.optInt("active") == 0);
+                                    // veh.setEngineNo(rs.getString("vech_engineNo"))
+
+                                    Customer cust = new Customer();
+                                    cust.setFirstName(jb.optString("clientName").toString());
+
+                                    Parameters prm = new Parameters();
+                                    prm.setMessage(jb.optString("location").toString());
+                                    prm.setLongitude(jb.optDouble("longitude"));
+                                    prm.setLatitude(jb.optDouble("latitude"));
+                                    prm.setStrDateTime(jb.optString("RecieveDate").toString());
+                                    prm.setSpeed(jb.optDouble("speed"));
+                                    prm.setDiffTime(jb.optString("rcvdTimeDiffer").toString());
+
+                                    prm.setStatusId(jb.optInt("statusId"));
+                                    prm.setModuleId(jb.optInt("moduleId"));
+                                    //prm.setHeading(jb.optInt("heading"));
+                                    // prm.setDirectionAllow((Boolean) jb.optBoolean("isDirectionAllow"));
+                                    unitList.add(new Object[]{unt, veh, cust, prm});
+
+                                }
+                                if (unitList.size() > 0)
+                                    Toast.makeText(getActivity(), "Size: " + unitList.size(), Toast.LENGTH_LONG).show();
+                                else
+                                    Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            showArrayList();
+
+
                         }
-
-                        showArrayList();
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(getActivity(), "Connection Problem", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("search", search);
-                params.put("psw", password);
-                params.put("name", loginName);
-                if(chartClick > 0){
-                    params.put("statusId", ""+chartClick);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getActivity(), "Connection Problem", Toast.LENGTH_SHORT).show();
                 }
-                return params;
-            }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("search", search);
+                    params.put("psw", password);
+                    params.put("name", loginName);
+                    if (chartClick > 0) {
+                        params.put("statusId", "" + chartClick);
+                    }
+                    return params;
+                }
 
-        }; Volley.newRequestQueue(getActivity()).add(sr);
+            };
+            Volley.newRequestQueue(getActivity()).add(sr);
 
-        sr.setRetryPolicy(new DefaultRetryPolicy(
-                8000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            sr.setRetryPolicy(new DefaultRetryPolicy(
+                    8000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
 
-        Log.d("Search_","statusId="+chartClick+" search="+search+" psw="+password+" name="+loginName);
+        Log.d("Search_", "statusId=" + chartClick + " search=" + search + " psw=" + password + " name=" + loginName);
     }
 
+    @Override
+    public void onItemClick(Object o) {
+        if (o != null) {
+            Object[] obj = (Object[]) o;
+//            Unit unt = (Unit) obj[0];
+//            Vehicle veh = (Vehicle) obj[1];
+//            Customer customer = (Customer) obj[2];
+            Parameters prm = (Parameters) obj[3];
+//            Log.e("asd", "asdas");
+            Bundle bundle = new Bundle();
+            bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1, prm.getModuleId());
+            ((MainActivity) getActivity()).changeFragment(new ReportFragment(), bundle);
+        }
+    }
 }

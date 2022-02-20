@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class FavFragment extends Fragment {
+public class FavFragment extends Fragment implements SearchArrayAdapter.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -117,7 +117,7 @@ public class FavFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         setTitleFrag();
-        adapter = new SearchArrayAdapter(getActivity(), unitList, userRole);
+        adapter = new SearchArrayAdapter(getActivity(), unitList, userRole,this);
 
         getDevicesData();
 
@@ -311,5 +311,10 @@ public class FavFragment extends Fragment {
             txt.setText("Favorite");
             getActivity().setTitle("");
         }catch (Exception e){}
+    }
+
+    @Override
+    public void onItemClick(Object o) {
+//        Log.e("asd","asdasdasdas");
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ConstantUtil {
 
+    public static final String PREF_EXTRA_BUNDLE_1 = "extra_1";
     public static List<ChartModel> getDummyChartModel() {
         List<ChartModel> list = new ArrayList<>();
 

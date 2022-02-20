@@ -43,6 +43,8 @@ public class Parameters implements Parcelable {
     protected String route;
     protected int direction;
 
+    protected int moduleId;
+
 
     public Parameters() {
     }
@@ -70,9 +72,14 @@ public class Parameters implements Parcelable {
         crudeMessage = in.readString();
         deviation = in.readByte() != 0;
         route = in.readString();
+        moduleId = in.readInt();
 
     }
 
+
+    public int getModuleId() {
+        return moduleId;
+    }
 
     public String getStrDateTime() {
         return strDateTime;
@@ -333,5 +340,9 @@ public class Parameters implements Parcelable {
 
     public void setTimeInMillies(long timeInMillies) {
         this.timeInMillies = timeInMillies;
+    }
+
+    public void setModuleId(int moduleId) {
+        this.moduleId = moduleId;
     }
 }

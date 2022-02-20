@@ -41,7 +41,13 @@ public class ReportFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_report, container, false);
         setTitleFrag();
         recyclerView = root.findViewById(R.id.recyclerView);
-        mViewModel.getReportsData(getActivity(), new ReportViewModel.ReportFetchListener() {
+        int extraIndex = -1;
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ConstantUtil.PREF_EXTRA_BUNDLE_1)) {
+                extraIndex = getArguments().getInt(ConstantUtil.PREF_EXTRA_BUNDLE_1);
+            }
+        }
+        mViewModel.getReportsData(getActivity(), extraIndex, new ReportViewModel.ReportFetchListener() {
             @Override
             public void onRequestComplete(ReportResponse response) {
                 if (!TextUtils.isEmpty(response.getMessage())) {

@@ -2,37 +2,30 @@ package com.example.cnctracking_2;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cnctracking_2.ui.dashboard.Dashboard;
-import com.example.cnctracking_2.ui.dashboard.DashboardWithHeader;
-import com.example.cnctracking_2.ui.gallery.GalleryFragment;
-import com.example.cnctracking_2.ui.home.HomeFragment;
-import com.example.cnctracking_2.ui.search.Search;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.example.cnctracking_2.ui.dashboard.DashboardWithHeader;
+import com.example.cnctracking_2.ui.search.Search;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -47,11 +40,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       toolbar = findViewById(R.id.toolbarMain);
-       toolbarTitle = findViewById(R.id.toolbar_title);
-      setSupportActionBar(toolbar);
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       setTitle("");
+        toolbar = findViewById(R.id.toolbarMain);
+        toolbarTitle = findViewById(R.id.toolbar_title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("");
         /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Overridefab
@@ -61,9 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setAction("Action", null).show();
             }
         });*/
-         drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
 
 
         drawerToggle = setupDrawerToggle();
@@ -94,10 +86,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             userRole = extras.getString("userRole");
             try {
                 userSideMenu.setText(loginName);
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
         }
 
-      //  View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        //  View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
 
         //toolbar = getSupportActionBar();
 
@@ -108,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setDrawerLayout(drawer)
                 .build();
 
-      //  DashboardWithHeader bottomSheet = new DashboardWithHeader();
+        //  DashboardWithHeader bottomSheet = new DashboardWithHeader();
         //bottomSheet.show(getSupportFragmentManager(),
-               // "ModalBottomSheet");
+        // "ModalBottomSheet");
 
         Fragment fragment = new DashboardWithHeader();
         getSupportFragmentManager().beginTransaction()
@@ -148,8 +141,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
-        return new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,  R.string.navigation_drawer_close);
+        return new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -163,33 +157,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
     private void setNavigationViewListener() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-    private void changeFragment(Fragment fr){
+
+    private void changeFragment(Fragment fr) {
         FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_frame);
         fl.removeAllViews();
         FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
         transaction1.add(R.id.fragment_frame, fr);
         transaction1.commit();
     }
+
+    public void changeFragment(Fragment fragment, Bundle bundle) {
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-      //  Toast.makeText(MainActivity.this,"a "+item.getItemId(), Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(MainActivity.this,"a "+item.getItemId(), Toast.LENGTH_SHORT).show();
         Fragment fragment;
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_search:
 
-                 fragment = new Search();
+                fragment = new Search();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
-               // changeFragment(fragment);
-              //  Toast.makeText(MainActivity.this,"Search", Toast.LENGTH_SHORT).show();
+                // changeFragment(fragment);
+                //  Toast.makeText(MainActivity.this,"Search", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_slideshow:
-              //  Toast.makeText(MainActivity.this,"SlideShow Dashboard", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(MainActivity.this,"SlideShow Dashboard", Toast.LENGTH_SHORT).show();
                 /* fragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
@@ -200,15 +203,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new DashboardWithHeader();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
-               // changeFragment(fragment);
-               // Toast.makeText(MainActivity.this,"Home", Toast.LENGTH_SHORT).show();
+                // changeFragment(fragment);
+                // Toast.makeText(MainActivity.this,"Home", Toast.LENGTH_SHORT).show();
                 break;
 
         }
         item.setChecked(true);
-        if(item.getTitle().equals("Slideshow")){
+        if (item.getTitle().equals("Slideshow")) {
             setTitle("Dashboard");
-        }else{
+        } else {
             setTitle(item.getTitle());
         }
 
@@ -217,19 +220,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return false;
     }
-    @Override
-    public void onBackPressed(){
-       // Log.d("onBackPressed_1", ""+getSupportFragmentManager().getBackStackEntryCount());
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+    @Override
+    public void onBackPressed() {
+        // Log.d("onBackPressed_1", ""+getSupportFragmentManager().getBackStackEntryCount());
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             showSettingsAlert();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
-    public void showSettingsAlert(){
-        try{
+
+    public void showSettingsAlert() {
+        try {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
             // Setting Dialog Title
@@ -239,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //+" "+ Arrays.asList(eventCounts)
             // On pressing Settings button
             alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int which) {
+                public void onClick(DialogInterface dialog, int which) {
                     finish();
                 }
             });

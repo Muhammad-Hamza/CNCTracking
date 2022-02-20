@@ -62,6 +62,10 @@ public class APIManager {
 
         return domain + appName + "WeeklyReportsAPI";
     }
+    public static String getMaintenanceData() {
+
+        return domain + appName + "MaintenanceViewAPI";
+    }
 
 
     private static final String PREFS_NAME = "SP_FILE";

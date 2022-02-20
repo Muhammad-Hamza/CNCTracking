@@ -27,25 +27,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReportViewModel extends AndroidViewModel
-{
+public class ReportViewModel extends AndroidViewModel {
 
 
-    public ReportViewModel(@NonNull Application application)
-    {
+    public ReportViewModel(@NonNull Application application) {
         super(application);
     }
 
 
-    public void getReportsData(Activity activity,ReportFetchListener mListener){
+    public void getReportsData(Activity activity, int moduleId, ReportFetchListener mListener) {
         //  Log.d("getHistory", "1");
-        SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
-        int userId= sp.getInt("userId", 0);
-        String regNo = sp.getString("regNo", "N/A");
-        String deviceType = sp.getString("deviceType", "N/A");
-        int moduleId = sp.getInt("moduleId", 0);
-        String password = sp.getString("password", "N/A");
-        String loginName = sp.getString("loginName", "N/A");
+//        SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
+//        int userId = sp.getInt("userId", 0);
+//        String regNo = sp.getString("regNo", "N/A");
+//        String deviceType = sp.getString("deviceType", "N/A");
+//        int moduleId = sp.getInt("moduleId", 0);
+//        String password = sp.getString("password", "N/A");
+//        String loginName = sp.getString("loginName", "N/A");
         try {
             String url = APIManager.getReportsData();
             //    Log.d("Frag1_1", url +" - "+ loginName +" - "+ password);
@@ -58,12 +56,12 @@ public class ReportViewModel extends AndroidViewModel
                             JSONObject jsonResponse;
                             // Log.d("Frag1_1", "2");
                             try {
-                                ReportResponse reportResponse = new Gson().fromJson(response,ReportResponse.class);
+                                ReportResponse reportResponse = new Gson().fromJson(response, ReportResponse.class);
 
                                 mListener.onRequestComplete(reportResponse);
 //                                showArrayList();
 
-                            }catch(Exception e){
+                            } catch (Exception e) {
                             }
 
                         }
@@ -82,7 +80,11 @@ public class ReportViewModel extends AndroidViewModel
 //                    params.put("fleetName", deviceType);
                     params.put("fleetName", "BUE-745");
 //                    params.put("moduleId", ""+moduleId );
-                    params.put("moduleId", "452" );
+                    if (moduleId != -1) {
+                        params.put("moduleId", "" + moduleId);
+                    } else {
+                        params.put("moduleId", "452");
+                    }
                     return params;
                 }
 
