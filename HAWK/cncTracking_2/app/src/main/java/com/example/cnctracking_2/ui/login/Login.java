@@ -2,6 +2,7 @@ package com.example.cnctracking_2.ui.login;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,6 +17,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,6 +42,7 @@ import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.config.APIManager;
 import com.example.cnctracking_2.ui.login.LoginViewModel;
 import com.example.cnctracking_2.ui.login.LoginViewModelFactory;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -50,6 +53,8 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,10 +68,11 @@ public class Login extends AppCompatActivity {
     Button loginButton;
     CheckBox rememberCB;
     Boolean cbState;
-    EditText password,userName;
+    EditText password, userName;
     ProgressBar progressBar;
-    String returnText="";
-    String userRole, loginName, psw, message, uName, uPsw;;
+    String returnText = "";
+    String userRole, loginName, psw, message, uName, uPsw;
+    ;
     boolean success;
     String name, macAddress;
     int userId;
@@ -85,8 +91,8 @@ public class Login extends AppCompatActivity {
         forgetPsw = findViewById(R.id.forget_psw);
         progressBar = findViewById(R.id.loading);
 
-        userName=(EditText) findViewById(R.id.editText1);
-        password=(EditText) findViewById(R.id.editText2);
+        userName = (EditText) findViewById(R.id.editText1);
+        password = (EditText) findViewById(R.id.editText2);
         rememberCB = (CheckBox) findViewById(R.id.checkbox);
         cbState = false;
         progressBar.setVisibility(View.GONE);
@@ -176,14 +182,14 @@ public class Login extends AppCompatActivity {
         forgetPsw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  final Intent i = new Intent(LocationWithDetailAct.this, MainActivity.class);
-               // startActivity(i);
+                //  final Intent i = new Intent(LocationWithDetailAct.this, MainActivity.class);
+                // startActivity(i);
                 view.animate().setDuration(500).alpha(0)
                         .withEndAction(new Runnable() {
                             @Override
                             public void run() {
                                 view.setAlpha(1);
-                                Toast.makeText(getApplicationContext(), "Please Contact Customer Center!" ,Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Please Contact Customer Center!", Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -211,88 +217,87 @@ public class Login extends AppCompatActivity {
                                 v.setAlpha(1);
 
 
-
-                loginName=userName.getText().toString();
-                    psw = password.getText().toString();
-                    if (cbState == true)
-
-                    {
-                        SharedPreferences mySharedPrefrences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = mySharedPrefrences.edit();
-                        editor.putString("USERNAME", "" + loginName);
-                        editor.putString("PASSWORD", "" + psw);
-                        editor.apply();
-
-                    }
-
-                    Log.d("check login",loginName +" "+ psw);
-                    if (loginName.equals("") || psw.equals("")) {
-                        Toast.makeText(getApplicationContext(), "Please Enter Username & Password!" ,Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    progressBar.setVisibility(View.VISIBLE);
-                    Log.d("check1", "check");
-                    String url = APIManager.loginAPI();
-                    StringRequest sr = new StringRequest(Request.Method.POST, url,
-                            new Response.Listener<String>() {
-
-                                @Override
-                                public void onResponse(String response) {
-
-                                    progressBar.setVisibility(View.GONE);
-                                    JSONObject jsonResponse;
-                                    try {
-                                        jsonResponse = new JSONObject(response);
-                                        success = jsonResponse.getBoolean("success");
-                                        userRole = jsonResponse.getString("userRole").toString();
-                                        message =  jsonResponse.getString("message").toString();
-                                        userId =  jsonResponse.getInt("userId");
-                                        Log.d("check3", ""+response);
-                                        if(success){
-                                            saveSharedPref(loginName, psw, userRole);
-                                            Toast.makeText(getApplicationContext(), message ,Toast.LENGTH_SHORT).show();
-                                            //Intent i = new Intent(UserLogin.this, ListActivity.class);
-                                            Intent i = new Intent(Login.this, MainActivity.class);
-                                            i.putExtra("password", psw);
-                                            i.putExtra("userRole", userRole);
-                                            i.putExtra("loginName", loginName);
-                                            i.putExtra("userId", userId);
-
-                                            startActivity(i);
-                                            finish();
-                                        }else{
-                                            Toast.makeText(getApplicationContext(), message ,Toast.LENGTH_LONG).show();
-                                        }
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                loginName = userName.getText().toString();
+                                psw = password.getText().toString();
+                                if (cbState == true) {
+                                    SharedPreferences mySharedPrefrences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = mySharedPrefrences.edit();
+                                    editor.putString("USERNAME", "" + loginName);
+                                    editor.putString("PASSWORD", "" + psw);
+                                    editor.apply();
 
                                 }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_SHORT).show();
-                        }
-                    }) {
-                        @Override
-                        protected Map<String, String> getParams() {
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("name", loginName);
-                            params.put("psw", psw);
-                            params.put("macAddress", "");
-                            return params;
-                        }
 
-                    };
-                    Volley.newRequestQueue(Login.this).add(sr);
-                    Log.d("check3", "check");
+                                Log.d("check login", loginName + " " + psw);
+                                if (loginName.equals("") || psw.equals("")) {
+                                    Toast.makeText(getApplicationContext(), "Please Enter Username & Password!", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                progressBar.setVisibility(View.VISIBLE);
+                                Log.d("check1", "check");
+                                String url = APIManager.loginAPI();
+                                StringRequest sr = new StringRequest(Request.Method.POST, url,
+                                        new Response.Listener<String>() {
 
-                  }
-               });
-                }
-            });
+                                            @Override
+                                            public void onResponse(String response) {
+
+                                                progressBar.setVisibility(View.GONE);
+                                                JSONObject jsonResponse;
+                                                try {
+                                                    jsonResponse = new JSONObject(response);
+                                                    success = jsonResponse.getBoolean("success");
+                                                    userRole = jsonResponse.getString("userRole").toString();
+                                                    message = jsonResponse.getString("message").toString();
+                                                    userId = jsonResponse.getInt("userId");
+                                                    Log.d("check3", "" + response);
+                                                    if (success) {
+                                                        saveSharedPref(loginName, psw, userRole);
+                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                                        //Intent i = new Intent(UserLogin.this, ListActivity.class);
+                                                        Intent i = new Intent(Login.this, MainActivity.class);
+                                                        i.putExtra("password", psw);
+                                                        i.putExtra("userRole", userRole);
+                                                        i.putExtra("loginName", loginName);
+                                                        i.putExtra("userId", userId);
+
+                                                        startActivity(i);
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                            }
+                                        }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        progressBar.setVisibility(View.GONE);
+                                        Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_SHORT).show();
+                                    }
+                                }) {
+                                    @Override
+                                    protected Map<String, String> getParams() {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("name", loginName);
+                                        params.put("psw", psw);
+                                        params.put("macAddress", "");
+                                        params.put("fcmId", FirebaseMessaging.getInstance().getToken().getResult());
+
+                                        return params;
+                                    }
+
+                                };
+                                Volley.newRequestQueue(Login.this).add(sr);
+                                Log.d("check3", "check");
+
+                            }
+                        });
+            }
+        });
 
         checkForAppUpdate();
         // update app
@@ -321,7 +326,8 @@ public class Login extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
-    public void saveSharedPref(String name, String psw, String role){
+
+    public void saveSharedPref(String name, String psw, String role) {
         SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -349,7 +355,7 @@ public class Login extends AppCompatActivity {
 
             case REQ_CODE_VERSION_UPDATE:
                 if (resultCode != RESULT_OK) { //RESULT_OK / RESULT_CANCELED / RESULT_IN_APP_UPDATE_FAILED
-                    Log.d("Login_update","Update flow failed! Result code: " + resultCode);
+                    Log.d("Login_update", "Update flow failed! Result code: " + resultCode);
                     // If the update is cancelled or fails,
                     // you can request to start the update again.
                     unregisterInstallStateUpdListener();
@@ -395,7 +401,7 @@ public class Login extends AppCompatActivity {
                     appUpdateManager.registerListener(installStateUpdatedListener);
                     // Start an update.
                     startAppUpdateFlexible(appUpdateInfo);
-                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) ) {
+                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                     // Start an update.
                     startAppUpdateImmediate(appUpdateInfo);
                 }
