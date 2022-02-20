@@ -35,7 +35,12 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.transition.Hold;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +185,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
         private void initStackData(NewGraphModel chartModel, Context context, int position) {
 
             ArrayList<BarEntry> values = new ArrayList<>();
-            Map<String, List<Float>> map = new HashMap<>();
+//            Map<String, List<Float>> map = new HashMap<>();
             int[] colorStr = new int[chartModel.getDataItems().size()];
             String[] dataStackLabel = new String[chartModel.getDataItems().size()];
             for (int i = 0; i < chartModel.getDataItems().size(); i++) {
@@ -203,6 +208,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             }
 
             List<String> listOfKeys = new ArrayList<String>(mapDriverBehaviour.keySet());
+            sortArray(listOfKeys);
             for (int i = 0; i < listOfKeys.size(); i++) {
                 float[] dataFloat = new float[mapDriverBehaviour.get(listOfKeys.get(i)).size()];
                 for (int j = 0; j < mapDriverBehaviour.get(listOfKeys.get(i)).size(); j++) {
@@ -402,6 +408,26 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
                 return ContextCompat.getColor(context, R.color.light_green);
             default:
                 return ContextCompat.getColor(context, R.color.teal_700);
+        }
+    }
+
+    private void sortArray(List<String> arraylist) {
+        Collections.sort(arraylist, new sortCompare());
+    }
+
+    class sortCompare implements Comparator<String> {
+        // Method of this class
+        @Override
+        public int compare(String a, String b) {
+            try {
+                Date aDate = new SimpleDateFormat("dd-MM-yy").parse(a);
+                Date bDate = new SimpleDateFormat("dd-MM-yy").parse(b);
+                /* Returns sorted data in ascending order */
+                return aDate.compareTo(bDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return -1;
         }
     }
 }
