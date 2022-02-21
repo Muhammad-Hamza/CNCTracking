@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cnctracking_2.R;
@@ -45,9 +46,16 @@ public class SearchArrayAdapter extends ArrayAdapter<String> {
         TextView lastTime = (TextView) rowView.findViewById(R.id.lasttime);
         ImageView eyesImg = (ImageView) rowView.findViewById(R.id.eyes);
         Button btnHistory = (Button) rowView.findViewById(R.id.btnHistory);
+        LinearLayout llContent = (LinearLayout) rowView.findViewById(R.id.llContent);
 
         if (unitList.size() > 0) {
 
+            llContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onViewClick(unitList.get(position), position, view);
+                }
+            });
             btnHistory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -92,5 +100,7 @@ public class SearchArrayAdapter extends ArrayAdapter<String> {
 
     public interface OnItemClickListener {
         void onItemClick(Object o);
+
+        void onViewClick(Object o, int position, View view);
     }
 }

@@ -317,4 +317,9 @@ public class FavFragment extends Fragment implements SearchArrayAdapter.OnItemCl
     public void onItemClick(Object o) {
 //        Log.e("asd","asdasdasdas");
     }
+
+    @Override
+    public void onViewClick(Object o, int position, View view) {
+
+    }
 }

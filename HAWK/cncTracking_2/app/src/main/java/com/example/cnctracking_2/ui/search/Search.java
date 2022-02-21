@@ -208,80 +208,80 @@ public class Search extends Fragment implements SearchArrayAdapter.OnItemClickLi
         list.setAdapter(adapter);
 
 
-        // list view menu
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    final int position, long id) {
-                // TODO Auto-generated method stub
-                Object[] obj = (Object[]) unitList.get(position);
-                final Unit unt = (Unit) obj[0];
-                Vehicle veh = (Vehicle) obj[1];
-                Customer customer = (Customer) obj[2];
-                Parameters prm = (Parameters) obj[3];
-
-                String Slecteditem = "" + veh.getRegNo();
-                //Toast.makeText(getActivity(), Slecteditem, Toast.LENGTH_SHORT).show();
-
-
-                // Shared Prefrences
-                SharedPreferences sp = getActivity().getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-
-
-                editor.putString("loginName", loginName);
-                editor.putString("password", password);
-                editor.putInt("userId", userId);
-                editor.putString("regNo", veh.getRegNo());
-                editor.putString("location", prm.getMessage());
-
-                editor.putString("custName", customer.getFirstName());
-
-                editor.putFloat("longitude", (float) (prm.getLongitude()));
-                editor.putFloat("latitude", (float) prm.getLatitude());
-                editor.putString("dateTime", prm.getStrDateTime());
-                editor.putString("deviceType", unt.getUnitType());
-                editor.putFloat("speed", (float) prm.getSpeed());
-                editor.putBoolean("isNr", veh.isNr());
-                editor.putInt("moduleId", (int) unt.getUnitId());
-
-                editor.commit();
-
-                //Toast.makeText(getApplicationContext(), "data save", Toast.LENGTH_LONG).show();
-
-                final Intent i = new Intent(getActivity(), LocationWithDetailAct.class);
-
-               /*
-                        i.putExtra("unitID", unt.getUnitId());
-                        i.putExtra("regNo", veh.getRegNo());
-                        i.putExtra("location", prm.getMessage());
-                        i.putExtra("longitude", prm.getLongitude());
-                        i.putExtra("latitude", prm.getLatitude());
-                        i.putExtra("dateTime", prm.getStrDateTime());
-                i.putExtra("unitID", unt.getUnitId());
-                i.putExtra("userRole", userRole);
-                i.putExtra("loginName", loginName);
-                i.putExtra("password", password);
-                i.putExtra("regNo", veh.getRegNo());*/
-
-                view.animate().setDuration(500).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                // list.remove(item);
-                                //adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-
-
-                                startActivity(i);
-
-                            }
-                        });
-
-            }
-        });
+//        // list view menu
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, final View view,
+//                                    final int position, long id) {
+//                // TODO Auto-generated method stub
+//                Object[] obj = (Object[]) unitList.get(position);
+//                final Unit unt = (Unit) obj[0];
+//                Vehicle veh = (Vehicle) obj[1];
+//                Customer customer = (Customer) obj[2];
+//                Parameters prm = (Parameters) obj[3];
+//
+//                String Slecteditem = "" + veh.getRegNo();
+//                //Toast.makeText(getActivity(), Slecteditem, Toast.LENGTH_SHORT).show();
+//
+//
+//                // Shared Prefrences
+//                SharedPreferences sp = getActivity().getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = sp.edit();
+//
+//
+//                editor.putString("loginName", loginName);
+//                editor.putString("password", password);
+//                editor.putInt("userId", userId);
+//                editor.putString("regNo", veh.getRegNo());
+//                editor.putString("location", prm.getMessage());
+//
+//                editor.putString("custName", customer.getFirstName());
+//
+//                editor.putFloat("longitude", (float) (prm.getLongitude()));
+//                editor.putFloat("latitude", (float) prm.getLatitude());
+//                editor.putString("dateTime", prm.getStrDateTime());
+//                editor.putString("deviceType", unt.getUnitType());
+//                editor.putFloat("speed", (float) prm.getSpeed());
+//                editor.putBoolean("isNr", veh.isNr());
+//                editor.putInt("moduleId", (int) unt.getUnitId());
+//
+//                editor.commit();
+//
+//                //Toast.makeText(getApplicationContext(), "data save", Toast.LENGTH_LONG).show();
+//
+//                final Intent i = new Intent(getActivity(), LocationWithDetailAct.class);
+//
+//               /*
+//                        i.putExtra("unitID", unt.getUnitId());
+//                        i.putExtra("regNo", veh.getRegNo());
+//                        i.putExtra("location", prm.getMessage());
+//                        i.putExtra("longitude", prm.getLongitude());
+//                        i.putExtra("latitude", prm.getLatitude());
+//                        i.putExtra("dateTime", prm.getStrDateTime());
+//                i.putExtra("unitID", unt.getUnitId());
+//                i.putExtra("userRole", userRole);
+//                i.putExtra("loginName", loginName);
+//                i.putExtra("password", password);
+//                i.putExtra("regNo", veh.getRegNo());*/
+//
+//                view.animate().setDuration(500).alpha(0)
+//                        .withEndAction(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                // list.remove(item);
+//                                //adapter.notifyDataSetChanged();
+//                                view.setAlpha(1);
+//
+//
+//                                startActivity(i);
+//
+//                            }
+//                        });
+//
+//            }
+//        });
 
 
     }
@@ -419,5 +419,74 @@ public class Search extends Fragment implements SearchArrayAdapter.OnItemClickLi
             bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1, prm.getModuleId());
             ((MainActivity) getActivity()).changeFragment(new ReportFragment(), bundle);
         }
+    }
+
+    @Override
+    public void onViewClick(Object o, int position, View view) {
+        // TODO Auto-generated method stub
+        Object[] obj = (Object[]) unitList.get(position);
+        final Unit unt = (Unit) obj[0];
+        Vehicle veh = (Vehicle) obj[1];
+        Customer customer = (Customer) obj[2];
+        Parameters prm = (Parameters) obj[3];
+
+        String Slecteditem = "" + veh.getRegNo();
+        //Toast.makeText(getActivity(), Slecteditem, Toast.LENGTH_SHORT).show();
+
+
+        // Shared Prefrences
+        SharedPreferences sp = getActivity().getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+
+        editor.putString("loginName", loginName);
+        editor.putString("password", password);
+        editor.putInt("userId", userId);
+        editor.putString("regNo", veh.getRegNo());
+        editor.putString("location", prm.getMessage());
+
+        editor.putString("custName", customer.getFirstName());
+
+        editor.putFloat("longitude", (float) (prm.getLongitude()));
+        editor.putFloat("latitude", (float) prm.getLatitude());
+        editor.putString("dateTime", prm.getStrDateTime());
+        editor.putString("deviceType", unt.getUnitType());
+        editor.putFloat("speed", (float) prm.getSpeed());
+        editor.putBoolean("isNr", veh.isNr());
+        editor.putInt("moduleId", (int) unt.getUnitId());
+
+        editor.commit();
+
+        //Toast.makeText(getApplicationContext(), "data save", Toast.LENGTH_LONG).show();
+
+        final Intent i = new Intent(getActivity(), LocationWithDetailAct.class);
+
+               /*
+                        i.putExtra("unitID", unt.getUnitId());
+                        i.putExtra("regNo", veh.getRegNo());
+                        i.putExtra("location", prm.getMessage());
+                        i.putExtra("longitude", prm.getLongitude());
+                        i.putExtra("latitude", prm.getLatitude());
+                        i.putExtra("dateTime", prm.getStrDateTime());
+                i.putExtra("unitID", unt.getUnitId());
+                i.putExtra("userRole", userRole);
+                i.putExtra("loginName", loginName);
+                i.putExtra("password", password);
+                i.putExtra("regNo", veh.getRegNo());*/
+
+        view.animate().setDuration(500).alpha(0)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        // list.remove(item);
+                        //adapter.notifyDataSetChanged();
+                        view.setAlpha(1);
+
+
+                        startActivity(i);
+
+                    }
+                });
+
     }
 }

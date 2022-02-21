@@ -20,7 +20,10 @@ import com.example.cnctracking_2.data.model.MaintenanceModel;
 import com.example.cnctracking_2.ui.maintenance.component.MaintenanceAdapter;
 import com.example.cnctracking_2.ui.maintenance.component.MaintenanceViewModel;
 import com.example.cnctracking_2.ui.report.component.ReportViewModel;
+import com.example.cnctracking_2.util.AppUtil;
 import com.example.cnctracking_2.util.ConstantUtil;
+
+import java.util.List;
 
 public class MaintenanceFragment extends Fragment {
     private MaintenanceViewModel mViewModel;
@@ -52,7 +55,8 @@ public class MaintenanceFragment extends Fragment {
             @Override
             public void onRequestComplete(Object response) {
                 if (response instanceof MaintenanceModel) {
-                    mAdapter = new MaintenanceAdapter(((MaintenanceModel) response).getMaintenanceDue());
+                    List<MaintenanceModel.MaintenanceDue> newList = AppUtil.Companion.doSortList(((MaintenanceModel) response).getMaintenanceDue());
+                    mAdapter = new MaintenanceAdapter(newList);
                     recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setAdapter(mAdapter);
