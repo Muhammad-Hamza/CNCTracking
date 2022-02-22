@@ -45,7 +45,7 @@ public class SearchArrayAdapter extends ArrayAdapter<String> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.iconImage);
         TextView lastTime = (TextView) rowView.findViewById(R.id.lasttime);
         ImageView eyesImg = (ImageView) rowView.findViewById(R.id.eyes);
-        Button btnHistory = (Button) rowView.findViewById(R.id.btnHistory);
+        LinearLayout btnHistory = (LinearLayout) rowView.findViewById(R.id.btnHistory);
         LinearLayout llContent = (LinearLayout) rowView.findViewById(R.id.llContent);
 
         if (unitList.size() > 0) {

@@ -98,19 +98,41 @@
             android:id="@+id/eyes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
             android:src="@drawable/ic_outline_remove_red_eye_24" />
 
-        <Button
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/btnHistory"
-            android:layout_width="80dp"
-            android:layout_height="35dp"
-            android:layout_below="@id/eyes"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="History"
-            android:textColor="@color/text_color_dark"
-            android:textSize="8sp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@id/eyes"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/graph"
+                android:textColor="@color/text_color_dark"
+                android:textSize="8sp"
+                android:layout_marginEnd="4dp"
+                android:layout_gravity="end"
+                tools:ignore="SpeakableTextPresentCheck" />
+            <TextView
+                android:id="@+id/tvReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_gravity="end"
+                android:text="Report"
+                android:textColor="@color/button_color"
+                android:textSize="12dp" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
