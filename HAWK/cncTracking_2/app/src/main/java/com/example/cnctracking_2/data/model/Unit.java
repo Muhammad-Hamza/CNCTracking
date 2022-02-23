@@ -11,37 +11,11 @@ public class Unit  implements Parcelable {
     private int code;
     private int unitId;
     private String unitType;
-    private String commType;
-    private int modemCode;
-    private long IMEI;
-    private String serialNo;
-    private String firmware;
-    private String packageName;
-    private String password;
+
 
     public Unit() {
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
-    public static final Creator CREATOR = new Creator() {
-        @Override
-        public Object createFromParcel(Parcel source) {
-            return null;
-        }
-
-        @Override
-        public Object[] newArray(int size) {
-            return new Object[0];
-        }
-    };
 
     public Unit(int unitId) {
         this.unitId = unitId;
@@ -52,6 +26,36 @@ public class Unit  implements Parcelable {
         this.unitType = unitType;
     }
 
+
+    protected Unit(Parcel in) {
+        code = in.readInt();
+        unitId = in.readInt();
+        unitType = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(code);
+        dest.writeInt(unitId);
+        dest.writeString(unitType);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Unit> CREATOR = new Creator<Unit>() {
+        @Override
+        public Unit createFromParcel(Parcel in) {
+            return new Unit(in);
+        }
+
+        @Override
+        public Unit[] newArray(int size) {
+            return new Unit[size];
+        }
+    };
 
     public void setUnitId(int unitId) {
         this.unitId = unitId;
@@ -70,52 +74,8 @@ public class Unit  implements Parcelable {
     }
 
 
-    public void setCommType(String commType) {
-        this.commType = commType;
-    }
-
-    public void setModemCode(int modemCode) {
-        this.modemCode = modemCode;
-    }
-
-    public void setSerialNo(String serialNo) {
-        this.serialNo = serialNo;
-    }
-
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setIMEI(long IMEI) {
-        this.IMEI = IMEI;
-    }
-
-    public String getCommType() {
-        return commType;
-    }
-
-    public int getModemCode() {
-        return modemCode;
-    }
-
-    public String getSerialNo() {
-        return serialNo;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public long getIMEI() {
-        return IMEI;
     }
 
     public int hashCode() {
@@ -133,22 +93,7 @@ public class Unit  implements Parcelable {
         return this.unitId + "/" + this.unitType;
     }
 
-    public String getFirmware() {
-        return firmware;
+    public int getCode() {
+        return code;
     }
-
-    public void setFirmware(String firmware) {
-        this.firmware= firmware;
-    }
-
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-
-
 }

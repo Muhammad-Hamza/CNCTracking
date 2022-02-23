@@ -28,6 +28,7 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tvSeeChart"
             android:layout_width="match_parent"
@@ -50,6 +51,12 @@
             android:id="@+id/barChart"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
+
+        <com.anychart.AnyChartView
+            android:id="@+id/anyBarChart"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="10dp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

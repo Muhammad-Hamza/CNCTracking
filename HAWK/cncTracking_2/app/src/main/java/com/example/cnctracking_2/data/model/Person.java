@@ -8,7 +8,8 @@ import java.util.Calendar;
 /**
  * Created by rd03 on 10/21/2015.
  */
-public class Person  implements Parcelable { protected int code;
+public class Person  {
+    protected int code;
 
     protected String gender;
     protected String department;
@@ -236,14 +237,6 @@ public class Person  implements Parcelable { protected int code;
         this.invalidAddr = invalidAddr;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
 }
 

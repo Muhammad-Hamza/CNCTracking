@@ -9,7 +9,7 @@
     android:layout_marginTop="?attr/actionBarSize"
     android:background="@color/white"
 
-    android:paddingBottom="300dp"
+    android:paddingBottom="270dp"
     tools:showIn="@layout/activity_location_with_detail">
 
 
