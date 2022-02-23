@@ -36,6 +36,12 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ReportViewModel.class);
         setContentView(R.layout.fragment_report);
+        findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         setTitleFrag();
         recyclerView = findViewById(R.id.recyclerView);
         int extraIndex = -1;
