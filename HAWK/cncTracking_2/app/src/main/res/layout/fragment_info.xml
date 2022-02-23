@@ -181,9 +181,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@id/like"
+            android:layout_below="@id/adress"
+
             android:orientation="vertical">
 
 

@@ -480,7 +480,7 @@ public class LocationWithDetailAct extends AppCompatActivity
     public void changeFragment(Fragment fragment, Bundle bundle)
     {
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fmHolder, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
     }
 
     public void getHistory()
