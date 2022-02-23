@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,11 +27,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.cnctracking_2.MainActivity;
 import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.config.APIManager;
 import com.example.cnctracking_2.ui.ControlFragment;
 import com.example.cnctracking_2.ui.map.LocationWithDetailAct;
 import com.example.cnctracking_2.ui.map.MapsFragment;
+import com.example.cnctracking_2.ui.report.ReportFragment;
+import com.example.cnctracking_2.util.ConstantUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +70,7 @@ public class InfoFragment extends Fragment {
     float latt,lngg, speed;
     boolean isNr;
     ImageView likeButton, shareButton, configButton, deviceStatusImg;
+    LinearLayout btnReport;
     String  deviceType;
     int moduleId, userId;
     public InfoFragment() {
@@ -116,6 +121,7 @@ public class InfoFragment extends Fragment {
         likeButton = (ImageView) v.findViewById(R.id.like);
         shareButton = (ImageView) v.findViewById(R.id.share);
         configButton = (ImageView) v.findViewById(R.id.configure);
+        btnReport = (LinearLayout) v.findViewById(R.id.btnReport);
         deviceStatusImg = (ImageView) v.findViewById(R.id.info_device_status);
         speedLabel = (TextView)  v.findViewById(R.id.speed_info);
         lastRecordTimeLabel = (TextView)  v.findViewById(R.id.last_packet_time_info);
@@ -189,6 +195,13 @@ public class InfoFragment extends Fragment {
                 startActivity(shareIntent);
                 //Toast.makeText(getActivity(), "Share Button Click", Toast.LENGTH_SHORT).show();
             }
+        });
+        btnReport.setOnClickListener(v1 ->
+        {
+            Bundle bundle = new Bundle();
+            bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1, moduleId);
+            ((LocationWithDetailAct) getActivity()).changeFragment(new ReportFragment(), bundle);
+
         });
         configButton.setOnClickListener(new View.OnClickListener() {
             @Override

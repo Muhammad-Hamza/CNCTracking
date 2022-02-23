@@ -149,13 +149,13 @@
             android:textStyle="bold"/>
 
         <ImageView
+            android:id="@+id/like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/share"
+            android:layout_below="@id/adress"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:layout_below="@id/adress"
-            android:id="@+id/like"
+            android:layout_toLeftOf="@id/share"
             android:background="@mipmap/like" />
         <ImageView
             android:layout_width="wrap_content"
@@ -176,6 +176,30 @@
             android:id="@+id/configure"
             android:background="@mipmap/settings" />
 
+        <LinearLayout
+            android:id="@+id/btnReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="45dp"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@id/like"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@id/eyes"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/graph"
+                android:textColor="@color/text_color_dark"
+                android:textSize="8sp"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </LinearLayout>
 
 
         <TextView
