@@ -8,14 +8,14 @@ import java.util.Calendar;
 /**
  * Created by rd03 on 10/21/2015.
  */
-public class Parameters implements Parcelable {
+public class Parameters implements Parcelable
+{
     //Get Current Position Param
     protected int unitId;
-    protected Calendar dateTime; //YYYY/MM/DD hh:mm:ss
-    protected Calendar sysDateTime;
     protected double longitude;
     protected double latitude;
     protected double speed;
+    protected int speedInt;
     protected int altitude;
     protected int satellite;
     protected int reportId;
@@ -28,10 +28,9 @@ public class Parameters implements Parcelable {
     protected int timeTotal;
     protected int statusId;
     protected String diffTime;
+    protected int moduleId;
 
-    boolean tempAllow;
-    boolean fuelAllow;
-    boolean SpeedAllow;
+
     protected double temperature;
     protected double fuel;
     protected long timeInMillies;
@@ -43,18 +42,21 @@ public class Parameters implements Parcelable {
     protected String route;
     protected int direction;
 
-    protected int moduleId;
+    protected Calendar dateTime; //YYYY/MM/DD hh:mm:ss
+    protected Calendar sysDateTime;
 
-
-    public Parameters() {
+    public Parameters()
+    {
     }
 
-    protected Parameters(Parcel in) {
+
+    protected Parameters(Parcel in)
+    {
         unitId = in.readInt();
         longitude = in.readDouble();
         latitude = in.readDouble();
         speed = in.readDouble();
-
+        speedInt = in.readInt();
         altitude = in.readInt();
         satellite = in.readInt();
         reportId = in.readInt();
@@ -62,21 +64,33 @@ public class Parameters implements Parcelable {
         mileage = in.readDouble();
         password = in.readString();
         strDateTime = in.readString();
-        tempAllow = in.readByte() != 0;
-        fuelAllow = in.readByte() != 0;
-        SpeedAllow = in.readByte() != 0;
+        startTime = in.readString();
+        endTime = in.readString();
+        timeTotal = in.readInt();
+        statusId = in.readInt();
+        diffTime = in.readString();
         temperature = in.readDouble();
         fuel = in.readDouble();
+        timeInMillies = in.readLong();
         message = in.readString();
         emergency = in.readByte() != 0;
         crudeMessage = in.readString();
         deviation = in.readByte() != 0;
         route = in.readString();
         direction = in.readInt();
+        moduleId = in.readInt();
+
+    }
+
+
+    public int getModuleId()
+    {
+        return moduleId;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int flags)
+    {
         dest.writeInt(unitId);
         dest.writeDouble(longitude);
         dest.writeDouble(latitude);
@@ -106,283 +120,317 @@ public class Parameters implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
+    public int describeContents()
+    {
         return 0;
     }
 
-    public static final Creator<Parameters> CREATOR = new Creator<Parameters>() {
+    public static final Creator<Parameters> CREATOR = new Creator<Parameters>()
+    {
         @Override
-        public Parameters createFromParcel(Parcel in) {
+        public Parameters createFromParcel(Parcel in)
+        {
             return new Parameters(in);
         }
 
         @Override
-        public Parameters[] newArray(int size) {
+        public Parameters[] newArray(int size)
+        {
             return new Parameters[size];
         }
     };
 
-    public String getStrDateTime() {
+    public String getStrDateTime()
+    {
         return strDateTime;
     }
 
-    public void setStrDateTime(String strDateTime) {
+    public void setStrDateTime(String strDateTime)
+    {
         this.strDateTime = strDateTime;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(double longitude)
+    {
         this.longitude = longitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(double latitude)
+    {
         this.latitude = latitude;
     }
 
-    public void setSpeed(double speed) {
+    public void setSpeed(double speed)
+    {
         this.speed = speed;
     }
 
-    public void setDateTime(Calendar dateTime) {
+    public void setDateTime(Calendar dateTime)
+    {
         this.dateTime = dateTime;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(String message)
+    {
         this.message = message;
     }
 
-    public void setReportId(int reportId) {
+    public void setReportId(int reportId)
+    {
         this.reportId = reportId;
     }
 
-    public void setEmergency(boolean emergency) {
+    public void setEmergency(boolean emergency)
+    {
         this.emergency = emergency;
     }
 
 
-
-    public void setReportText(String reportText) {
+    public void setReportText(String reportText)
+    {
         this.reportText = reportText;
     }
 
-    public void setUnitId(int unitId) {
+    public void setUnitId(int unitId)
+    {
         this.unitId = unitId;
     }
 
-    public void setSysDateTime(Calendar sysDateTime) {
+    public void setSysDateTime(Calendar sysDateTime)
+    {
         this.sysDateTime = sysDateTime;
     }
 
-    public void setCrudeMessage(String crudeMessage) {
+    public void setCrudeMessage(String crudeMessage)
+    {
         this.crudeMessage = crudeMessage;
     }
 
-    public double getLongitude() {
+    public double getLongitude()
+    {
         return longitude;
     }
 
-    public double getLatitude() {
+    public double getLatitude()
+    {
         return latitude;
     }
 
-    public double getSpeed() {
+    public double getSpeed()
+    {
         return speed;
     }
 
-    public Calendar getDateTime() {
+    public Calendar getDateTime()
+    {
         return dateTime;
     }
 
-    public String getMessage() {
+    public String getMessage()
+    {
         return message;
     }
 
-    public int getReportId() {
+    public int getReportId()
+    {
         return reportId;
     }
 
-    public boolean getEmergency() {
+    public boolean getEmergency()
+    {
         return emergency;
     }
 
 
-
-    public String getReportText() {
+    public String getReportText()
+    {
         return reportText;
     }
 
-    public int getUnitId() {
+    public int getUnitId()
+    {
         return unitId;
     }
 
-    public Calendar getSysDateTime() {
+    public Calendar getSysDateTime()
+    {
         return sysDateTime;
     }
 
-    public String getCrudeMessage() {
+    public String getCrudeMessage()
+    {
         return crudeMessage;
     }
 
-    public String getPassword() {
+    public String getPassword()
+    {
         return password;
     }
 
-    public boolean getDeviation() {
+    public boolean getDeviation()
+    {
         return deviation;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password)
+    {
         this.password = password;
     }
 
-    public int getAltitude() {
+    public int getAltitude()
+    {
         return altitude;
     }
 
-    public void setAltitude(int altitude) {
+    public void setAltitude(int altitude)
+    {
         this.altitude = altitude;
     }
 
-    public int getSatellite() {
+    public int getSatellite()
+    {
         return satellite;
     }
 
-    public void setSatellite(int satellite) {
+    public void setSatellite(int satellite)
+    {
         this.satellite = satellite;
     }
 
-    public double getMileage() {
+    public double getMileage()
+    {
         return mileage;
     }
 
-    public void setMileage(double mileage) {
+    public void setMileage(double mileage)
+    {
         this.mileage = mileage;
     }
 
-    public void setDeviation(boolean deviation) {
+    public void setDeviation(boolean deviation)
+    {
         this.deviation = deviation;
     }
 
-    public String getRoute() {
+    public String getRoute()
+    {
         return route;
     }
 
-    public void setRoute(String route) {
+    public void setRoute(String route)
+    {
         this.route = route;
     }
-    public double getTemperature() {
+
+    public double getTemperature()
+    {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(double temperature)
+    {
         this.temperature = temperature;
     }
 
-    public double getFuel() {
+    public double getFuel()
+    {
         return fuel;
     }
 
-    public void setFuel(double fuel) {
+    public void setFuel(double fuel)
+    {
         this.fuel = fuel;
     }
 
-    public boolean isTempAllow() {
-        return tempAllow;
+    public int getSpeedInt()
+    {
+        return speedInt;
     }
 
-    public void setTempAllow(boolean tempAllow) {
-        this.tempAllow = tempAllow;
+    public void setSpeedInt(int speedInt)
+    {
+        this.speedInt = speedInt;
     }
 
-    public boolean isFuelAllow() {
-        return fuelAllow;
-    }
-
-    public void setFuelAllow(boolean fuelAllow) {
-        this.fuelAllow = fuelAllow;
-    }
-
-    public boolean isSpeedAllow() {
-        return SpeedAllow;
-    }
-
-    public void setSpeedAllow(boolean speedAllow) {
-        SpeedAllow = speedAllow;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
-
-    public String getStartTime() {
+    public String getStartTime()
+    {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(String startTime)
+    {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public String getEndTime()
+    {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(String endTime)
+    {
         this.endTime = endTime;
     }
 
-    public int getTimeTotal() {
+    public int getTimeTotal()
+    {
         return timeTotal;
     }
 
-    public void setTimeTotal(int timeTotal) {
+    public void setTimeTotal(int timeTotal)
+    {
         this.timeTotal = timeTotal;
     }
 
-    public boolean isEmergency() {
+    public boolean isEmergency()
+    {
         return emergency;
     }
 
-    public boolean isDeviation() {
+    public boolean isDeviation()
+    {
         return deviation;
     }
 
-    public String getDiffTime() {
+    public String getDiffTime()
+    {
         return diffTime;
     }
 
-    public void setDiffTime(String diffTime) {
+    public void setDiffTime(String diffTime)
+    {
         this.diffTime = diffTime;
     }
 
-    public int getDirection() {
+    public int getDirection()
+    {
         return direction;
     }
 
-    public void setDirection(int direction) {
+    public void setDirection(int direction)
+    {
         this.direction = direction;
     }
 
-    public int getStatusId() {
+    public int getStatusId()
+    {
         return statusId;
     }
 
-    public void setStatusId(int statusId) {
+    public void setStatusId(int statusId)
+    {
         this.statusId = statusId;
     }
 
-    public long getTimeInMillies() {
+    public long getTimeInMillies()
+    {
         return timeInMillies;
     }
 
-    public void setTimeInMillies(long timeInMillies) {
+    public void setTimeInMillies(long timeInMillies)
+    {
         this.timeInMillies = timeInMillies;
     }
-
     public void setModuleId(int moduleId) {
         this.moduleId = moduleId;
     }
