@@ -11,11 +11,10 @@ import java.util.Calendar;
 public class Parameters implements Parcelable {
     //Get Current Position Param
     protected int unitId;
-    protected Calendar dateTime; //YYYY/MM/DD hh:mm:ss
-    protected Calendar sysDateTime;
     protected double longitude;
     protected double latitude;
     protected double speed;
+    protected int speedInt;
     protected int altitude;
     protected int satellite;
     protected int reportId;
@@ -29,9 +28,7 @@ public class Parameters implements Parcelable {
     protected int statusId;
     protected String diffTime;
 
-    boolean tempAllow;
-    boolean fuelAllow;
-    boolean SpeedAllow;
+
     protected double temperature;
     protected double fuel;
     protected long timeInMillies;
@@ -43,16 +40,19 @@ public class Parameters implements Parcelable {
     protected String route;
     protected int direction;
 
+    protected Calendar dateTime; //YYYY/MM/DD hh:mm:ss
+    protected Calendar sysDateTime;
 
     public Parameters() {
     }
+
 
     protected Parameters(Parcel in) {
         unitId = in.readInt();
         longitude = in.readDouble();
         latitude = in.readDouble();
         speed = in.readDouble();
-
+        speedInt = in.readInt();
         altitude = in.readInt();
         satellite = in.readInt();
         reportId = in.readInt();
@@ -60,19 +60,68 @@ public class Parameters implements Parcelable {
         mileage = in.readDouble();
         password = in.readString();
         strDateTime = in.readString();
-        tempAllow = in.readByte() != 0;
-        fuelAllow = in.readByte() != 0;
-        SpeedAllow = in.readByte() != 0;
+        startTime = in.readString();
+        endTime = in.readString();
+        timeTotal = in.readInt();
+        statusId = in.readInt();
+        diffTime = in.readString();
         temperature = in.readDouble();
         fuel = in.readDouble();
+        timeInMillies = in.readLong();
         message = in.readString();
         emergency = in.readByte() != 0;
         crudeMessage = in.readString();
         deviation = in.readByte() != 0;
         route = in.readString();
-
+        direction = in.readInt();
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(unitId);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
+        dest.writeDouble(speed);
+        dest.writeInt(speedInt);
+        dest.writeInt(altitude);
+        dest.writeInt(satellite);
+        dest.writeInt(reportId);
+        dest.writeString(reportText);
+        dest.writeDouble(mileage);
+        dest.writeString(password);
+        dest.writeString(strDateTime);
+        dest.writeString(startTime);
+        dest.writeString(endTime);
+        dest.writeInt(timeTotal);
+        dest.writeInt(statusId);
+        dest.writeString(diffTime);
+        dest.writeDouble(temperature);
+        dest.writeDouble(fuel);
+        dest.writeLong(timeInMillies);
+        dest.writeString(message);
+        dest.writeByte((byte) (emergency ? 1 : 0));
+        dest.writeString(crudeMessage);
+        dest.writeByte((byte) (deviation ? 1 : 0));
+        dest.writeString(route);
+        dest.writeInt(direction);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Parameters> CREATOR = new Creator<Parameters>() {
+        @Override
+        public Parameters createFromParcel(Parcel in) {
+            return new Parameters(in);
+        }
+
+        @Override
+        public Parameters[] newArray(int size) {
+            return new Parameters[size];
+        }
+    };
 
     public String getStrDateTime() {
         return strDateTime;
@@ -237,38 +286,12 @@ public class Parameters implements Parcelable {
         this.fuel = fuel;
     }
 
-    public boolean isTempAllow() {
-        return tempAllow;
+    public int getSpeedInt() {
+        return speedInt;
     }
 
-    public void setTempAllow(boolean tempAllow) {
-        this.tempAllow = tempAllow;
-    }
-
-    public boolean isFuelAllow() {
-        return fuelAllow;
-    }
-
-    public void setFuelAllow(boolean fuelAllow) {
-        this.fuelAllow = fuelAllow;
-    }
-
-    public boolean isSpeedAllow() {
-        return SpeedAllow;
-    }
-
-    public void setSpeedAllow(boolean speedAllow) {
-        SpeedAllow = speedAllow;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
+    public void setSpeedInt(int speedInt) {
+        this.speedInt = speedInt;
     }
 
     public String getStartTime() {
@@ -334,4 +357,5 @@ public class Parameters implements Parcelable {
     public void setTimeInMillies(long timeInMillies) {
         this.timeInMillies = timeInMillies;
     }
+
 }

@@ -133,16 +133,16 @@ public class LocationWithDetailAct extends AppCompatActivity  {
 /*        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();*/
-       // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-         //       .findFragmentById(R.id.map);
+        // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        //       .findFragmentById(R.id.map);
 
-       // mapFragment.getMapAsync(this);
+        // mapFragment.getMapAsync(this);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         progressBar.setVisibility(View.GONE);
 
         backButton = (ImageView) findViewById(R.id.back);
         searchImg = (ImageView) findViewById(R.id.searchtop);
-       // searchImg.setVisibility(View.GONE);
+        // searchImg.setVisibility(View.GONE);
         SharedPreferences sp = getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
 
         historyFetched = false;
@@ -156,8 +156,8 @@ public class LocationWithDetailAct extends AppCompatActivity  {
         deviceType = sp.getString("deviceType", DEFAULT);
         moduleId = sp.getInt("moduleId", 0);
         // heading = sp.getInt("heading", 0);
-         password = sp.getString("password", DEFAULT);
-         loginName = sp.getString("loginName", DEFAULT);
+        password = sp.getString("password", DEFAULT);
+        loginName = sp.getString("loginName", DEFAULT);
         // isNr =  sp.getBoolean("isNr", FALSE);
 
         final Calendar c = Calendar.getInstance();
@@ -179,17 +179,17 @@ public class LocationWithDetailAct extends AppCompatActivity  {
 
         mapfragment = new MapsFragment();
         getSupportFragmentManager().beginTransaction()
-               .replace(R.id.content, mapfragment, mapfragment.getClass().getSimpleName()).
+                .replace(R.id.content, mapfragment, mapfragment.getClass().getSimpleName()).
                 setCustomAnimations(
-                R.anim.slide_in,  // enter
-                R.anim.fade_out,  // exit
-                R.anim.fade_in,   // popEnter
-                R.anim.slide_out  // popExit
-        ).addToBackStack(null).commit();
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                ).addToBackStack(null).commit();
 
 
 //
-       // btnBottomsheet.setVisibility(View.GONE);
+        // btnBottomsheet.setVisibility(View.GONE);
         // fragment_map
         // navView.setOnNavigationItemSelectedListener(this);
         //  navView.setSelectedItemId(R.id.navigation_home);
@@ -208,9 +208,9 @@ public class LocationWithDetailAct extends AppCompatActivity  {
 
 
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
-
-        sheetBehavior.setPeekHeight(600);
-
+        // sheetBehavior.setPeekHeight(600);
+        //sheetBehavior.setPeekHeight(getApplicationContext().getResources().getDimension(R.dimen.bottom_sheet_height));
+        //  sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         /*int contenteight = contentSheet.getHeight() - layoutBottomSheet.getHeight();
         contentSheet.getLayoutParams().height = contenteight;*/
         sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -221,7 +221,7 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                         break;
                     }
                     case BottomSheetBehavior.STATE_EXPANDED: {
-                      //  btnBottomsheet.setText("Close Sheet");
+                        //  btnBottomsheet.setText("Close Sheet");
 
                         break;
                     }
@@ -230,7 +230,7 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                         break;
                     }
                     case BottomSheetBehavior.STATE_COLLAPSED: {
-                       // btnBottomsheet.setText("Expend Sheet");
+                        // btnBottomsheet.setText("Expend Sheet");
 
                         break;
                     }
@@ -250,8 +250,8 @@ public class LocationWithDetailAct extends AppCompatActivity  {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  final Intent i = new Intent(LocationWithDetailAct.this, MainActivity.class);
-               // startActivity(i);
+                //  final Intent i = new Intent(LocationWithDetailAct.this, MainActivity.class);
+                // startActivity(i);
                 view.animate().setDuration(500).alpha(0)
                         .withEndAction(new Runnable() {
                             @Override
@@ -274,7 +274,7 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                                 finish();
                             }
                         });
-             //   Toast.makeText(LocationWithDetailAct.this, "Search Button Click", Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(LocationWithDetailAct.this, "Search Button Click", Toast.LENGTH_SHORT).show();
             }
         });
         info.setOnClickListener(new View.OnClickListener() {
@@ -289,12 +289,12 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, mapfragment, mapfragment.getClass().getSimpleName())
                         .setCustomAnimations(
-                        R.anim.slide_in,  // enter
-                        R.anim.fade_out,  // exit
-                        R.anim.fade_in,   // popEnter
-                        R.anim.slide_out  // popExit
-                )
-                .addToBackStack(null).commit();
+                                R.anim.slide_in,  // enter
+                                R.anim.fade_out,  // exit
+                                R.anim.fade_in,   // popEnter
+                                R.anim.slide_out  // popExit
+                        )
+                        .addToBackStack(null).commit();
 
 
             }
@@ -303,9 +303,9 @@ public class LocationWithDetailAct extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 hideSpaceBar(2);
-              //  Fragment fragment2 = new Fragment1();
-             //   getSupportFragmentManager().beginTransaction()
-               //         .replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName()).addToBackStack(null).commit();
+                //  Fragment fragment2 = new Fragment1();
+                //   getSupportFragmentManager().beginTransaction()
+                //         .replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName()).addToBackStack(null).commit();
                 if(mapfragment != null){
                     mapfragment.onStop();
                 }else{
@@ -330,7 +330,8 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                 }else{
                     changeToHistory();
                 }
-                sheetBehavior.setPeekHeight(600);
+                //  sheetBehavior.setPeekHeight(600);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 
@@ -452,11 +453,11 @@ public class LocationWithDetailAct extends AppCompatActivity  {
 
 
     public void getHistory(){
-     //   Log.d("getHistory", "1");
+        //   Log.d("getHistory", "1");
         try {
             progressBar.setVisibility(View.VISIBLE);
             String url = APIManager.getTrackLogsAPI();
-        //    Log.d("getHistory", url +" - "+ loginName +" - "+ password);
+            //    Log.d("getHistory", url +" - "+ loginName +" - "+ password);
             StringRequest sr = new StringRequest(Request.Method.POST, url,
 
                     new Response.Listener<String>() {
@@ -464,10 +465,10 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                         @Override
                         public void onResponse(String response) {
                             JSONObject jsonResponse;
-                   //         Log.d("getHistory", "2");
+                            //         Log.d("getHistory", "2");
                             try {
                                 jsonResponse = new JSONObject(response);
-                           //     Log.d("getHistory", response);
+                                //     Log.d("getHistory", response);
                                 JSONArray jsonArray = jsonResponse.optJSONArray("searchResult");
                                 JSONArray jsonArray2 = jsonResponse.optJSONArray("tripResults");
                                 String totalRunning = jsonResponse.optString("totalTripsMileage").toString();
@@ -478,8 +479,8 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                                 if(totalStop != null) {
                                     totalStop = totalStop + "@" + jsonResponse.optString("totalStopDuration").toString();
                                 }
-                           //     Log.d("getHistory", totalRunning);
-                           //     Log.d("getHistory3", totalStop);
+                                //     Log.d("getHistory", totalRunning);
+                                //     Log.d("getHistory3", totalStop);
 
                                 historyFetched = true;
                                 progressBar.setVisibility(View.GONE);
@@ -489,7 +490,7 @@ public class LocationWithDetailAct extends AppCompatActivity  {
 
                             }catch(Exception e){
                                 e.printStackTrace();
-                           //     Log.d("getHistory", "Exception found in locationWithDetailAct getHistory");
+                                //     Log.d("getHistory", "Exception found in locationWithDetailAct getHistory");
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "History is empty", Toast.LENGTH_SHORT).show();
                                 changeToHistory();
@@ -500,7 +501,7 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     progressBar.setVisibility(View.GONE);
-                   // Log.d("getHistory", "Exception found volleyError in locationWithDetailAct getHistory");
+                    // Log.d("getHistory", "Exception found volleyError in locationWithDetailAct getHistory");
                     Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_SHORT).show();
                 }
             }) {
@@ -530,7 +531,7 @@ public class LocationWithDetailAct extends AppCompatActivity  {
             // progressBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Data Not Found", Toast.LENGTH_SHORT).show();
         }
-  //      Log.d("getHistory", "fromDate="+dateOnly+" 12:00:00 AM&toDate="+dateOnly+" 11:59:59 PM&moduleId="+moduleId);
+        //      Log.d("getHistory", "fromDate="+dateOnly+" 12:00:00 AM&toDate="+dateOnly+" 11:59:59 PM&moduleId="+moduleId);
     }
 
     public void sharedPreferencesMethod(String part1, String part2, String totalRunning, String totalStop, boolean changePage){
@@ -544,7 +545,7 @@ public class LocationWithDetailAct extends AppCompatActivity  {
         editor.commit();
 
         if(changePage)
-        changeToHistory();
+            changeToHistory();
 
     }
     public void changeToHistory(){
@@ -554,13 +555,13 @@ public class LocationWithDetailAct extends AppCompatActivity  {
         fragment2.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName())
-        .setCustomAnimations(
-                R.anim.slide_in,  // enter
-                R.anim.fade_out,  // exit
-                R.anim.fade_in,   // popEnter
-                R.anim.slide_out  // popExit
-        )
-        .addToBackStack(null).commit();
+                .setCustomAnimations(
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                )
+                .addToBackStack(null).commit();
 
         Fragment fragment = new MapsFragment_history();
         Bundle args2 = new Bundle();
@@ -583,15 +584,15 @@ public class LocationWithDetailAct extends AppCompatActivity  {
                 R.anim.fade_out,  // exit
                 R.anim.fade_in,   // popEnter
                 R.anim.slide_out  // popExit
-                ).addToBackStack(null).commit();
+        ).addToBackStack(null).commit();
 
     }
     @Override
     public void onBackPressed(){
-      //  Log.d("onBackPressed", ""+getSupportFragmentManager().getBackStackEntryCount());
+        //  Log.d("onBackPressed", ""+getSupportFragmentManager().getBackStackEntryCount());
         super.onBackPressed();
         if (getSupportFragmentManager().getBackStackEntryCount() == 2){
-           // showSettingsAlert();
+            // showSettingsAlert();
             finish();
         }
         else {
@@ -609,11 +610,11 @@ public class LocationWithDetailAct extends AppCompatActivity  {
             alertDialog.setMessage(R.string.exit_dialog);
 //+" "+ Arrays.asList(eventCounts)
             // On pressing Settings button
-      alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-                finish();
-            }
-        });
+            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    finish();
+                }
+            });
 
             // on pressing cancel button
             alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -77,13 +77,13 @@ public class MapsFragment_history extends Fragment {
 
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.mipmap.redpin_map)));
-                        //.title("END")
-                       // .snippet("" + listReport.get(total).getStrDateTime()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                //.title("END")
+                // .snippet("" + listReport.get(total).getStrDateTime()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
                 latLng = new LatLng(listReport.get(0).getLatitude(), listReport.get(0).getLongitude());
                 googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.mipmap.greenpin)));
-                        //.title("START")//+ listReport.get(0).getMessage()
-                        //.snippet("" + listReport.get(0).getStrDateTime()));
+                //.title("START")//+ listReport.get(0).getMessage()
+                //.snippet("" + listReport.get(0).getStrDateTime()));
 
                 LatLngBounds bounds = builder.build();
                 //int padding = 0; // offset from edges of the map in pixels
@@ -96,7 +96,7 @@ public class MapsFragment_history extends Fragment {
 
                 googleMap.moveCamera(cu);
 
-               // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
                 /*CameraPosition cameraPosition = CameraPosition.builder()
                         .target(latLng)
                         .zoom(13)
@@ -105,8 +105,8 @@ public class MapsFragment_history extends Fragment {
                         .build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
                         2000, null);*/
-                }
             }
+        }
     };
 
     @Nullable
@@ -126,18 +126,18 @@ public class MapsFragment_history extends Fragment {
         Bundle args = getArguments();
         String index = null;
         try{
-             index = args.getString("index", DEFAULT);
+            index = args.getString("index", DEFAULT);
         }catch(Exception e){}
 
 
         if(index != null && index.equals("TripClick")){ // means click it from trip report
-             sp = getActivity().getSharedPreferences("TripClickLatLong", Context.MODE_PRIVATE);
+            sp = getActivity().getSharedPreferences("TripClickLatLong", Context.MODE_PRIVATE);
             report = sp.getString("searchResult", DEFAULT);
             Log.d("frag_map", "Trip click");
 
         }else{
             sp = getActivity().getSharedPreferences("Report", Context.MODE_PRIVATE);
-             report = sp.getString("searchResult", DEFAULT);
+            report = sp.getString("searchResult", DEFAULT);
             Log.d("frag_map", "All history");
         }
         Log.d("frag_map", report);
@@ -150,7 +150,7 @@ public class MapsFragment_history extends Fragment {
         JSONObject jsonResponse;
         try {
             if(report == null){report = "";}
-           // jsonResponse = new JSONObject(report);
+            // jsonResponse = new JSONObject(report);
             JSONArray jsonArray = new JSONArray(report);
             if( jsonArray == null){
                 jsonArray = new JSONArray(report);

@@ -9,11 +9,43 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:textAlignment="center"
+        android:id="@+id/immobilzerText"
         android:textStyle="bold"
         android:textSize="15dp"
-        android:text="@string/no_data" />
+        android:text="Engine Immobilizer" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/off_veh"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/loginbutton_green"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="10dp"
+        android:text=" On "
+        android:textColor="@android:color/black"
+        android:textSize="12sp" >
+    </androidx.appcompat.widget.AppCompatButton>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/on_veh"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/loginbutton_grey"
+        android:layout_centerHorizontal="true"
+        android:text=" Off "
+        android:textColor="@android:color/black"
+        android:textSize="12sp" >
+    </androidx.appcompat.widget.AppCompatButton>
+
+</LinearLayout>
+
 
 </FrameLayout>

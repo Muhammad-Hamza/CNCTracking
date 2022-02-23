@@ -108,7 +108,7 @@ public class Fragment1 extends Fragment {
         layoutBottomSheet = (LinearLayout)getActivity().findViewById(R.id.temp_bottomsheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         /* sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);*/
-        sheetBehavior.setPeekHeight(600);
+        //sheetBehavior.setPeekHeight(600);
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -136,7 +136,7 @@ public class Fragment1 extends Fragment {
 
         adapter = new TripArrayAdapter(getActivity(), unitList);
 
-    //    list.setAdapter(adapter);
+        //    list.setAdapter(adapter);
         bellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,7 +157,7 @@ public class Fragment1 extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 changeDateStr = (month+1)+"-"+day+"-"+year;
                 changeDate.setText((month+1)+"-"+day+"-"+year);
-                sheetBehavior.setPeekHeight(600);
+                // sheetBehavior.setPeekHeight(600);
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 if(firstTimeLoad){
                     firstTimeLoad = false;
@@ -205,7 +205,7 @@ public class Fragment1 extends Fragment {
                     view.setBackgroundColor(Color.LTGRAY);
                     counter++;
                 }catch(Exception e){}
-                sheetBehavior.setPeekHeight(600);
+                // sheetBehavior.setPeekHeight(600);
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 view.animate().setDuration(500).alpha(0)
                         .withEndAction(new Runnable() {
@@ -229,110 +229,110 @@ public class Fragment1 extends Fragment {
         String report = sp.getString("searchResult", DEFAULT);
         totalEventCounts = 0;
         eventCounts.clear();
-     //   Log.d("Frag_", "getHistoryForAlerts "+report);
-    boolean emergAlert = false;
-    JSONObject jsonResponse;
+        //   Log.d("Frag_", "getHistoryForAlerts "+report);
+        boolean emergAlert = false;
+        JSONObject jsonResponse;
         try {
-        if(report == null){report = "";}
-        // jsonResponse = new JSONObject(report);
-        JSONArray jsonArray = new JSONArray(report);
-        if( jsonArray == null){
-            jsonArray = new JSONArray(report);
-        }
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jb = jsonArray.getJSONObject(i);
-            emergAlert = jb.optBoolean("emergency");
-        //    Log.d("Frag_", jb.optBoolean("emergency")+"-- "+emergAlert);
-            if(emergAlert) {
-                if(eventCounts.get(jb.optString("event").toString()) == null) {
-                    eventCounts.put(jb.optString("event").toString(), 1);
-                }else{
-                    eventCounts.put(jb.optString("event").toString(), eventCounts.get(jb.optString("event").toString())+1);
-                }
-                totalEventCounts++;
-
+            if(report == null){report = "";}
+            // jsonResponse = new JSONObject(report);
+            JSONArray jsonArray = new JSONArray(report);
+            if( jsonArray == null){
+                jsonArray = new JSONArray(report);
             }
-        }
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jb = jsonArray.getJSONObject(i);
+                emergAlert = jb.optBoolean("emergency");
+                //    Log.d("Frag_", jb.optBoolean("emergency")+"-- "+emergAlert);
+                if(emergAlert) {
+                    if(eventCounts.get(jb.optString("event").toString()) == null) {
+                        eventCounts.put(jb.optString("event").toString(), 1);
+                    }else{
+                        eventCounts.put(jb.optString("event").toString(), eventCounts.get(jb.optString("event").toString())+1);
+                    }
+                    totalEventCounts++;
+
+                }
+            }
             alertTotal.setText(totalEventCounts+" Alerts");
-    } catch (Exception e) {
-        Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
-        //progressBar.setVisibility(View.GONE);
-       //     Log.d ("check json", "Json Problem");
-        //e.printStackTrace();
-    }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
+            //progressBar.setVisibility(View.GONE);
+            //     Log.d ("check json", "Json Problem");
+            //e.printStackTrace();
+        }
     }
     public void getHistoryFromSharedPref(){
-     //   Log.d("Frag1","getHistory");
+        //   Log.d("Frag1","getHistory");
         getHistoryForAlerts();
-            SharedPreferences sp = getActivity().getSharedPreferences("Report", Context.MODE_PRIVATE);
-            String report = sp.getString("tripResults", DEFAULT);
-            String totalRunning = sp.getString("totalRunning", DEFAULT);
-            String totalStop = sp.getString("totalStop", DEFAULT);
-      //      Log.d("Frag1_trip",report);
-    //    Log.d("Frag1_trip_run",totalRunning);
-          if( report == null){
-                report = "";
-           }
+        SharedPreferences sp = getActivity().getSharedPreferences("Report", Context.MODE_PRIVATE);
+        String report = sp.getString("tripResults", DEFAULT);
+        String totalRunning = sp.getString("totalRunning", DEFAULT);
+        String totalStop = sp.getString("totalStop", DEFAULT);
+        //      Log.d("Frag1_trip",report);
+        //    Log.d("Frag1_trip_run",totalRunning);
+        if( report == null){
+            report = "";
+        }
 
         //        Log.d("Frag1", "IGNITION OFF");
-                JSONObject jsonResponse;
-                unitList.clear();
-                try {
-                    //jsonResponse = new JSONObject(report);
-                    JSONArray jsonArray = new JSONArray(report);// jsonResponse.optJSONArray("tripReport");
-                    if( jsonArray == null){
-                        jsonArray = new JSONArray(report);
-                    }
+        JSONObject jsonResponse;
+        unitList.clear();
+        try {
+            //jsonResponse = new JSONObject(report);
+            JSONArray jsonArray = new JSONArray(report);// jsonResponse.optJSONArray("tripReport");
+            if( jsonArray == null){
+                jsonArray = new JSONArray(report);
+            }
 
-                    progressBar.setVisibility(View.GONE);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jb = jsonArray.getJSONObject(i);
+            progressBar.setVisibility(View.GONE);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jb = jsonArray.getJSONObject(i);
 
-                        TripsBean teb = new TripsBean();
-                        teb.setSerialNo(jb.optInt("tripConter"));
-                        teb.setTypeObject(jb.optString("obj_type").toString());
-                        teb.setTripStartTimeMS(jb.optString("eventStartTimeMS").toString());
-                        teb.setTripEndTimeMS(jb.optString("eventEndTimeMS").toString());
+                TripsBean teb = new TripsBean();
+                teb.setSerialNo(jb.optInt("tripConter"));
+                teb.setTypeObject(jb.optString("obj_type").toString());
+                teb.setTripStartTimeMS(jb.optString("eventStartTimeMS").toString());
+                teb.setTripEndTimeMS(jb.optString("eventEndTimeMS").toString());
 
-                        if(teb.getTypeObject().equals("RUNNING")) {
-                            teb.setDistance(jb.optString("running_mileage").toString());
-                            teb.setDuration(jb.optString("running_duration").toString());
-                            teb.setIgntionStartTime(jb.optString("running_eventTime").toString());
-                            teb.setSpeed(jb.optString("high_speed").toString());
-                        }else {
-                            teb.setIgntiOFFStartTime(jb.optString("ignOff_eventStartTime").toString());
-                            teb.setIgntiOffEndTime(jb.optString("ignOff_eventEndTime").toString());
-                            teb.setIgntionOffDuration(jb.optString("ignOff_duration").toString());
-                        }
-                        unitList.add(teb);
-                    }
-
-                    if(totalRunning != null && totalStop != null) {
-                        if(totalRunning.contains("@")) {
-                            runningTotal.setText(totalRunning.split("@")[0] + " Km");
-                            runningTotalHr.setText(totalRunning.split("@")[1]);
-                        }
-                        if(totalStop.contains("@")) {
-                            stopTotal.setText(totalStop.split("@")[0] + " Stop");
-                            stopTotalHr.setText(totalStop.split("@")[1]);
-                        }
-                    }
-
-                    showArrayList();
-                } catch (JSONException e) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
-                    Log.d("check json", "Json Problem");
-                    //e.printStackTrace();
+                if(teb.getTypeObject().equals("RUNNING")) {
+                    teb.setDistance(jb.optString("running_mileage").toString());
+                    teb.setDuration(jb.optString("running_duration").toString());
+                    teb.setIgntionStartTime(jb.optString("running_eventTime").toString());
+                    teb.setSpeed(jb.optString("high_speed").toString());
+                }else {
+                    teb.setIgntiOFFStartTime(jb.optString("ignOff_eventStartTime").toString());
+                    teb.setIgntiOffEndTime(jb.optString("ignOff_eventEndTime").toString());
+                    teb.setIgntionOffDuration(jb.optString("ignOff_duration").toString());
                 }
+                unitList.add(teb);
+            }
 
+            if(totalRunning != null && totalStop != null) {
+                if(totalRunning.contains("@")) {
+                    runningTotal.setText(totalRunning.split("@")[0] + " Km");
+                    runningTotalHr.setText(totalRunning.split("@")[1]);
+                }
+                if(totalStop.contains("@")) {
+                    stopTotal.setText(totalStop.split("@")[0] + " Stop");
+                    stopTotalHr.setText(totalStop.split("@")[1]);
+                }
+            }
+
+            showArrayList();
+        } catch (JSONException e) {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
+            Log.d("check json", "Json Problem");
+            //e.printStackTrace();
         }
+
+    }
     public void getLocationsForMapFromTripData(String fromDateTimeMS, String toDateTimeMS){
-      //  Log.d("getHistory", "1");
+        //  Log.d("getHistory", "1");
         try {
             progressBar.setVisibility(View.VISIBLE);
             String url = APIManager.getLatLongTripClickAPI();
-        //    Log.d("Frag1_1", url +" - "+ loginName +" - "+ password);
+            //    Log.d("Frag1_1", url +" - "+ loginName +" - "+ password);
             StringRequest sr = new StringRequest(Request.Method.POST, url,
 
                     new Response.Listener<String>() {
@@ -340,10 +340,10 @@ public class Fragment1 extends Fragment {
                         @Override
                         public void onResponse(String response) {
                             JSONObject jsonResponse;
-                           // Log.d("Frag1_1", "2");
+                            // Log.d("Frag1_1", "2");
                             try {
                                 jsonResponse = new JSONObject(response);
-                            //    Log.d("Frag1_1", response);
+                                //    Log.d("Frag1_1", response);
                                 JSONArray jsonArray = jsonResponse.optJSONArray("searchResult");
 
                                 progressBar.setVisibility(View.GONE);
@@ -385,7 +385,7 @@ public class Fragment1 extends Fragment {
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        //    Log.d("Frag1_1_getHistory","fromDateTimeMS="+ fromDateTimeMS+"&"+ "toDate="+ toDateTimeMS +"&moduleId="+ moduleId+"&fleetName="+ deviceType);
+            //    Log.d("Frag1_1_getHistory","fromDateTimeMS="+ fromDateTimeMS+"&"+ "toDate="+ toDateTimeMS +"&moduleId="+ moduleId+"&fleetName="+ deviceType);
 
         } catch (Exception e) {
             // progressBar.setVisibility(View.GONE);
@@ -453,11 +453,11 @@ public class Fragment1 extends Fragment {
 
     }
     public void getHistory(){
-   //     Log.d("Frag1_DT_getHistory", "1");
+        //     Log.d("Frag1_DT_getHistory", "1");
         try {
             progressBar.setVisibility(View.VISIBLE);
             String url = APIManager.getTrackLogsAPI();
-       //     Log.d("Frag1_DT_getHistory", url +" - "+ loginName +" - "+ password);
+            //     Log.d("Frag1_DT_getHistory", url +" - "+ loginName +" - "+ password);
             StringRequest sr = new StringRequest(Request.Method.POST, url,
 
                     new Response.Listener<String>() {
@@ -465,13 +465,13 @@ public class Fragment1 extends Fragment {
                         @Override
                         public void onResponse(String response) {
                             JSONObject jsonResponse;
-                           // Log.d("Frag1_DT_getHistory", "2");
+                            // Log.d("Frag1_DT_getHistory", "2");
                             try {
                                 jsonResponse = new JSONObject(response);
-                          //      Log.d("Frag1_DT_getHistory", response);
+                                //      Log.d("Frag1_DT_getHistory", response);
                                 JSONArray jsonArray = jsonResponse.optJSONArray("searchResult");
                                 JSONArray jsonArray2 = jsonResponse.optJSONArray("tripResults");
-                         //       Log.d("Frag1_DT_getHistory_tr", jsonArray2.toString());
+                                //       Log.d("Frag1_DT_getHistory_tr", jsonArray2.toString());
 
                                 String totalRunning = jsonResponse.optString("totalTripsMileage").toString();
                                 totalRunning = totalRunning + "@" + jsonResponse.optString("totalTripsDuration").toString();
@@ -509,7 +509,7 @@ public class Fragment1 extends Fragment {
                     params.put("fromDate", changeDateStr+" 12:00:00 AM" );
                     params.put("toDate", changeDateStr+" 11:59:59 PM"  );
 
-                //    Log.d("Frag1_DT_getHistory","fromDate="+ changeDateStr+" 12:00:00 AM" +"&"+ "toDate="+ changeDateStr+" 11:59:59 PM"  +"&moduleId="+ moduleId+"&fleetName="+ deviceType);
+                    //    Log.d("Frag1_DT_getHistory","fromDate="+ changeDateStr+" 12:00:00 AM" +"&"+ "toDate="+ changeDateStr+" 11:59:59 PM"  +"&moduleId="+ moduleId+"&fleetName="+ deviceType);
                     return params;
                 }
 
@@ -521,7 +521,7 @@ public class Fragment1 extends Fragment {
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        //    Log.d("getHisotry", "end");
+            //    Log.d("getHisotry", "end");
         } catch (Exception e) {
             // progressBar.setVisibility(View.GONE);
             Toast.makeText(getActivity(), "Data Not Found", Toast.LENGTH_SHORT).show();
@@ -530,10 +530,10 @@ public class Fragment1 extends Fragment {
 
     public void showSettingsAlert(){
         try{
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
-        // Setting Dialog Title
-        alertDialog.setTitle("Emergency Alerts");
+            // Setting Dialog Title
+            alertDialog.setTitle("Emergency Alerts");
 
             Set<String> keys = eventCounts.keySet();
             StringBuffer data = new StringBuffer("");
@@ -543,10 +543,10 @@ public class Fragment1 extends Fragment {
                 data.append( eventCounts.get(key) +"\n");
             }
 
-        // Setting Dialog Message
-        alertDialog.setMessage(data.toString());
+            // Setting Dialog Message
+            alertDialog.setMessage(data.toString());
 //+" "+ Arrays.asList(eventCounts)
-        // On pressing Settings button
+            // On pressing Settings button
        /* alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -554,19 +554,19 @@ public class Fragment1 extends Fragment {
             }
         });*/
 
-        // on pressing cancel button
-        alertDialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+            // on pressing cancel button
+            alertDialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
 
-        // Showing Alert Message
-        alertDialog.show();
-    } catch (Exception e) {
-        Toast.makeText(getActivity(), "Dialog box is not opening right now, pls try again later.", Toast.LENGTH_SHORT).show();
-        e.printStackTrace();
-    }
+            // Showing Alert Message
+            alertDialog.show();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Dialog box is not opening right now, pls try again later.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
 }

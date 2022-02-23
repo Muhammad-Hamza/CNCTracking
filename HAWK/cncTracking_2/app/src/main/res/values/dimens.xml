@@ -8,4 +8,6 @@
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="list_item_spacing_5">5dp</dimen>
+    <dimen name="bottom_sheet_height_check">200dp</dimen>
+
 </resources>

@@ -23,6 +23,33 @@ public class TripsBean implements Parcelable {
     String tripStartTimeMS;
     String tripEndTimeMS;
     String typeObject;
+    public TripsBean() {}
+
+    protected TripsBean(Parcel in) {
+        serialNo = in.readInt();
+        distance = in.readString();
+        duration = in.readString();
+        igntionStartTime = in.readString();
+        speed = in.readString();
+        igntionOffDuration = in.readString();
+        igntiOFFStartTime = in.readString();
+        igntiOffEndTime = in.readString();
+        tripStartTimeMS = in.readString();
+        tripEndTimeMS = in.readString();
+        typeObject = in.readString();
+    }
+
+    public static final Creator<TripsBean> CREATOR = new Creator<TripsBean>() {
+        @Override
+        public TripsBean createFromParcel(Parcel in) {
+            return new TripsBean(in);
+        }
+
+        @Override
+        public TripsBean[] newArray(int size) {
+            return new TripsBean[size];
+        }
+    };
 
     public int getSerialNo() {
         return serialNo;
@@ -112,6 +139,7 @@ public class TripsBean implements Parcelable {
         this.typeObject = typeObject;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -119,8 +147,16 @@ public class TripsBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeInt(serialNo);
+        dest.writeString(distance);
+        dest.writeString(duration);
+        dest.writeString(igntionStartTime);
+        dest.writeString(speed);
+        dest.writeString(igntionOffDuration);
+        dest.writeString(igntiOFFStartTime);
+        dest.writeString(igntiOffEndTime);
+        dest.writeString(tripStartTimeMS);
+        dest.writeString(tripEndTimeMS);
+        dest.writeString(typeObject);
     }
-
-
 }

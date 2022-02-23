@@ -249,7 +249,7 @@ public class Login extends AppCompatActivity {
                                         userId =  jsonResponse.getInt("userId");
                                         Log.d("check3", ""+response);
                                         if(success){
-                                            saveSharedPref(loginName, psw, userRole);
+                                            saveSharedPref(loginName, psw, userRole,  jsonResponse.getBoolean("immobilizerAllow"));
                                             Toast.makeText(getApplicationContext(), message ,Toast.LENGTH_SHORT).show();
                                             //Intent i = new Intent(UserLogin.this, ListActivity.class);
                                             Intent i = new Intent(Login.this, MainActivity.class);
@@ -321,7 +321,7 @@ public class Login extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
-    public void saveSharedPref(String name, String psw, String role){
+    public void saveSharedPref(String name, String psw, String role, boolean immobilzeAllow){
         SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -330,7 +330,7 @@ public class Login extends AppCompatActivity {
         editor.putString("password", psw);
         editor.putString("userRole", role);
         editor.putInt("userId", userId);
-
+        editor.putBoolean("immobilizerAllow", immobilzeAllow);
         editor.commit();
     }
 
