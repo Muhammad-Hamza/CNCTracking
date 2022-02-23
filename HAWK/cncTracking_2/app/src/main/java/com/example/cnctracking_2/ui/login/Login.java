@@ -2,7 +2,6 @@ package com.example.cnctracking_2.ui.login;
 
 import android.app.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,7 +16,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -42,7 +40,6 @@ import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.config.APIManager;
 import com.example.cnctracking_2.ui.login.LoginViewModel;
 import com.example.cnctracking_2.ui.login.LoginViewModelFactory;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -53,8 +50,6 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,18 +57,16 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Login extends AppCompatActivity
-{
+public class Login extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     Button loginButton;
     CheckBox rememberCB;
     Boolean cbState;
-    EditText password, userName;
+    EditText password,userName;
     ProgressBar progressBar;
-    String returnText = "";
-    String userRole, loginName, psw, message, uName, uPsw;
-    ;
+    String returnText="";
+    String userRole, loginName, psw, message, uName, uPsw;;
     boolean success;
     String name, macAddress;
     int userId;
@@ -83,17 +76,17 @@ public class Login extends AppCompatActivity
     private InstallStateUpdatedListener installStateUpdatedListener;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+                .get(LoginViewModel.class);
         loginButton = findViewById(R.id.login);
         forgetPsw = findViewById(R.id.forget_psw);
         progressBar = findViewById(R.id.loading);
 
-        userName = (EditText) findViewById(R.id.editText1);
-        password = (EditText) findViewById(R.id.editText2);
+        userName=(EditText) findViewById(R.id.editText1);
+        password=(EditText) findViewById(R.id.editText2);
         rememberCB = (CheckBox) findViewById(R.id.checkbox);
         cbState = false;
         progressBar.setVisibility(View.GONE);
@@ -166,40 +159,33 @@ public class Login extends AppCompatActivity
             }
         });
 */
-        rememberCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
+        rememberCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (buttonView.isChecked())
-                {
+                if (buttonView.isChecked()) {
                     cbState = true;
 
-                } else
-                {
+                } else {
                     cbState = false;
                 }
             }
         });
 
 
-        forgetPsw.setOnClickListener(new View.OnClickListener()
-        {
+        forgetPsw.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                //  final Intent i = new Intent(LocationWithDetailAct.this, MainActivity.class);
-                // startActivity(i);
-                view.animate().setDuration(500).alpha(0).withEndAction(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        view.setAlpha(1);
-                        Toast.makeText(getApplicationContext(), "Please Contact Customer Center!", Toast.LENGTH_LONG).show();
-                    }
-                });
+            public void onClick(View view) {
+              //  final Intent i = new Intent(LocationWithDetailAct.this, MainActivity.class);
+               // startActivity(i);
+                view.animate().setDuration(500).alpha(0)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.setAlpha(1);
+                                Toast.makeText(getApplicationContext(), "Please Contact Customer Center!" ,Toast.LENGTH_LONG).show();
+                            }
+                        });
 
             }
         });
@@ -212,82 +198,75 @@ public class Login extends AppCompatActivity
         userName.setText(uName);
         password.setText(uPsw);
 
-        loginButton.setOnClickListener(new View.OnClickListener()
-        {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
 
-                v.animate().setDuration(300).alpha(0).withEndAction(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        // list.remove(item);
-                        //adapter.notifyDataSetChanged();
-                        v.setAlpha(1);
-
-
-                        loginName = userName.getText().toString();
-                        psw = password.getText().toString();
-                        if (cbState == true)
-                        {
-                            SharedPreferences mySharedPrefrences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = mySharedPrefrences.edit();
-                            editor.putString("USERNAME", "" + loginName);
-                            editor.putString("PASSWORD", "" + psw);
-                            editor.apply();
-
-                        }
-
-                        Log.d("check login", loginName + " " + psw);
-                        if (loginName.equals("") || psw.equals(""))
-                        {
-                            Toast.makeText(getApplicationContext(), "Please Enter Username & Password!", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        progressBar.setVisibility(View.VISIBLE);
-                        Log.d("check1", "check");
-                        String url = APIManager.loginAPI();
-                        StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
-                        {
-
+                v.animate().setDuration(300).alpha(0)
+                        .withEndAction(new Runnable() {
                             @Override
-                            public void onResponse(String response)
-                            {
+                            public void run() {
+                                // list.remove(item);
+                                //adapter.notifyDataSetChanged();
+                                v.setAlpha(1);
 
-                                progressBar.setVisibility(View.GONE);
-                                JSONObject jsonResponse;
-                                try
-                                {
-                                    jsonResponse = new JSONObject(response);
-                                    success = jsonResponse.getBoolean("success");
-                                    userRole = jsonResponse.getString("userRole").toString();
-                                    message = jsonResponse.getString("message").toString();
-                                    userId = jsonResponse.getInt("userId");
-                                    Log.d("check3", "" + response);
-                                    if (success)
-                                    {
-                                        saveSharedPref(loginName, psw, userRole);
-                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                                        //Intent i = new Intent(UserLogin.this, ListActivity.class);
-                                        Intent i = new Intent(Login.this, MainActivity.class);
-                                        i.putExtra("password", psw);
-                                        i.putExtra("userRole", userRole);
-                                        i.putExtra("loginName", loginName);
-                                        i.putExtra("userId", userId);
 
-                                        startActivity(i);
-                                        finish();
-                                    } else
-                                    {
-                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                loginName=userName.getText().toString();
+                    psw = password.getText().toString();
+                    if (cbState == true)
+
+                    {
+                        SharedPreferences mySharedPrefrences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = mySharedPrefrences.edit();
+                        editor.putString("USERNAME", "" + loginName);
+                        editor.putString("PASSWORD", "" + psw);
+                        editor.apply();
+
+                    }
+
+                    Log.d("check login",loginName +" "+ psw);
+                    if (loginName.equals("") || psw.equals("")) {
+                        Toast.makeText(getApplicationContext(), "Please Enter Username & Password!" ,Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    progressBar.setVisibility(View.VISIBLE);
+                    Log.d("check1", "check");
+                    String url = APIManager.loginAPI();
+                    StringRequest sr = new StringRequest(Request.Method.POST, url,
+                            new Response.Listener<String>() {
+
+                                @Override
+                                public void onResponse(String response) {
+
+                                    progressBar.setVisibility(View.GONE);
+                                    JSONObject jsonResponse;
+                                    try {
+                                        jsonResponse = new JSONObject(response);
+                                        success = jsonResponse.getBoolean("success");
+                                        userRole = jsonResponse.getString("userRole").toString();
+                                        message =  jsonResponse.getString("message").toString();
+                                        userId =  jsonResponse.getInt("userId");
+                                        Log.d("check3", ""+response);
+                                        if(success){
+                                            saveSharedPref(loginName, psw, userRole,  jsonResponse.getBoolean("immobilizerAllow"));
+                                            Toast.makeText(getApplicationContext(), message ,Toast.LENGTH_SHORT).show();
+                                            //Intent i = new Intent(UserLogin.this, ListActivity.class);
+                                            Intent i = new Intent(Login.this, MainActivity.class);
+                                            i.putExtra("password", psw);
+                                            i.putExtra("userRole", userRole);
+                                            i.putExtra("loginName", loginName);
+                                            i.putExtra("userId", userId);
+
+                                            startActivity(i);
+                                            finish();
+                                        }else{
+                                            Toast.makeText(getApplicationContext(), message ,Toast.LENGTH_LONG).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-
-                                } catch (JSONException e)
-                                {
-                                    e.printStackTrace();
-                                }
 
                             }
                         }, new Response.ErrorListener()
@@ -318,10 +297,10 @@ public class Login extends AppCompatActivity
                         Volley.newRequestQueue(Login.this).add(sr);
                         Log.d("check3", "check");
 
-                    }
-                });
-            }
-        });
+                  }
+               });
+                }
+            });
 
         checkForAppUpdate();
         // update app
@@ -331,32 +310,26 @@ public class Login extends AppCompatActivity
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
 
 // Checks that the platform will allow the specified type of update.
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo ->
-        {
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                     // This example applies an immediate update. To apply a flexible update
                     // instead, pass in AppUpdateType.FLEXIBLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE))
-            {
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                 // Request the update.
             }
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model)
-    {
+    private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
-    private void showLoginFailed(@StringRes Integer errorString)
-    {
+    private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
-
-    public void saveSharedPref(String name, String psw, String role)
-    {
+    public void saveSharedPref(String name, String psw, String role, boolean immobilzeAllow){
         SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -370,25 +343,21 @@ public class Login extends AppCompatActivity
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         checkNewAppVersionState();
     }
 
 
     @Override
-    public void onActivityResult(int requestCode, final int resultCode, Intent intent)
-    {
+    public void onActivityResult(int requestCode, final int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        switch (requestCode)
-        {
+        switch (requestCode) {
 
             case REQ_CODE_VERSION_UPDATE:
-                if (resultCode != RESULT_OK)
-                { //RESULT_OK / RESULT_CANCELED / RESULT_IN_APP_UPDATE_FAILED
-                    Log.d("Login_update", "Update flow failed! Result code: " + resultCode);
+                if (resultCode != RESULT_OK) { //RESULT_OK / RESULT_CANCELED / RESULT_IN_APP_UPDATE_FAILED
+                    Log.d("Login_update","Update flow failed! Result code: " + resultCode);
                     // If the update is cancelled or fails,
                     // you can request to start the update again.
                     unregisterInstallStateUpdListener();
@@ -399,15 +368,13 @@ public class Login extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         unregisterInstallStateUpdListener();
         super.onDestroy();
     }
 
 
-    private void checkForAppUpdate()
-    {
+    private void checkForAppUpdate() {
         // Creates instance of the manager.
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
 
@@ -415,11 +382,9 @@ public class Login extends AppCompatActivity
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
 
         // Create a listener to track request state updates.
-        installStateUpdatedListener = new InstallStateUpdatedListener()
-        {
+        installStateUpdatedListener = new InstallStateUpdatedListener() {
             @Override
-            public void onStateUpdate(InstallState installState)
-            {
+            public void onStateUpdate(InstallState installState) {
                 // Show module progress, log state, or install the update.
                 if (installState.installStatus() == InstallStatus.DOWNLOADED)
                     // After the update is downloaded, show a notification
@@ -429,20 +394,16 @@ public class Login extends AppCompatActivity
         };
 
         // Checks that the platform will allow the specified type of update.
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo ->
-        {
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE)
-            {
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                 // Request the update.
-                if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE))
-                {
+                if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
 
                     // Before starting an update, register a listener for updates.
                     appUpdateManager.registerListener(installStateUpdatedListener);
                     // Start an update.
                     startAppUpdateFlexible(appUpdateInfo);
-                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE))
-                {
+                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) ) {
                     // Start an update.
                     startAppUpdateImmediate(appUpdateInfo);
                 }
@@ -450,32 +411,30 @@ public class Login extends AppCompatActivity
         });
     }
 
-    private void startAppUpdateImmediate(AppUpdateInfo appUpdateInfo)
-    {
-        try
-        {
-            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,
+    private void startAppUpdateImmediate(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
                     // The current activity making the update request.
                     this,
                     // Include a request code to later monitor this update request.
                     Login.REQ_CODE_VERSION_UPDATE);
-        } catch (IntentSender.SendIntentException e)
-        {
+        } catch (IntentSender.SendIntentException e) {
             e.printStackTrace();
         }
     }
 
-    private void startAppUpdateFlexible(AppUpdateInfo appUpdateInfo)
-    {
-        try
-        {
-            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE,
+    private void startAppUpdateFlexible(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.FLEXIBLE,
                     // The current activity making the update request.
                     this,
                     // Include a request code to later monitor this update request.
                     Login.REQ_CODE_VERSION_UPDATE);
-        } catch (IntentSender.SendIntentException e)
-        {
+        } catch (IntentSender.SendIntentException e) {
             e.printStackTrace();
             unregisterInstallStateUpdListener();
         }
@@ -485,14 +444,12 @@ public class Login extends AppCompatActivity
      * Displays the snackbar notification and call to action.
      * Needed only for Flexible app update
      */
-    private void popupSnackbarForCompleteUpdateAndUnregister()
-    {
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.container), getString(R.string.update_downloaded), Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.restart, new View.OnClickListener()
-        {
+    private void popupSnackbarForCompleteUpdateAndUnregister() {
+        Snackbar snackbar =
+                Snackbar.make(findViewById(R.id.container), getString(R.string.update_downloaded), Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(R.string.restart, new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 appUpdateManager.completeUpdate();
             }
         });
@@ -506,33 +463,32 @@ public class Login extends AppCompatActivity
      * Checks that the update is not stalled during 'onResume()'.
      * However, you should execute this check at all app entry points.
      */
-    private void checkNewAppVersionState()
-    {
-        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(appUpdateInfo ->
-        {
-            //FLEXIBLE:
-            // If the update is downloaded but not installed,
-            // notify the user to complete the update.
-            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED)
-            {
-                popupSnackbarForCompleteUpdateAndUnregister();
-            }
+    private void checkNewAppVersionState() {
+        appUpdateManager
+                .getAppUpdateInfo()
+                .addOnSuccessListener(
+                        appUpdateInfo -> {
+                            //FLEXIBLE:
+                            // If the update is downloaded but not installed,
+                            // notify the user to complete the update.
+                            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                                popupSnackbarForCompleteUpdateAndUnregister();
+                            }
 
-            //IMMEDIATE:
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS)
-            {
-                // If an in-app update is already running, resume the update.
-                startAppUpdateImmediate(appUpdateInfo);
-            }
-        });
+                            //IMMEDIATE:
+                            if (appUpdateInfo.updateAvailability()
+                                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                                // If an in-app update is already running, resume the update.
+                                startAppUpdateImmediate(appUpdateInfo);
+                            }
+                        });
 
     }
 
     /**
      * Needed only for FLEXIBLE update
      */
-    private void unregisterInstallStateUpdListener()
-    {
+    private void unregisterInstallStateUpdListener() {
         if (appUpdateManager != null && installStateUpdatedListener != null)
             appUpdateManager.unregisterListener(installStateUpdatedListener);
     }

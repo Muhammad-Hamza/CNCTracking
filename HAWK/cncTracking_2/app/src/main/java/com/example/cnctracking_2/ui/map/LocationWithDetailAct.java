@@ -180,11 +180,14 @@ public class LocationWithDetailAct extends AppCompatActivity
         ).addToBackStack(null).commit();
 
         mapfragment = new MapsFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, mapfragment, mapfragment.getClass().getSimpleName()).setCustomAnimations(R.anim.slide_in,  // enter
-                R.anim.fade_out,  // exit
-                R.anim.fade_in,   // popEnter
-                R.anim.slide_out  // popExit
-        ).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content, mapfragment, mapfragment.getClass().getSimpleName()).
+                setCustomAnimations(
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                ).addToBackStack(null).commit();
 
 
 //
@@ -208,9 +211,9 @@ public class LocationWithDetailAct extends AppCompatActivity
 
 
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
-
-        sheetBehavior.setPeekHeight(600);
-
+        // sheetBehavior.setPeekHeight(600);
+        //sheetBehavior.setPeekHeight(getApplicationContext().getResources().getDimension(R.dimen.bottom_sheet_height));
+        //  sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         /*int contenteight = contentSheet.getHeight() - layoutBottomSheet.getHeight();
         contentSheet.getLayoutParams().height = contenteight;*/
         sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
@@ -224,8 +227,7 @@ public class LocationWithDetailAct extends AppCompatActivity
                     {
                         break;
                     }
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                    {
+                    case BottomSheetBehavior.STATE_EXPANDED: {
                         //  btnBottomsheet.setText("Close Sheet");
 
                         break;
@@ -235,9 +237,8 @@ public class LocationWithDetailAct extends AppCompatActivity
 
                         break;
                     }
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                    {
-                        // btnBottomsheet.setText("Expend Sheet");
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                       // btnBottomsheet.setText("Expend Sheet");
 
                         break;
                     }
@@ -258,36 +259,32 @@ public class LocationWithDetailAct extends AppCompatActivity
         backButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 //  final Intent i = new Intent(LocationWithDetailAct.this, MainActivity.class);
                 // startActivity(i);
-                view.animate().setDuration(500).alpha(0).withEndAction(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        view.setAlpha(1);
-                        finish();
-                    }
-                });
+                view.animate().setDuration(500).alpha(0)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.setAlpha(1);
+                                finish();
+                            }
+                        });
 
             }
         });
         searchImg.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
-            {
-                view.animate().setDuration(500).alpha(0).withEndAction(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        view.setAlpha(1);
-                        finish();
-                    }
-                });
+            public void onClick(View view) {
+                view.animate().setDuration(500).alpha(0)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.setAlpha(1);
+                                finish();
+                            }
+                        });
                 //   Toast.makeText(LocationWithDetailAct.this, "Search Button Click", Toast.LENGTH_SHORT).show();
             }
         });
@@ -302,11 +299,15 @@ public class LocationWithDetailAct extends AppCompatActivity
                         .replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName()).addToBackStack(null).commit();
 */
                 mapfragment = new MapsFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, mapfragment, mapfragment.getClass().getSimpleName()).setCustomAnimations(R.anim.slide_in,  // enter
-                        R.anim.fade_out,  // exit
-                        R.anim.fade_in,   // popEnter
-                        R.anim.slide_out  // popExit
-                ).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content, mapfragment, mapfragment.getClass().getSimpleName())
+                        .setCustomAnimations(
+                                R.anim.slide_in,  // enter
+                                R.anim.fade_out,  // exit
+                                R.anim.fade_in,   // popEnter
+                                R.anim.slide_out  // popExit
+                        )
+                        .addToBackStack(null).commit();
 
 
             }
@@ -320,8 +321,7 @@ public class LocationWithDetailAct extends AppCompatActivity
                 //  Fragment fragment2 = new Fragment1();
                 //   getSupportFragmentManager().beginTransaction()
                 //         .replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName()).addToBackStack(null).commit();
-                if (mapfragment != null)
-                {
+                if(mapfragment != null){
                     mapfragment.onStop();
                 } else
                 {
@@ -345,27 +345,24 @@ public class LocationWithDetailAct extends AppCompatActivity
                 {
                     new MapsFragment().onStop();
                 }
-                if (!historyFetched)
-                {
+                if(!historyFetched) {
                     getHistory();
-                } else
-                {
+                }else{
                     changeToHistory();
                 }
-                sheetBehavior.setPeekHeight(600);
+                //  sheetBehavior.setPeekHeight(600);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 
 
     }
 
-    public void hideSpaceBar(int i)
-    {
+    public void hideSpaceBar(int i){
         space1.setVisibility(View.GONE);
         space2.setVisibility(View.GONE);
         space3.setVisibility(View.GONE);
-        switch (i)
-        {
+        switch (i){
             case 1:
                 space1.setVisibility(View.VISIBLE);
                 break;
@@ -392,8 +389,7 @@ public class LocationWithDetailAct extends AppCompatActivity
     }*/
 
 
-    private void changeFragment(Fragment fr)
-    {
+    private void changeFragment(Fragment fr){
         FrameLayout fl = (FrameLayout) findViewById(R.id.nav_host_fragment);
         fl.removeAllViews();
         FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
@@ -447,14 +443,12 @@ public class LocationWithDetailAct extends AppCompatActivity
     }*/
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
             /*Intent upIntent = new Intent(this, MainActivity.class);
 
@@ -483,38 +477,31 @@ public class LocationWithDetailAct extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
     }
 
-    public void getHistory()
-    {
+    public void getHistory(){
         //   Log.d("getHistory", "1");
-        try
-        {
+        try {
             progressBar.setVisibility(View.VISIBLE);
             String url = APIManager.getTrackLogsAPI();
             //    Log.d("getHistory", url +" - "+ loginName +" - "+ password);
             StringRequest sr = new StringRequest(Request.Method.POST, url,
 
-                    new Response.Listener<String>()
-                    {
+                    new Response.Listener<String>() {
 
                         @Override
-                        public void onResponse(String response)
-                        {
+                        public void onResponse(String response) {
                             JSONObject jsonResponse;
                             //         Log.d("getHistory", "2");
-                            try
-                            {
+                            try {
                                 jsonResponse = new JSONObject(response);
                                 //     Log.d("getHistory", response);
                                 JSONArray jsonArray = jsonResponse.optJSONArray("searchResult");
                                 JSONArray jsonArray2 = jsonResponse.optJSONArray("tripResults");
                                 String totalRunning = jsonResponse.optString("totalTripsMileage").toString();
-                                if (totalRunning != null)
-                                {
+                                if(totalRunning != null) {
                                     totalRunning = totalRunning + "@" + jsonResponse.optString("totalTripsDuration").toString();
                                 }
                                 String totalStop = jsonResponse.optString("totalStops").toString();
-                                if (totalStop != null)
-                                {
+                                if(totalStop != null) {
                                     totalStop = totalStop + "@" + jsonResponse.optString("totalStopDuration").toString();
                                 }
                                 //     Log.d("getHistory", totalRunning);
@@ -522,42 +509,37 @@ public class LocationWithDetailAct extends AppCompatActivity
 
                                 historyFetched = true;
                                 progressBar.setVisibility(View.GONE);
-                                sharedPreferencesMethod(jsonArray.toString(), jsonArray2.toString(), totalRunning, totalStop, true);
+                                sharedPreferencesMethod(jsonArray.toString(), jsonArray2.toString(),totalRunning,totalStop, true );
 
                                 //showArrayList();
 
-                            } catch (Exception e)
-                            {
+                            }catch(Exception e){
                                 e.printStackTrace();
-                                //     Log.d("getHistory", "Exception found in locationWithDetailAct getHistory");
+                           //     Log.d("getHistory", "Exception found in locationWithDetailAct getHistory");
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "History is empty", Toast.LENGTH_SHORT).show();
                                 changeToHistory();
                             }
 
                         }
-                    }, new Response.ErrorListener()
-            {
+                    }, new Response.ErrorListener() {
                 @Override
-                public void onErrorResponse(VolleyError error)
-                {
+                public void onErrorResponse(VolleyError error) {
                     progressBar.setVisibility(View.GONE);
-                    // Log.d("getHistory", "Exception found volleyError in locationWithDetailAct getHistory");
+                   // Log.d("getHistory", "Exception found volleyError in locationWithDetailAct getHistory");
                     Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_SHORT).show();
                 }
-            })
-            {
+            }) {
                 @Override
-                protected Map<String, String> getParams()
-                {
+                protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("name", loginName);
                     params.put("psw", password);
                     params.put("fleetName", deviceType);
-                    params.put("moduleId", "" + moduleId);
-                    params.put("isDeviceDate", "true");
-                    params.put("fromDate", dateOnly + " 12:00:00 AM");
-                    params.put("toDate", dateOnly + " 11:59:59 PM");
+                    params.put("moduleId", ""+moduleId );
+                    params.put("isDeviceDate", "true" );
+                    params.put("fromDate", dateOnly+" 12:00:00 AM" );
+                    params.put("toDate", dateOnly+" 11:59:59 PM"  );
 
                     return params;
                 }
@@ -565,18 +547,19 @@ public class LocationWithDetailAct extends AppCompatActivity
             };
             Volley.newRequestQueue(getApplicationContext()).add(sr);
 
-            sr.setRetryPolicy(new DefaultRetryPolicy(12000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            sr.setRetryPolicy(new DefaultRetryPolicy(
+                    12000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             // progressBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Data Not Found", Toast.LENGTH_SHORT).show();
         }
-        //      Log.d("getHistory", "fromDate="+dateOnly+" 12:00:00 AM&toDate="+dateOnly+" 11:59:59 PM&moduleId="+moduleId);
+  //      Log.d("getHistory", "fromDate="+dateOnly+" 12:00:00 AM&toDate="+dateOnly+" 11:59:59 PM&moduleId="+moduleId);
     }
 
-    public void sharedPreferencesMethod(String part1, String part2, String totalRunning, String totalStop, boolean changePage)
-    {
+    public void sharedPreferencesMethod(String part1, String part2, String totalRunning, String totalStop, boolean changePage){
         SharedPreferences sp = getSharedPreferences("Report", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -586,65 +569,64 @@ public class LocationWithDetailAct extends AppCompatActivity
         editor.putString("totalStop", totalStop);
         editor.commit();
 
-        if (changePage)
+        if(changePage)
             changeToHistory();
 
     }
-
-    public void changeToHistory()
-    {
+    public void changeToHistory(){
         Fragment fragment2 = new Fragment1();
         Bundle args = new Bundle();
         args.putString("index", "");
         fragment2.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName()).setCustomAnimations(R.anim.slide_in,  // enter
-                R.anim.fade_out,  // exit
-                R.anim.fade_in,   // popEnter
-                R.anim.slide_out  // popExit
-        ).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName())
+                .setCustomAnimations(
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                )
+                .addToBackStack(null).commit();
 
         Fragment fragment = new MapsFragment_history();
         Bundle args2 = new Bundle();
         args.putString("index", "");
         fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment, fragment.getClass().getSimpleName()).setCustomAnimations(R.anim.slide_in,  // enter
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content, fragment, fragment.getClass().getSimpleName()).setCustomAnimations(
+                R.anim.slide_in,  // enter
                 R.anim.fade_out,  // exit
                 R.anim.fade_in,   // popEnter
                 R.anim.slide_out  // popExit
         ).addToBackStack(null).commit();
 
     }
-
-    public void changeToMObilizer()
-    {
+    public void changeToMObilizer(){
         Fragment fragment2 = new MobilizerBottomFrag();
-        getSupportFragmentManager().beginTransaction().replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName()).setCustomAnimations(R.anim.slide_in,  // enter
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.bottom_frag, fragment2, fragment2.getClass().getSimpleName()).setCustomAnimations(
+                R.anim.slide_in,  // enter
                 R.anim.fade_out,  // exit
                 R.anim.fade_in,   // popEnter
                 R.anim.slide_out  // popExit
-        ).addToBackStack(null).commit();
+                ).addToBackStack(null).commit();
 
     }
-
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed(){
         //  Log.d("onBackPressed", ""+getSupportFragmentManager().getBackStackEntryCount());
         super.onBackPressed();
-        if (getSupportFragmentManager().getBackStackEntryCount() == 2)
-        {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 2){
             // showSettingsAlert();
             finish();
-        } else
-        {
+        }
+        else {
             finish();
         }
     }
 
-    public void showSettingsAlert()
-    {
-        try
-        {
+    public void showSettingsAlert(){
+        try{
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
             // Setting Dialog Title
@@ -653,26 +635,21 @@ public class LocationWithDetailAct extends AppCompatActivity
             alertDialog.setMessage(R.string.exit_dialog);
 //+" "+ Arrays.asList(eventCounts)
             // On pressing Settings button
-            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int which)
-                {
+            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
                     finish();
                 }
             });
 
             // on pressing cancel button
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int which)
-                {
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
             });
             // Showing Alert Message
             alertDialog.show();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Dialog box is not opening right now, pls try again later.", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }

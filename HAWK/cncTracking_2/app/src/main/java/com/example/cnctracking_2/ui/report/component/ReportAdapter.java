@@ -35,12 +35,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.transition.Hold;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -194,7 +189,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             }
             Map<String, List<DataPointsItem>> mapDriverBehaviour = new HashMap<>();
             for (int i = 0; i < chartModel.getDataItems().size(); i++) {
-                for (int j = 0; j < chartModel.getDataItems().get(i).getDataPoints().size(); j++) {
+                for (int j = 0; j < chartModel.getDataItems().size(); j++) {
                     if (mapDriverBehaviour.containsKey(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel())) {
                         List<DataPointsItem> nestedGraphListNew = mapDriverBehaviour.get(chartModel.getDataItems().get(i).getDataPoints().get(j).getLabel());
                         nestedGraphListNew.add(chartModel.getDataItems().get(i).getDataPoints().get(j));
@@ -208,7 +203,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             }
 
             List<String> listOfKeys = new ArrayList<String>(mapDriverBehaviour.keySet());
-            sortArray(listOfKeys);
             for (int i = 0; i < listOfKeys.size(); i++) {
                 float[] dataFloat = new float[mapDriverBehaviour.get(listOfKeys.get(i)).size()];
                 for (int j = 0; j < mapDriverBehaviour.get(listOfKeys.get(i)).size(); j++) {
@@ -359,9 +353,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
             ValueFormatter formatter = new ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    if (chartModel.getListOfDataPoint().size() > (int) value)
-                        return chartModel.getListOfDataPoint().get((int) value).getLabel();
-                    return "";
+                    return chartModel.getListOfDataPoint().get((int) value).getLabel();
                 }
             };
 

@@ -27,10 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReportViewModel extends AndroidViewModel {
+public class ReportViewModel extends AndroidViewModel
+{
 
 
-    public ReportViewModel(@NonNull Application application) {
+    public ReportViewModel(@NonNull Application application)
+    {
         super(application);
     }
 
@@ -56,12 +58,12 @@ public class ReportViewModel extends AndroidViewModel {
                             JSONObject jsonResponse;
                             // Log.d("Frag1_1", "2");
                             try {
-                                ReportResponse reportResponse = new Gson().fromJson(response, ReportResponse.class);
+                                ReportResponse reportResponse = new Gson().fromJson(response,ReportResponse.class);
 
                                 mListener.onRequestComplete(reportResponse);
 //                                showArrayList();
 
-                            } catch (Exception e) {
+                            }catch(Exception e){
                             }
 
                         }

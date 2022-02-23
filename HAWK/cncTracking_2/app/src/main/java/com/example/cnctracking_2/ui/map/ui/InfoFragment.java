@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,7 +65,7 @@ public class InfoFragment extends Fragment {
     String  loginName, password, userRole;
     int unitID;
     TextView label1, label2, label3, label4, label5, label6, label7, label8, speedLabel, lastRecordTimeLabel;
-    TextView device1, device2, device3, device4, device5;
+    TextView device1, device2, device3, device4, device5, simpleChronometer_temp;
     public static final String DEFAULT = "N/A";
     String regNo, custName,dateTime;
     float latt,lngg, speed;
@@ -73,6 +74,7 @@ public class InfoFragment extends Fragment {
     LinearLayout btnReport;
     String  deviceType;
     int moduleId, userId;
+    Chronometer simpleChronometer;
     public InfoFragment() {
         // Required empty public constructor
     }
@@ -125,31 +127,19 @@ public class InfoFragment extends Fragment {
         deviceStatusImg = (ImageView) v.findViewById(R.id.info_device_status);
         speedLabel = (TextView)  v.findViewById(R.id.speed_info);
         lastRecordTimeLabel = (TextView)  v.findViewById(R.id.last_packet_time_info);
+        simpleChronometer   = (Chronometer) v.findViewById(R.id.simpleChronometer);
+        simpleChronometer_temp  = (TextView)  v.findViewById(R.id.simpleChronometer_temp);
 
         progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar1);
 
         progressBar.setVisibility(View.GONE);
+        simpleChronometer.setVisibility(View.GONE);
+        configButton.setVisibility(View.GONE);
 
-        SharedPreferences sp = getActivity().getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
-
-
-        unitID = sp.getInt("unitID", 0);
-        userId= sp.getInt("userId", 0);
-        regNo = sp.getString("regNo", DEFAULT);
-        custName = sp.getString("custName", DEFAULT);
-        lngg = sp.getFloat("longitude", 0.0f);
-        latt = sp.getFloat("latitude", 0.0f);
-        dateTime = sp.getString("dateTime", DEFAULT);
-        speed = sp.getFloat("speed", 0.0f);
-        deviceType = sp.getString("deviceType", DEFAULT);
-        moduleId = sp.getInt("moduleId", 0);
-        password = sp.getString("password", DEFAULT);
-        loginName = sp.getString("loginName", DEFAULT);
-        isNr =  sp.getBoolean("isNr", FALSE);
-
-       // label1.setText(message);
+        getSharePrfDataForDevice();
+        // label1.setText(message);
         label2.setText("");
-      //  label3.setText(dateTime);
+        //  label3.setText(dateTime);
         label4.setText("");
         label5.setText("");
         label6.setText(custName);
@@ -160,7 +150,7 @@ public class InfoFragment extends Fragment {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Toast.makeText(getActivity(), "Fav Button Click", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Fav Button Click", Toast.LENGTH_SHORT).show();
                 view.animate().setDuration(500).alpha(0)
                         .withEndAction(new Runnable() {
                             @Override
@@ -185,8 +175,8 @@ public class InfoFragment extends Fragment {
 
                             }
                         });
-               // Uri uri = Uri.parse("http://maps.google.com?q="+latt+","+lngg); // missing 'http://' will cause crashed
-               // Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                // Uri uri = Uri.parse("http://maps.google.com?q="+latt+","+lngg); // missing 'http://' will cause crashed
+                // Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 String url = "My Location: http://maps.google.com?q="+latt+","+lngg;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_TEXT, url);
@@ -235,6 +225,7 @@ public class InfoFragment extends Fragment {
         try {
             SharedPreferences sp2 = getActivity().getSharedPreferences("InfoDevice", Context.MODE_PRIVATE);
             String report = sp2.getString("searchResult", DEFAULT);
+            Log.d("InfoFrag_1_report", report);
             if (report != null && !report.equals("N/A")) {
 
 /*
@@ -246,20 +237,20 @@ public class InfoFragment extends Fragment {
 */
                 JSONObject jsonResponse;
                 try {
+                    Log.d("InfoFrag_1", "json Start");
                     Log.d("InfoFrag_1", report);
                     jsonResponse = new JSONObject(report);
                             /*jsonResponse = new JSONObject(response);
                             moving = jsonResponse.optInt("Moving");*/
-                    Log.d("InfoFrag_1", "test2");
-                    label1.setText(jsonResponse.getString("refPoint").toString());
-                    label2.setText(jsonResponse.getString("satellite").toString());
-                    label3.setText(jsonResponse.getString("eventTime").toString());
-                    label4.setText(jsonResponse.getString("odoMeter").toString());
-                    label5.setText(jsonResponse.getString("voltage").toString());
-                    //label6.setText(jsonResponse.getString("chassisNo").toString()); driver
-                    label7.setText(jsonResponse.getString("temp").toString());
+
+                    label1.setText(jsonResponse.getString("refPoint"));
+                    label2.setText(jsonResponse.getString("satellite"));
+                    label3.setText(jsonResponse.getString("eventTime"));
+                    label4.setText(jsonResponse.getString("odoMeter"));
+                    label5.setText(jsonResponse.getString("voltage"));
                     speedLabel.setText(jsonResponse.getString("speed").toString() +" KM/h");
                     Log.d("InfoFrag_22", "" + jsonResponse.getInt("statusId"));
+
 
 //                1. nr grey color D4D4D4
 //                2. parked/stop blue 3498db
@@ -273,6 +264,9 @@ public class InfoFragment extends Fragment {
                             deviceStatusImg.setImageResource(R.mipmap.stop_device_d);
                         } else if (statusId == 3) {
                             deviceStatusImg.setImageResource(R.mipmap.running_device_d);
+                            simpleChronometer_temp.setVisibility(View.GONE);
+                            simpleChronometer.setVisibility(View.VISIBLE);
+                            simpleChronometer.start();
                         } else if (statusId == 4) {
                             deviceStatusImg.setImageResource(R.mipmap.idling_device_d);
                         }
@@ -281,12 +275,18 @@ public class InfoFragment extends Fragment {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    label8.setText(jsonResponse.getString("fuel").toString());
-                    //  label8.setText(jsonResponse.getString("fuel").toString());
+                    try{
 
+                        //label6.setText(jsonResponse.getString("chassisNo").toString()); driver
+                        label7.setText(jsonResponse.getString("temp"));
+                        label8.setText(jsonResponse.getString("fuel"));
+                        //  label8.setText(jsonResponse.getString("fuel").toString());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     //   progressBar.setVisibility(View.GONE);
                 } catch (JSONException e) {
-                   // e.printStackTrace();
+                    e.printStackTrace();
                     // progressBar.setVisibility(View.GONE);
                     Log.d("InfoFrag", "Exception in info frag on sharedprf");
                     //Toast.makeText(getActivity(), "Network Problem", Toast.LENGTH_SHORT).show();
@@ -400,5 +400,24 @@ public class InfoFragment extends Fragment {
     public void setTimeSpeed(String speed, String diffTime) {
         speedLabel.setText(speed);
         lastRecordTimeLabel.setText(diffTime);
+    }
+
+    public void getSharePrfDataForDevice(){
+        SharedPreferences sp = getActivity().getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
+
+        unitID = sp.getInt("unitID", 0);
+        userId= sp.getInt("userId", 0);
+        regNo = sp.getString("regNo", DEFAULT);
+        custName = sp.getString("custName", DEFAULT);
+        lngg = sp.getFloat("longitude", 0.0f);
+        latt = sp.getFloat("latitude", 0.0f);
+        dateTime = sp.getString("dateTime", DEFAULT);
+        speed = sp.getFloat("speed", 0.0f);
+        deviceType = sp.getString("deviceType", DEFAULT);
+        moduleId = sp.getInt("moduleId", 0);
+        password = sp.getString("password", DEFAULT);
+        loginName = sp.getString("loginName", DEFAULT);
+        isNr =  sp.getBoolean("isNr", FALSE);
+
     }
 }

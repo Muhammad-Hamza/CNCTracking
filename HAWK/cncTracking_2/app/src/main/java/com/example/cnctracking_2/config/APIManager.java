@@ -58,6 +58,11 @@ public class APIManager {
         return domain + appName + "TripLogsAPI";
     }
 
+    public static String getImmobilzerCommandAPI() {
+
+        return domain + appName + "ImmobilzerCommandAPI";
+    }
+
     public static String getReportsData() {
 
         return domain + appName + "WeeklyReportsAPI";

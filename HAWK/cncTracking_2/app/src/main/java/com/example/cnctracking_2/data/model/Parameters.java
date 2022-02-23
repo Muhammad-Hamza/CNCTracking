@@ -72,14 +72,55 @@ public class Parameters implements Parcelable {
         crudeMessage = in.readString();
         deviation = in.readByte() != 0;
         route = in.readString();
-        moduleId = in.readInt();
-
+        direction = in.readInt();
     }
 
-
-    public int getModuleId() {
-        return moduleId;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(unitId);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
+        dest.writeDouble(speed);
+        dest.writeInt(speedInt);
+        dest.writeInt(altitude);
+        dest.writeInt(satellite);
+        dest.writeInt(reportId);
+        dest.writeString(reportText);
+        dest.writeDouble(mileage);
+        dest.writeString(password);
+        dest.writeString(strDateTime);
+        dest.writeString(startTime);
+        dest.writeString(endTime);
+        dest.writeInt(timeTotal);
+        dest.writeInt(statusId);
+        dest.writeString(diffTime);
+        dest.writeDouble(temperature);
+        dest.writeDouble(fuel);
+        dest.writeLong(timeInMillies);
+        dest.writeString(message);
+        dest.writeByte((byte) (emergency ? 1 : 0));
+        dest.writeString(crudeMessage);
+        dest.writeByte((byte) (deviation ? 1 : 0));
+        dest.writeString(route);
+        dest.writeInt(direction);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Parameters> CREATOR = new Creator<Parameters>() {
+        @Override
+        public Parameters createFromParcel(Parcel in) {
+            return new Parameters(in);
+        }
+
+        @Override
+        public Parameters[] newArray(int size) {
+            return new Parameters[size];
+        }
+    };
 
     public String getStrDateTime() {
         return strDateTime;
