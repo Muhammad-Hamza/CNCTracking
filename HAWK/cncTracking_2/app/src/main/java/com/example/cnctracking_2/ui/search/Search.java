@@ -1,10 +1,8 @@
 package com.example.cnctracking_2.ui.search;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -39,14 +36,12 @@ import com.example.cnctracking_2.data.model.Unit;
 import com.example.cnctracking_2.data.model.Vehicle;
 import com.example.cnctracking_2.ui.SearchArrayAdapter;
 import com.example.cnctracking_2.ui.map.LocationWithDetailAct;
-import com.example.cnctracking_2.ui.report.ReportFragment;
+import com.example.cnctracking_2.ui.report.ReportActivity;
 import com.example.cnctracking_2.util.ConstantUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -417,7 +412,10 @@ public class Search extends Fragment implements SearchArrayAdapter.OnItemClickLi
 //            Log.e("asd", "asdas");
             Bundle bundle = new Bundle();
             bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1, prm.getModuleId());
-            ((MainActivity) getActivity()).changeFragment(new ReportFragment(), bundle);
+            Intent intent = new Intent(requireContext(), ReportActivity.class);
+            intent.putExtra("bundle", bundle);
+            startActivity(intent);
+//            ((MainActivity) getActivity()).changeFragment(new ReportActivity(), bundle);
         }
     }
 

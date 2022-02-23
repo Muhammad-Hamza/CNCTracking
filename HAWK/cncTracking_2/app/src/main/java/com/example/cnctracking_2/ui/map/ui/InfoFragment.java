@@ -3,19 +3,15 @@ package com.example.cnctracking_2.ui.map.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -28,13 +24,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.cnctracking_2.MainActivity;
 import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.config.APIManager;
 import com.example.cnctracking_2.ui.ControlFragment;
 import com.example.cnctracking_2.ui.map.LocationWithDetailAct;
-import com.example.cnctracking_2.ui.map.MapsFragment;
-import com.example.cnctracking_2.ui.report.ReportFragment;
+import com.example.cnctracking_2.ui.report.ReportActivity;
 import com.example.cnctracking_2.util.ConstantUtil;
 
 import org.json.JSONException;
@@ -62,19 +56,20 @@ public class InfoFragment extends Fragment {
     private String mParam2;
 
     ProgressBar progressBar;
-    String  loginName, password, userRole;
+    String loginName, password, userRole;
     int unitID;
     TextView label1, label2, label3, label4, label5, label6, label7, label8, speedLabel, lastRecordTimeLabel;
     TextView device1, device2, device3, device4, device5, simpleChronometer_temp;
     public static final String DEFAULT = "N/A";
-    String regNo, custName,dateTime;
-    float latt,lngg, speed;
+    String regNo, custName, dateTime;
+    float latt, lngg, speed;
     boolean isNr;
     ImageView likeButton, shareButton, configButton, deviceStatusImg;
     LinearLayout btnReport;
-    String  deviceType;
+    String deviceType;
     int moduleId, userId;
     Chronometer simpleChronometer;
+
     public InfoFragment() {
         // Required empty public constructor
     }
@@ -113,22 +108,22 @@ public class InfoFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_info, container, false);
 
         label1 = (TextView) v.findViewById(R.id.adress);
-        label2 = (TextView)  v.findViewById(R.id.satellite);
-        label3 = (TextView)  v.findViewById(R.id.date);
-        label4 = (TextView)  v.findViewById(R.id.odo);
-        label5 = (TextView)  v.findViewById(R.id.battery);
-        label6 = (TextView)  v.findViewById(R.id.driver);
-        label7 = (TextView)  v.findViewById(R.id.temp);
-        label8 = (TextView)  v.findViewById(R.id.fuel);
+        label2 = (TextView) v.findViewById(R.id.satellite);
+        label3 = (TextView) v.findViewById(R.id.date);
+        label4 = (TextView) v.findViewById(R.id.odo);
+        label5 = (TextView) v.findViewById(R.id.battery);
+        label6 = (TextView) v.findViewById(R.id.driver);
+        label7 = (TextView) v.findViewById(R.id.temp);
+        label8 = (TextView) v.findViewById(R.id.fuel);
         likeButton = (ImageView) v.findViewById(R.id.like);
         shareButton = (ImageView) v.findViewById(R.id.share);
         configButton = (ImageView) v.findViewById(R.id.configure);
         btnReport = (LinearLayout) v.findViewById(R.id.btnReport);
         deviceStatusImg = (ImageView) v.findViewById(R.id.info_device_status);
-        speedLabel = (TextView)  v.findViewById(R.id.speed_info);
-        lastRecordTimeLabel = (TextView)  v.findViewById(R.id.last_packet_time_info);
-        simpleChronometer   = (Chronometer) v.findViewById(R.id.simpleChronometer);
-        simpleChronometer_temp  = (TextView)  v.findViewById(R.id.simpleChronometer_temp);
+        speedLabel = (TextView) v.findViewById(R.id.speed_info);
+        lastRecordTimeLabel = (TextView) v.findViewById(R.id.last_packet_time_info);
+        simpleChronometer = (Chronometer) v.findViewById(R.id.simpleChronometer);
+        simpleChronometer_temp = (TextView) v.findViewById(R.id.simpleChronometer_temp);
 
         progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar1);
 
@@ -177,7 +172,7 @@ public class InfoFragment extends Fragment {
                         });
                 // Uri uri = Uri.parse("http://maps.google.com?q="+latt+","+lngg); // missing 'http://' will cause crashed
                 // Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                String url = "My Location: http://maps.google.com?q="+latt+","+lngg;
+                String url = "My Location: http://maps.google.com?q=" + latt + "," + lngg;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_TEXT, url);
                 intent.setType("text/plain");
@@ -190,7 +185,10 @@ public class InfoFragment extends Fragment {
         {
             Bundle bundle = new Bundle();
             bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1, moduleId);
-            ((LocationWithDetailAct) getActivity()).changeFragment(new ReportFragment(), bundle);
+            Intent intent = new Intent(requireContext(), ReportActivity.class);
+            intent.putExtra("bundle", bundle);
+            startActivity(intent);
+//            ((LocationWithDetailAct) getActivity()).changeFragment(new ReportActivity(), bundle);
 
         });
         configButton.setOnClickListener(new View.OnClickListener() {
@@ -248,7 +246,7 @@ public class InfoFragment extends Fragment {
                     label3.setText(jsonResponse.getString("eventTime"));
                     label4.setText(jsonResponse.getString("odoMeter"));
                     label5.setText(jsonResponse.getString("voltage"));
-                    speedLabel.setText(jsonResponse.getString("speed").toString() +" KM/h");
+                    speedLabel.setText(jsonResponse.getString("speed").toString() + " KM/h");
                     Log.d("InfoFrag_22", "" + jsonResponse.getInt("statusId"));
 
 
@@ -275,7 +273,7 @@ public class InfoFragment extends Fragment {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    try{
+                    try {
 
                         //label6.setText(jsonResponse.getString("chassisNo").toString()); driver
                         label7.setText(jsonResponse.getString("temp"));
@@ -322,26 +320,28 @@ public class InfoFragment extends Fragment {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 */
-        }catch(Exception ee){ee.printStackTrace();}
+        } catch (Exception ee) {
+            ee.printStackTrace();
+        }
 
         Bundle args = getArguments(); // calling form map fragment
         String index = null;
-        try{
+        try {
             index = args.getString("index", DEFAULT);
-            if(index != null && index.equals("LAST10RECORDS")){
-                speedLabel.setText( args.getString("speed", DEFAULT));
+            if (index != null && index.equals("LAST10RECORDS")) {
+                speedLabel.setText(args.getString("speed", DEFAULT));
                 lastRecordTimeLabel.setText(args.getString("rcvdTimeDiffer", DEFAULT));
                 label1.setText(args.getString("refPoint", DEFAULT));
             }
 
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
 
         return v;
     }
 
 
-
-    public void saveFavDevice(){
+    public void saveFavDevice() {
 
 
         progressBar.setVisibility(View.VISIBLE);
@@ -361,13 +361,12 @@ public class InfoFragment extends Fragment {
                         try {
 
                             jsonResponse = new JSONObject(response);
-                            Toast.makeText(getActivity(), jsonResponse.getString("message").toString(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), jsonResponse.getString("message").toString(), Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), "Not Found!" ,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
                         }
-
 
 
                     }
@@ -382,13 +381,14 @@ public class InfoFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("userId", ""+userId);
-                params.put("moduleId", ""+moduleId);
+                params.put("userId", "" + userId);
+                params.put("moduleId", "" + moduleId);
 
                 return params;
             }
 
-        }; Volley.newRequestQueue(getActivity()).add(sr);
+        };
+        Volley.newRequestQueue(getActivity()).add(sr);
 
         sr.setRetryPolicy(new DefaultRetryPolicy(
                 8000,
@@ -402,11 +402,11 @@ public class InfoFragment extends Fragment {
         lastRecordTimeLabel.setText(diffTime);
     }
 
-    public void getSharePrfDataForDevice(){
+    public void getSharePrfDataForDevice() {
         SharedPreferences sp = getActivity().getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
 
         unitID = sp.getInt("unitID", 0);
-        userId= sp.getInt("userId", 0);
+        userId = sp.getInt("userId", 0);
         regNo = sp.getString("regNo", DEFAULT);
         custName = sp.getString("custName", DEFAULT);
         lngg = sp.getFloat("longitude", 0.0f);
@@ -417,7 +417,7 @@ public class InfoFragment extends Fragment {
         moduleId = sp.getInt("moduleId", 0);
         password = sp.getString("password", DEFAULT);
         loginName = sp.getString("loginName", DEFAULT);
-        isNr =  sp.getBoolean("isNr", FALSE);
+        isNr = sp.getBoolean("isNr", FALSE);
 
     }
 }

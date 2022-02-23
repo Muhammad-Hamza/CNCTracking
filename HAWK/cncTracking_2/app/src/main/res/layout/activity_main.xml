@@ -14,28 +14,30 @@
         android:orientation="vertical"
 
         >
-       <androidx.appcompat.widget.Toolbar
+
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarMain"
             android:layout_width="match_parent"
-           android:layout_height="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/actionbar_background"
-           app:theme="@style/ToolBarStyle"
-            android:textColor="@color/white">
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text=""
-               android:gravity="center"
-               android:layout_gravity= "center"
-               android:id="@+id/toolbar_title" />
-       </androidx.appcompat.widget.Toolbar>
+            android:textColor="@color/white"
+            app:theme="@style/ToolBarStyle">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="" />
+        </androidx.appcompat.widget.Toolbar>
 
-        />
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
 
     </LinearLayout>
 

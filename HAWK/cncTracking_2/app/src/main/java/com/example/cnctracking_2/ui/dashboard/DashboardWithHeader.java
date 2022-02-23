@@ -1,5 +1,6 @@
 package com.example.cnctracking_2.ui.dashboard;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,16 +8,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.SpannableString;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -34,20 +30,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.cnctracking_2.MainActivity;
 import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.config.APIManager;
-import com.example.cnctracking_2.data.model.Customer;
-import com.example.cnctracking_2.data.model.Parameters;
-import com.example.cnctracking_2.data.model.Unit;
-import com.example.cnctracking_2.data.model.Vehicle;
-import com.example.cnctracking_2.data.model.YourFormatter;
-import com.example.cnctracking_2.ui.ControlFragment;
-import com.example.cnctracking_2.ui.gallery.GalleryFragment;
 import com.example.cnctracking_2.ui.maintenance.MaintenanceFragment;
-import com.example.cnctracking_2.ui.map.LocationWithDetailAct;
-import com.example.cnctracking_2.ui.map.MovementReport;
-import com.example.cnctracking_2.ui.report.ReportFragment;
+import com.example.cnctracking_2.ui.report.ReportActivity;
 import com.example.cnctracking_2.ui.search.FavFragment;
 import com.example.cnctracking_2.ui.search.Search;
 import com.github.mikephil.charting.animation.Easing;
@@ -63,7 +49,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -238,34 +223,11 @@ public class DashboardWithHeader extends Fragment {
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(getActivity(), "b3 click", Toast.LENGTH_SHORT).show();
-//              Toast.makeText(getActivity(), "Reports Page Is Under Development", Toast.LENGTH_SHORT).show();
-                // final Intent i = new Intent(getActivity(), MovementReport.class);
-
-                Fragment fragment = new ReportFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle args = new Bundle();
                 args.putString("index", ""); //means trip click
-                fragment.setArguments(args);
-                fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in,  // enter
-                        R.anim.fade_out,  // exit
-                        R.anim.fade_in,   // popEnter
-                        R.anim.slide_out  // popExit
-                );
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.replace(R.id.fragment_frame, fragment);
-                fragmentTransaction.commit();
-//                view.animate().setDuration(500).alpha(0)
-//                        .withEndAction(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                view.setAlpha(1);
-//                               // startActivity(i);
-//
-//                            }
-//                        });
+                Intent intent = new Intent(requireContext(), ReportActivity.class);
+                intent.putExtra("bundle", args);
+                startActivity(intent);
             }
 
         });

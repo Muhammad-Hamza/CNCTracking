@@ -8,15 +8,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/activity_location_with_detail.xml" value="0.23846153846153847" />
-        <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/content.xml" value="0.2421875" />
-        <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/fragment_info.xml" value="0.176" />
         <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/fragment_report.xml" value="0.2421875" />
         <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/listitem_report.xml" value="0.2421875" />
-        <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/listitem_search.xml" value="0.536" />
-        <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/temp_bottom_sheet.xml" value="0.2421875" />
-        <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/trips_row_layout.xml" value="0.2421875" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/activity_main.xml" value="0.1929084001688476" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/content.xml" value="0.195382642154767" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/fragment_info.xml" value="0.195382642154767" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/fragment_report.xml" value="0.1929084001688476" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/fragment_search2.xml" value="0.23802083333333332" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/listitem_maintenance_new.xml" value="0.195382642154767" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/listitem_report.xml" value="0.23802083333333332" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/listitem_search.xml" value="0.195382642154767" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/search_adapter.xml" value="0.23802083333333332" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/temp_bottom_sheet.xml" value="0.195382642154767" />
       </map>
     </option>
   </component>

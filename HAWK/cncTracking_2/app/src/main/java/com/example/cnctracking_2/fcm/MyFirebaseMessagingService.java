@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -49,17 +50,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             sendNotification(remoteMessage.getNotification().getBody());
         }
     }
+
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
         sendRegistrationToServer(token);
     }
+
     private void handleNow() {
         Log.d(TAG, "Short lived task is done.");
     }
 
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+//        fcmId
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString("fcmId", token).apply();
     }
 
     private void sendNotification(String messageBody) {
