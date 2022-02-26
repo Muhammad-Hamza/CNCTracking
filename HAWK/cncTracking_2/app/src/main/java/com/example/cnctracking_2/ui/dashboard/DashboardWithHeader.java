@@ -445,8 +445,6 @@ public class DashboardWithHeader extends Fragment {
     }
 
     public void getDevicesData() {
-
-
         progressBar.setVisibility(View.VISIBLE);
         String url = APIManager.getDashboardAPI();
         // Log.d("test1", "t3");

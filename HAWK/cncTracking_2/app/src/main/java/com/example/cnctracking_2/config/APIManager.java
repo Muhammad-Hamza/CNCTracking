@@ -67,6 +67,10 @@ public class APIManager {
 
         return domain + appName + "WeeklyReportsAPI";
     }
+    public static String getNotifications() {
+
+        return domain + appName + "NotificationsAPI";
+    }
     public static String getMaintenanceData() {
 
         return domain + appName + "MaintenanceViewAPI";

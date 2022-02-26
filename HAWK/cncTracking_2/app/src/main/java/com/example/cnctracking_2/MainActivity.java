@@ -1,6 +1,9 @@
 package com.example.cnctracking_2;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +27,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.cnctracking_2.ui.dashboard.DashboardWithHeader;
+import com.example.cnctracking_2.ui.notifications.NotifcationActivity;
+import com.example.cnctracking_2.ui.report.ReportActivity;
 import com.example.cnctracking_2.ui.search.Search;
+import com.example.cnctracking_2.util.ConstantUtil;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -205,6 +211,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
                 // changeFragment(fragment);
                 // Toast.makeText(MainActivity.this,"Home", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_notifications:
+                SharedPreferences sp = getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
+                Bundle bundle = new Bundle();
+                bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1,  sp.getInt("moduleId", 0));
+                Intent intent = new Intent(getApplicationContext(), NotifcationActivity.class);
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
                 break;
 
         }
