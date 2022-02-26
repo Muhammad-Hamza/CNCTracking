@@ -209,6 +209,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 
             List<String> listOfKeys = new ArrayList<String>(mapDriverBehaviour.keySet());
             sortArray(listOfKeys);
+
             for (int i = 0; i < listOfKeys.size(); i++) {
                 float[] dataFloat = new float[mapDriverBehaviour.get(listOfKeys.get(i)).size()];
                 for (int j = 0; j < mapDriverBehaviour.get(listOfKeys.get(i)).size(); j++) {
@@ -413,6 +414,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
 
     private void sortArray(List<String> arraylist) {
         Collections.sort(arraylist, new sortCompare());
+        Collections.reverse(arraylist);
     }
 
     class sortCompare implements Comparator<String> {
@@ -425,7 +427,14 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.Holder> {
                 /* Returns sorted data in ascending order */
                 return aDate.compareTo(bDate);
             } catch (ParseException e) {
-                e.printStackTrace();
+                try{
+                    Date aaDate = new SimpleDateFormat("dd-MM").parse(a);
+                    Date bbDate = new SimpleDateFormat("dd-MM").parse(b);
+                    /* Returns sorted data in ascending order */
+                    return aaDate.compareTo(bbDate);
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
             return -1;
         }
