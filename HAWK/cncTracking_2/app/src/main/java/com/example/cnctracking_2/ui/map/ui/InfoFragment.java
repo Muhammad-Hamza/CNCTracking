@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,9 +29,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.cnctracking_2.R;
 import com.example.cnctracking_2.config.APIManager;
 import com.example.cnctracking_2.ui.ControlFragment;
+import com.example.cnctracking_2.ui.maintenance.MaintenanceFragment;
 import com.example.cnctracking_2.ui.map.LocationWithDetailAct;
+import com.example.cnctracking_2.ui.map.MapsFragment;
 import com.example.cnctracking_2.ui.report.ReportActivity;
 import com.example.cnctracking_2.util.ConstantUtil;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,7 +70,7 @@ public class InfoFragment extends Fragment {
     float latt, lngg, speed;
     boolean isNr;
     ImageView likeButton, shareButton, configButton, deviceStatusImg;
-    LinearLayout btnReport;
+    LinearLayout btnReport, btnFindVehicle;
     String deviceType;
     int moduleId, userId;
     Chronometer simpleChronometer;
@@ -119,6 +124,7 @@ public class InfoFragment extends Fragment {
         shareButton = (ImageView) v.findViewById(R.id.share);
         configButton = (ImageView) v.findViewById(R.id.configure);
         btnReport = (LinearLayout) v.findViewById(R.id.btnReport);
+        btnFindVehicle = (LinearLayout) v.findViewById(R.id.btnFindVehicle);
         deviceStatusImg = (ImageView) v.findViewById(R.id.info_device_status);
         speedLabel = (TextView) v.findViewById(R.id.speed_info);
         lastRecordTimeLabel = (TextView) v.findViewById(R.id.last_packet_time_info);
@@ -158,6 +164,35 @@ public class InfoFragment extends Fragment {
                 saveFavDevice();
             }
         });
+
+        btnFindVehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.animate().setDuration(500).alpha(0)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.setAlpha(1);
+               // Toast.makeText(getActivity(), "FIND MY VEHICLE", Toast.LENGTH_SHORT).show();
+
+                LinearLayout layoutBottomSheet = (LinearLayout)getActivity().findViewById(R.id.temp_bottomsheet);
+                BottomSheetBehavior sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+                Fragment fragment = new MapsFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Bundle args = new Bundle();
+                args.putString("index", "FIND_MY_VEHICLE");
+                fragment.setArguments(args);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.content, fragment);
+                fragmentTransaction.commit();
+                            }
+                });
+            }
+        });
+
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

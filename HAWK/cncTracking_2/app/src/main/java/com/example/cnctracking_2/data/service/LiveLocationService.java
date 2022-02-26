@@ -3,6 +3,7 @@ package com.example.cnctracking_2.data.service;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 public class LiveLocationService {
     private Activity activity;
-
+    public static final String DEFAULT = "N/A";
     public LiveLocationService(Activity activity) {
         this.activity = activity;
     }
@@ -188,27 +189,21 @@ public class LiveLocationService {
         return BitmapDescriptorFactory.fromResource(R.mipmap.car_1);
     }
     public BitmapDescriptor getDirectionIconGreen(int direction){
-       // Log.d("TSTAct_direction_",""+direction);
-        /*if (direction == 0) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_1_red);
-        } else if (direction >= 340 || direction < 16) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_1_red);
-        } else if (direction >= 16 && direction < 67) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_2_red);
-        } else if (direction >= 67 && direction < 112) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_3_red);
-        } else if (direction >= 112 && direction < 157) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_4_red);
-        } else if (direction >= 157 && direction < 202) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_5_red);
-        } else if (direction >= 202 && direction < 247) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_6_red);
-        } else if (direction >= 247 && direction < 292) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_7_red);
-        } else if (direction >= 292 && direction < 340) {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.car_8_red);
-        }*/
         Log.d("TSTAct_direction_",""+direction);
         return BitmapDescriptorFactory.fromResource(R.mipmap.car_1_red);
+    }
+
+    public boolean isFindMyVehicleAllowed(Bundle args) {
+        String index = null;
+        try {
+            index = args.getString("index", DEFAULT);
+            if (index != null && index.equals("FIND_MY_VEHICLE")) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

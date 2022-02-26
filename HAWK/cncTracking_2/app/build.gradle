@@ -49,7 +49,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.gms:play-services-maps:18.0.0'
-
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.jakewharton:butterknife:10.2.3'
     implementation 'com.google.android.play:core:1.10.2'
 //    implementation 'androidx.compose.ui:ui-graphics:1.0.0-rc01'

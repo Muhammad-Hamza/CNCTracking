@@ -2,13 +2,20 @@ package com.example.cnctracking_2.ui.map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -18,7 +25,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -34,20 +43,39 @@ import com.example.cnctracking_2.data.model.Parameters;
 import com.example.cnctracking_2.data.model.User;
 import com.example.cnctracking_2.data.model.VehilceSelection;
 import com.example.cnctracking_2.data.service.DataFromSharedPreferences;
+import com.example.cnctracking_2.data.service.FindMyVehicle;
 import com.example.cnctracking_2.data.service.LiveLocationService;
 import com.example.cnctracking_2.data.service.VolleyCallback;
 import com.example.cnctracking_2.ui.map.ui.InfoFragment;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class MapsFragment extends Fragment  {
+public class MapsFragment extends Fragment {
     public static final String DEFAULT = "N/A";
 
     User user;
@@ -55,26 +83,35 @@ public class MapsFragment extends Fragment  {
     LiveLocationService service;
     DataFromSharedPreferences dataSP;
     LiveLocationMap liveLocationMap;
+    FindMyVehicle findVehicleService;
     ArrayList<Parameters> movementList;
     SupportMapFragment mapFragment;
     ProgressBar progressBar;
     private Activity mActivity;
     Handler mHandler = new Handler();
     Handler mHandler2 = new Handler();
-
+    GPSTracker gps;
     // Map
-    LatLng prvLatLng, currentlatLng;
+    LatLng prvLatLng, currentlatLng, myLocationLattLong;
     private GoogleMap gMap;
     static Marker carMarker;
+    FusedLocationProviderClient fusedLocationClient;
 
     boolean responseOk = false;
     boolean startAsyncTask = false;
-    boolean isCancelled = false;boolean isCancelled2 = false;
+    boolean isCancelled = false;
+    boolean isCancelled2 = false;
+    boolean isFindLocation = false;
+    boolean isBoundarySet = false;
     int direction, newDirection;
-    int carMoveCounter = 0, prvSpeed= 0;
-    long lastPacketMovementMillies=0;
+    int carMoveCounter = 0, prvSpeed = 0;
+    long lastPacketMovementMillies = 0;
     double bearingD;
     Marker myMarker2;
+    String stringUrl;
+    TextView distanceTxt;
+    LinearLayout distanceLayout;
+    Polyline polyline;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -111,30 +148,71 @@ public class MapsFragment extends Fragment  {
         mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
-        progressBar =  (ProgressBar)  getActivity().findViewById(R.id.progressBar1);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar1);
+        distanceTxt = view.findViewById(R.id.distance_txt);
+        distanceLayout= view.findViewById(R.id.distance_layout);
+
+        distanceLayout.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
 
         dataSP = new DataFromSharedPreferences(getActivity());
         user = dataSP.getUserDataSP();
         vehilce = dataSP.getVehicleDataSP();
-
+        findVehicleService = new FindMyVehicle();
         movementList = new ArrayList();
         carMoveCounter = 0;
         direction = 0;
+        // start work for find my vehicle
         liveLocationMap = new LiveLocationMap();
-        getData(); // from APIs
-        getLastTimeSaved(); // for future movements
+        service = new LiveLocationService(getActivity());
+        Bundle args = getArguments();
+        isFindLocation = service.isFindMyVehicleAllowed(args);
+        //Log.d("MapFrag_L", "isFindLocation "+isFindLocation);
 
+        // end work for find my vehicle
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
             startRepeatingTask();
         }
+        getData(); // from APIs
+        getLastTimeSaved(); // for future movements
+        getMyLocation();
+
+        if(isFindLocation) {
+            distanceLayout.setVisibility(View.VISIBLE);
+           // startFindMyVehicle();
+        }
     }
+
+    public void getCurrentLocation(){
+    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+    }
+     Task<Location> tasks = fusedLocationClient.getLastLocation();
+     tasks.addOnSuccessListener(new OnSuccessListener<Location>() {
+         @Override
+         public void onSuccess(Location location) {
+             if(location != null){
+                 myLocationLattLong = new LatLng(location.getLatitude(), location.getLongitude());
+             }
+         }
+     });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 44) {
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getCurrentLocation();
+            }
+        }
+    }
+
     public void getData(){
         getLastTimeSaved();
         progressBar.setVisibility(View.VISIBLE);
 
-        service = new LiveLocationService(getActivity());
         service.getData(user, vehilce,carMoveCounter, lastPacketMovementMillies, new VolleyCallback(){
             @Override
             public void onSuccess(LiveLocationMap result){
@@ -152,7 +230,12 @@ public class MapsFragment extends Fragment  {
                 responseOk = true;
                 callInfoFrag();
                 moveCar();
-
+                if(isFindLocation) {
+                    startFindMyVehicle();
+                    if(!isBoundarySet) {
+                        setBoundariesOfMap();
+                    }
+                }
             }
         });
 
@@ -239,7 +322,9 @@ public class MapsFragment extends Fragment  {
             //direction = newDirection;
             myMarker2 =  gMap.addMarker(new MarkerOptions().position(newLatLng).title(liveLocationMap.getDateTime()+" "+liveLocationMap.getSpeedcurrent()+" KM/h").snippet(liveLocationMap.getMessage())
                     .icon(speedInt>0? service.getDirectionIconGreen(direction):service.getDirectionIcon(direction)).anchor(0.5f, 0.5f));
-            gMap.animateCamera(CameraUpdateFactory.newLatLng(newLatLng));
+            if(!isFindLocation) {
+                gMap.animateCamera(CameraUpdateFactory.newLatLng(newLatLng));
+            }
         }
         // Toast.makeText(getActivity(), direction+" prvLatLng "+prvLatLng.latitude +" "+prvLatLng.longitude, Toast.LENGTH_SHORT).show();
         //  Toast.makeText(getActivity(), newDirection+" newLatLng "+prvLatLng.latitude +" "+prvLatLng.longitude, Toast.LENGTH_SHORT).show();
@@ -263,7 +348,9 @@ public class MapsFragment extends Fragment  {
             return;
         }
         //gMap.clear();
-        gMap.animateCamera(CameraUpdateFactory.newLatLng(newLatLng));
+        if(!isFindLocation || speedInt> 0 ) {
+            gMap.animateCamera(CameraUpdateFactory.newLatLng(newLatLng));
+        }
         // cnc map
 
         if((prvSpeed == 0 && speedInt> 0) || (prvSpeed > 0 && speedInt == 0 )) {
@@ -441,4 +528,177 @@ public class MapsFragment extends Fragment  {
         fragmentTransaction.commit();
     }
 
+
+// Direction API Work Start
+    public void getMyLocation(){
+        gps = new GPSTracker(this.getContext());
+        gps.getLocation();
+        if(gps.canGetLocation){
+            myLocationLattLong = new LatLng(gps.getLatitude(), gps.getLongitude());
+            Log.d("MapFrag_myloc",+gps.getLatitude()+","+gps.getLongitude());
+        }
+        else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
+    }
+
+    public LatLng getLastVehicleLatLong(){
+        LatLng vCurrentLatLng = new LatLng(vehilce.getLatitude(), vehilce.getLongitude());
+        if(movementList != null & movementList.size()>0){
+            Parameters p =  movementList.get(movementList.size()-1);
+            vCurrentLatLng = new LatLng(p.getLatitude(), p.getLongitude());
+        }
+        return  vCurrentLatLng;
+    }
+
+    public void startFindMyVehicle(){
+        getMyLocation();
+
+        stringUrl = findVehicleService.getDirectionsUrl(myLocationLattLong,getLastVehicleLatLong() );
+        Log.d("MapFrag_myloc",stringUrl);
+        try {
+            new GetDirection().execute();
+        }catch(Exception e){ e.printStackTrace();}
+    }
+
+    public void setBoundariesOfMap(){
+        if (myLocationLattLong != null) {
+            gMap.addMarker(new MarkerOptions().title("My Location").position(myLocationLattLong).icon(BitmapDescriptorFactory.fromResource(R.mipmap.location_icon3)));
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(getLastVehicleLatLong());
+        builder.include(myLocationLattLong);
+        LatLngBounds bounds = builder.build();
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        Log.d("ACT_height",""+height);
+        int padding = (int) (width * 0.16); // offset from edges of the map 10% of screen
+        int paddingHeight = (int) (height * 0.40);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, (height-paddingHeight), padding);
+        gMap.moveCamera(cu);
+        isBoundarySet = true;
+    }
+
+    class GetDirection extends AsyncTask<String, String, List<List<HashMap<String, String>>>> {
+        ProgressDialog dialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        protected List<List<HashMap<String, String>>> doInBackground(String... args) {
+            List<List<HashMap<String, String>>> routesParsed = null;
+            StringBuilder response = new StringBuilder();
+
+            if(stringUrl != null) {
+                Log.d("stringUrl",stringUrl);
+            }
+
+            try {
+                URL url = new URL(stringUrl);
+                HttpURLConnection httpconn = (HttpURLConnection) url
+                        .openConnection();
+                if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader input = new BufferedReader(
+                            new InputStreamReader(httpconn.getInputStream()),
+                            8192);
+                    String strLine = null;
+
+                    while ((strLine = input.readLine()) != null) {
+                        response.append(strLine);
+                    }
+                    input.close();
+                }
+
+
+                String jsonOutput = response.toString();
+                if(jsonOutput != null) {
+                    Log.d("ACT_jsonOutput",jsonOutput);
+                }
+
+                JSONObject jsonObject = new JSONObject(jsonOutput);
+
+                JSONArray routeArray = jsonObject.getJSONArray("routes");
+
+                JSONObject routes = routeArray.getJSONObject(0);
+
+                JSONObject overviewPolylines = routes.getJSONObject("overview_polyline");
+                String encodedString = overviewPolylines.getString("points");
+
+                List<LatLng> points = findVehicleService.decodePoly(encodedString);
+                // Starts parsing data
+                routesParsed = findVehicleService.parse(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return routesParsed;
+
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+            MarkerOptions markerOptions = new MarkerOptions();
+            String distance = "";
+            String duration = "";
+            String address = "";
+
+            if (result == null || result.size() < 1) {
+                Toast.makeText(getActivity(), "No Points", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    if (j == 0) {    // Get distance from the list
+                        distance = (String) point.get("distance");
+                        continue;
+                    } else if (j == 1) { // Get duration from the list
+                        duration = (String) point.get("duration");
+                        continue;
+                    } else if (j == 2) { // Get duration from the list
+                        address = (String) point.get("address");
+                        continue;
+                    }
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(4);
+                lineOptions.color(Color.BLUE);
+            }
+            Log.d("TSTAct_myLoc", "Distance:" + distance + ", Duration:" + duration);
+           distanceTxt.setText("Distance\n" + distance + "\nDuration\n" + duration );
+           /* if(destMarker != null) {
+                destMarker.setTitle("Dest.: " + address);
+            }*/
+
+            if (polyline !=null) {
+                polyline.remove();
+            }
+            polyline = gMap.addPolyline(lineOptions);
+            //   dialog.dismiss();
+        }
+
+    }
 }
