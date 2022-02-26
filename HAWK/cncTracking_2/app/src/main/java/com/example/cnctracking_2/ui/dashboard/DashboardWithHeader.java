@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -223,13 +224,18 @@ public class DashboardWithHeader extends Fragment {
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle args = new Bundle();
-                args.putString("index", ""); //means trip click
-                Intent intent = new Intent(requireContext(), ReportActivity.class);
-                intent.putExtra("bundle", args);
-                startActivity(intent);
+                try
+                {
+                    Intent goToMarket = new Intent(Intent.ACTION_DIAL);
+                    goToMarket.setData(Uri.parse("tel:" + "+922137139000"));
+                    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getContext().startActivity(goToMarket);
+                }
+                catch (Exception e)
+                {
+                    Log.e(DashboardWithHeader.class.getName(), "-->" + e.getMessage());
+                }
             }
-
         });
         b4.setOnClickListener(new View.OnClickListener() {
             @Override

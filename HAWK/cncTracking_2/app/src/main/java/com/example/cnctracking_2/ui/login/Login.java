@@ -334,7 +334,7 @@ public class Login extends AppCompatActivity {
         editor.putString("password", psw);
         editor.putString("userRole", role);
         editor.putInt("userId", userId);
-
+        editor.putBoolean("immobilizerAllow", immobilzeAllow);
         editor.commit();
     }
 
