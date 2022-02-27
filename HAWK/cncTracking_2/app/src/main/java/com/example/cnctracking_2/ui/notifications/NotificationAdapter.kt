@@ -3,11 +3,14 @@ package com.example.cnctracking_2.ui.notifications
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cnctracking_2.R
 import com.example.cnctracking_2.data.model.notifications.MaintenanceDueItem
 import com.example.cnctracking_2.databinding.ListItemNotificationBinding
+import com.example.cnctracking_2.util.DateTimeUtil
+import java.util.*
 
 class NotificationAdapter(
         val context: Context?,
@@ -51,10 +54,26 @@ class NotificationAdapter(
     inner class NotificationHolder(binding: ListItemNotificationBinding) :
             RecyclerView.ViewHolder(binding.root) {
         fun bindData(user: MaintenanceDueItem?, position: Int) {
-            binding.tvDate.text = user?.datetime
-            binding.tvTime.text = user?.datetime
-            binding.tvDesc.text = user?.description
-            binding.tvType.text = user?.type
+            binding.tvDate.text = DateTimeUtil.getCurrentDateTime(DateTimeUtil.FORMAT_DATE_TIME_LOGGING, Locale.getDefault(), user?.datetime!!.toLong())
+            binding.tvTime.text = DateTimeUtil.getCurrentDateTime(DateTimeUtil.FORMAT_TIME_BOOKING, Locale.getDefault(), user.datetime.toLong())
+            binding.tvDesc.text = user.description
+            binding.tvType.text = user.type
+
+
+            when(user?.alertTypeId){
+                "1"->{
+                    binding.imgNotificationType.setImageResource(R.drawable.car_battery)
+                }
+                "2"->{
+                    binding.imgNotificationType.setImageResource(R.drawable.ignition)
+                }
+                "3"->{
+                    binding.imgNotificationType.setImageResource(R.drawable.speedometer)
+                }
+                "4"->{
+                    binding.imgNotificationType.setImageResource(R.drawable.geofence)
+                }
+            }
         }
     }
 }
