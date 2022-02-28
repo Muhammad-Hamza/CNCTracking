@@ -47,8 +47,8 @@ import com.example.cnctracking_2.data.service.FindMyVehicle;
 import com.example.cnctracking_2.data.service.LiveLocationService;
 import com.example.cnctracking_2.data.service.VolleyCallback;
 import com.example.cnctracking_2.ui.map.ui.InfoFragment;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
+//import com.google.android.gms.location.FusedLocationProviderClient;
+//import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -95,7 +95,7 @@ public class MapsFragment extends Fragment {
     LatLng prvLatLng, currentlatLng, myLocationLattLong;
     private GoogleMap gMap;
     static Marker carMarker;
-    FusedLocationProviderClient fusedLocationClient;
+//    FusedLocationProviderClient fusedLocationClient;
 
     boolean responseOk = false;
     boolean startAsyncTask = false;
@@ -188,15 +188,15 @@ public class MapsFragment extends Fragment {
     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
     }
-     Task<Location> tasks = fusedLocationClient.getLastLocation();
-     tasks.addOnSuccessListener(new OnSuccessListener<Location>() {
-         @Override
-         public void onSuccess(Location location) {
-             if(location != null){
-                 myLocationLattLong = new LatLng(location.getLatitude(), location.getLongitude());
-             }
-         }
-     });
+//     Task<Location> tasks = fusedLocationClient.getLastLocation();
+//     tasks.addOnSuccessListener(new OnSuccessListener<Location>() {
+//         @Override
+//         public void onSuccess(Location location) {
+//             if(location != null){
+//                 myLocationLattLong = new LatLng(location.getLatitude(), location.getLongitude());
+//             }
+//         }
+//     });
     }
 
     @Override
@@ -566,7 +566,7 @@ public class MapsFragment extends Fragment {
 
     public void setBoundariesOfMap(){
         if (myLocationLattLong != null) {
-            gMap.addMarker(new MarkerOptions().title("My Location").position(myLocationLattLong).icon(BitmapDescriptorFactory.fromResource(R.mipmap.location_icon3)));
+//            gMap.addMarker(new MarkerOptions().title("My Location").position(myLocationLattLong).icon(BitmapDescriptorFactory.fromResource(R.mipmap.location_icon3)));
         }
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(getLastVehicleLatLong());
