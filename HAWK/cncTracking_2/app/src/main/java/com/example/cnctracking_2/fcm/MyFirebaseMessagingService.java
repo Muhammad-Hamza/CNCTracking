@@ -49,7 +49,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if (remoteMessage.getNotification() != null) {
-            sendNotification(remoteMessage.getNotification().getBody());
+            sendNotification(remoteMessage);
         }
     }
 
@@ -69,15 +69,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         sharedPreferences.edit().putString("fcmId", token).apply();
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(RemoteMessage remoteMessage) {
+        String messageBody = remoteMessage.getNotification().getBody();
         Intent intent = new Intent(this, Splash.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         String channelId = getString(R.string.default_notification_channel_id);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.sample); //Here is FILE_NAME is the name of file that you want to play
+        Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.emergency); //Here is FILE_NAME is the name of file that you want to play
 
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -89,8 +89,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentTitle("FCM Message")
                         .setContentText(messageBody)
                         .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
+
+        notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -100,9 +101,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationChannel channel = new NotificationChannel(channelId,
                     "Channel human readable title",
                     NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setSound(sound,audioAttributes);
             notificationManager.createNotificationChannel(channel);
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
 }

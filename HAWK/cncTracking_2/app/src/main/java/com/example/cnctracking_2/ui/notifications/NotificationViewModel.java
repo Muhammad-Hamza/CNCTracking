@@ -1,7 +1,11 @@
 package com.example.cnctracking_2.ui.notifications;
 
+import static com.example.cnctracking_2.ui.search.FavFragment.DEFAULT;
+
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -71,13 +75,20 @@ public class NotificationViewModel extends AndroidViewModel
             }) {
                 @Override
                 protected Map<String, String> getParams() {
+                    SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
+                    int userId= sp.getInt("userId", 0);
+                   String regNo = sp.getString("regNo", DEFAULT);
+                    String deviceType = sp.getString("deviceType", DEFAULT);
+                    int  moduleId = sp.getInt("moduleId", 0);
+                    String password = sp.getString("password", DEFAULT);
+                    String loginName = sp.getString("loginName", DEFAULT);
                     Map<String, String> params = new HashMap<String, String>();
 //                    params.put("name", loginName);
-                    params.put("name", "ZEESHAN");
+                    params.put("name", loginName);
 //                    params.put("psw", password);
-                    params.put("psw", "1234");
+                    params.put("psw", password);
 //                    params.put("fleetName", deviceType);
-                    params.put("fleetName", "BUE-745");
+                    params.put("fleetName", deviceType);
 //                    params.put("moduleId", ""+moduleId );
                     if (moduleId != -1) {
                         params.put("moduleId", "" + moduleId);

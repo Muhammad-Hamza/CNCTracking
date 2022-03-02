@@ -73,6 +73,12 @@ class NotificationAdapter(
                 "4"->{
                     binding.imgNotificationType.setImageResource(R.drawable.geofence)
                 }
+                "5"->{
+                    binding.imgNotificationType.setImageResource(R.drawable.ignitionoff)
+                }
+                "6"->{
+                    binding.imgNotificationType.setImageResource(R.drawable.alert)
+                }
             }
         }
     }

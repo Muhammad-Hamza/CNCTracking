@@ -636,7 +636,7 @@ public class MapsFragment extends Fragment
     {
         if (myLocationLattLong != null)
         {
-//            gMap.addMarker(new MarkerOptions().title("My Location").position(myLocationLattLong).icon(BitmapDescriptorFactory.fromResource(R.mipmap.location_icon3)));
+            gMap.addMarker(new MarkerOptions().title("My Location").position(myLocationLattLong).icon(BitmapDescriptorFactory.fromResource(R.mipmap.location_icon3)));
         }
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(getLastVehicleLatLong());
