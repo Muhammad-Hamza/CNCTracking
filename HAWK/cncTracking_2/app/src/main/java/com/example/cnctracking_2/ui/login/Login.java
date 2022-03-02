@@ -291,6 +291,8 @@ public class Login extends AppCompatActivity {
                                         params.put("psw", psw);
                                         params.put("macAddress", "");
                                         params.put("fcmId", sharedPreferences.getString("fcmId", ""));
+
+                                        Log.d("Firebase id", params.get("fcmId"));
                                         //TODO asher this will crash the API better is to save the token in Sharedpref from the service's onToken method
                                         //and use that SP here
 //                                    params.put("fcmId",FirebaseMessaging.getInstance().getToken().getResult());
