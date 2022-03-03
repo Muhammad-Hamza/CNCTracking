@@ -14,7 +14,7 @@ class DateTimeUtil {
         {
             val calendar = Calendar.getInstance()
             calendar.time = Date(time)
-            return SimpleDateFormat(format, locale).format(calendar.time)
+            return SimpleDateFormat(format).format(calendar.time)
         }
 
         fun getDate(dateStr: String?, format: String?): Date?
