@@ -340,8 +340,6 @@ public class Login extends AppCompatActivity {
     public void saveSharedPref(String name, String psw, String role, boolean immobilzeAllow) {
         SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-
-
         editor.putString("loginName", name);
         editor.putString("password", psw);
         editor.putString("userRole", role);

@@ -60,7 +60,7 @@ class NotificationAdapter(
             binding.tvType.text = user.type
 
 
-            when(user?.alertTypeId){
+            when(user.alertTypeId){
                 "1"->{
                     binding.imgNotificationType.setImageResource(R.drawable.car_battery)
                 }

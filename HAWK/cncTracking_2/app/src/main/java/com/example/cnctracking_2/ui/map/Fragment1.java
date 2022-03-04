@@ -38,6 +38,8 @@ import com.example.cnctracking_2.config.APIManager;
 import com.example.cnctracking_2.data.model.Parameters;
 import com.example.cnctracking_2.data.model.TripsBean;
 import com.example.cnctracking_2.ui.ControlFragment;
+import com.example.cnctracking_2.ui.report.ReportActivity;
+import com.example.cnctracking_2.util.ConstantUtil;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -529,44 +531,11 @@ public class Fragment1 extends Fragment {
     }
 
     public void showSettingsAlert(){
-        try{
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-
-            // Setting Dialog Title
-            alertDialog.setTitle("Emergency Alerts");
-
-            Set<String> keys = eventCounts.keySet();
-            StringBuffer data = new StringBuffer("");
-
-            for(String key: keys){
-                data.append(key +" : ");
-                data.append( eventCounts.get(key) +"\n");
-            }
-
-            // Setting Dialog Message
-            alertDialog.setMessage(data.toString());
-//+" "+ Arrays.asList(eventCounts)
-            // On pressing Settings button
-       /* alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                getActivity().startActivity(intent);
-            }
-        });*/
-
-            // on pressing cancel button
-            alertDialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            // Showing Alert Message
-            alertDialog.show();
-        } catch (Exception e) {
-            Toast.makeText(getActivity(), "Dialog box is not opening right now, pls try again later.", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        Bundle bundle = new Bundle();
+        bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1, moduleId);
+        Intent intent = new Intent(requireContext(), ReportActivity.class);
+        intent.putExtra("bundle", bundle);
+        startActivity(intent);
     }
 
 }

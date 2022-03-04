@@ -38,7 +38,8 @@ public class NotificationViewModel extends AndroidViewModel
     }
 
 
-    public void getNotifications(Activity activity, int moduleId, NotificationsFetchListener mListener) {
+    public void getNotifications(Activity activity, int moduleId, NotificationsFetchListener mListener)
+    {
         //  Log.d("getHistory", "1");
 //        SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
 //        int userId = sp.getInt("userId", 0);
@@ -47,39 +48,48 @@ public class NotificationViewModel extends AndroidViewModel
 //        int moduleId = sp.getInt("moduleId", 0);
 //        String password = sp.getString("password", "N/A");
 //        String loginName = sp.getString("loginName", "N/A");
-        try {
+        try
+        {
             String url = APIManager.getNotifications();
             //    Log.d("Frag1_1", url +" - "+ loginName +" - "+ password);
             StringRequest sr = new StringRequest(Request.Method.POST, url,
 
-                    new Response.Listener<String>() {
+                    new Response.Listener<String>()
+                    {
 
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(String response)
+                        {
                             JSONObject jsonResponse;
                             // Log.d("Frag1_1", "2");
-                            try {
+                            try
+                            {
                                 NotificationResponse reportResponse = new Gson().fromJson(response, NotificationResponse.class);
 
                                 mListener.onRequestComplete(reportResponse);
 //                                showArrayList();
 
-                            }catch(Exception e){
+                            } catch (Exception e)
+                            {
                             }
 
                         }
-                    }, new Response.ErrorListener() {
+                    }, new Response.ErrorListener()
+            {
                 @Override
-                public void onErrorResponse(VolleyError error) {
+                public void onErrorResponse(VolleyError error)
+                {
                 }
-            }) {
+            })
+            {
                 @Override
-                protected Map<String, String> getParams() {
-                    SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
-                    int userId= sp.getInt("userId", 0);
-                   String regNo = sp.getString("regNo", DEFAULT);
+                protected Map<String, String> getParams()
+                {
+                    SharedPreferences sp = activity.getSharedPreferences("user", Context.MODE_PRIVATE);
+                    int userId = sp.getInt("userId", 0);
+                    String regNo = sp.getString("regNo", DEFAULT);
                     String deviceType = sp.getString("deviceType", DEFAULT);
-                    int  moduleId = sp.getInt("moduleId", 0);
+                    int moduleId = sp.getInt("moduleId", 0);
                     String password = sp.getString("password", DEFAULT);
                     String loginName = sp.getString("loginName", DEFAULT);
                     Map<String, String> params = new HashMap<String, String>();
@@ -90,9 +100,11 @@ public class NotificationViewModel extends AndroidViewModel
 //                    params.put("fleetName", deviceType);
                     params.put("fleetName", deviceType);
 //                    params.put("moduleId", ""+moduleId );
-                    if (moduleId != -1) {
+                    if (moduleId != -1)
+                    {
                         params.put("moduleId", "" + moduleId);
-                    } else {
+                    } else
+                    {
                         params.put("moduleId", "452");
                     }
                     return params;
@@ -101,18 +113,17 @@ public class NotificationViewModel extends AndroidViewModel
             };
             Volley.newRequestQueue(activity).add(sr);
 
-            sr.setRetryPolicy(new DefaultRetryPolicy(
-                    12000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            sr.setRetryPolicy(new DefaultRetryPolicy(12000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             // progressBar.setVisibility(View.GONE);
             Toast.makeText(activity, "Data Not Found", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public interface NotificationsFetchListener {
+    public interface NotificationsFetchListener
+    {
 
         void onRequestComplete(NotificationResponse response);
 
