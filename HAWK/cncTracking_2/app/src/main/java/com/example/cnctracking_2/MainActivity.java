@@ -204,11 +204,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //  Toast.makeText(MainActivity.this,"Search", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_slideshow:
-                //  Toast.makeText(MainActivity.this,"SlideShow Dashboard", Toast.LENGTH_SHORT).show();
-                /* fragment = new HomeFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
-               */// changeFragment(fragment);
+                SharedPreferences sp1 = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp1.edit();
+                editor.remove("isUserExist");
+                editor.apply();
                 finish();
                 break;
             case R.id.nav_home:

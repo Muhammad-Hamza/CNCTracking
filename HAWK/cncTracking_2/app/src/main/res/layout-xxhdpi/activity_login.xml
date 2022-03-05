@@ -38,7 +38,7 @@
             android:layout_gravity="center"
             android:textSize="24dp"
             android:layout_marginBottom="20dp"
-            android:text="Sing In"
+            android:text="Sign In"
             android:textColor="@color/light_blue_A400" />
 
         <EditText

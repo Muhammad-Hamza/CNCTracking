@@ -51,10 +51,10 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:layout_marginBottom="10dp"
-                    android:maxLines="3"
+                    android:maxLines="5"
                     android:ellipsize="end"
                     android:text="Lorem epsum dolar esmet loram Lorem epsum dolar esmet loram Lorem epsum dolar esmet loram"
-                    android:textSize="14sp" />
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <TextView

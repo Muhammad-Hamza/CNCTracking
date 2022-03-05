@@ -255,7 +255,6 @@ public class Fragment1 extends Fragment {
 
                 }
             }
-            alertTotal.setText(totalEventCounts+" Alerts");
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Not Found!", Toast.LENGTH_SHORT).show();
             //progressBar.setVisibility(View.GONE);

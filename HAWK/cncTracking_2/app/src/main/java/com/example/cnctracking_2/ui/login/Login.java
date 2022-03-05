@@ -1,5 +1,7 @@
 package com.example.cnctracking_2.ui.login;
 
+import static com.example.cnctracking_2.ui.search.FavFragment.DEFAULT;
+
 import android.Manifest;
 import android.app.Activity;
 
@@ -85,6 +87,9 @@ public class Login extends AppCompatActivity {
     public static final int REQUEST_LOCATION_STATE = 1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if(isUserExist()){
+            performLogin();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
@@ -260,14 +265,7 @@ public class Login extends AppCompatActivity {
                                                         saveSharedPref(loginName, psw, userRole, jsonResponse.getBoolean("immobilizerAllow"));
                                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                                         //Intent i = new Intent(UserLogin.this, ListActivity.class);
-                                                        Intent i = new Intent(Login.this, MainActivity.class);
-                                                        i.putExtra("password", psw);
-                                                        i.putExtra("userRole", userRole);
-                                                        i.putExtra("loginName", loginName);
-                                                        i.putExtra("userId", userId);
-
-                                                        startActivity(i);
-                                                        finish();
+                                                        performLogin();
                                                     } else {
                                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                                                     }
@@ -327,6 +325,21 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void performLogin(){
+        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
+        int uId = sp.getInt("userId", 0);
+        String uRole = sp.getString("userRole", DEFAULT);
+        String pass = sp.getString("password", DEFAULT);
+        String login = sp.getString("loginName", DEFAULT);
+        Intent i = new Intent(Login.this, MainActivity.class);
+        i.putExtra("password", pass);
+        i.putExtra("userRole", uRole);
+        i.putExtra("loginName", login);
+        i.putExtra("userId", uId);
+
+        startActivity(i);
+        finish();
+    }
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
@@ -341,11 +354,17 @@ public class Login extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("loginName", name);
+        editor.putBoolean("isUserExist", true);
         editor.putString("password", psw);
         editor.putString("userRole", role);
         editor.putInt("userId", userId);
         editor.putBoolean("immobilizerAllow", immobilzeAllow);
         editor.commit();
+    }
+
+    public boolean isUserExist(){
+        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
+        return sp.getBoolean("isUserExist",false);
     }
 
     @Override

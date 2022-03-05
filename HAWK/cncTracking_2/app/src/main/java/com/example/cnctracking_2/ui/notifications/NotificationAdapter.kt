@@ -55,10 +55,9 @@ class NotificationAdapter(
             RecyclerView.ViewHolder(binding.root) {
         fun bindData(user: MaintenanceDueItem?, position: Int) {
             binding.tvDate.text = DateTimeUtil.getCurrentDateTime(DateTimeUtil.FORMAT_DATE_TIME_LOGGING, Locale.getDefault(), user?.datetime!!.toLong())
-            binding.tvTime.text = DateTimeUtil.getCurrentDateTime(DateTimeUtil.FORMAT_TIME_BOOKING, Locale.getDefault(), user.datetime.toLong())
+            binding.tvTime.text = DateTimeUtil.getTime( user.datetime.toLong())
             binding.tvDesc.text = user.description
             binding.tvType.text = user.type
-
 
             when(user.alertTypeId){
                 "1"->{

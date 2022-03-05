@@ -48,7 +48,7 @@
         <LinearLayout
             android:id="@+id/totaldistancebox"
             android:layout_width="wrap_content"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:background="@android:drawable/dialog_holo_light_frame"
             android:clickable="true"
             android:gravity="center"
@@ -85,7 +85,7 @@
         <LinearLayout
             android:id="@+id/trips"
             android:layout_width="wrap_content"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:background="@android:drawable/dialog_holo_light_frame"
             android:clickable="true"
             android:layout_margin="4dp"
@@ -123,7 +123,7 @@
         <LinearLayout
             android:id="@+id/bell_history"
             android:layout_width="wrap_content"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:background="@android:drawable/dialog_holo_light_frame"
             android:clickable="true"
             android:layout_weight="1"
