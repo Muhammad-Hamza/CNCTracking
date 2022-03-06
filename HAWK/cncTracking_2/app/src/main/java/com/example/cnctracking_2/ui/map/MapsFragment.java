@@ -96,7 +96,7 @@ public class MapsFragment extends Fragment
     LatLng prvLatLng, currentlatLng, myLocationLattLong;
     private GoogleMap gMap;
     static Marker carMarker;
-    FusedLocationProviderClient fusedLocationClient;
+    //FusedLocationProviderClient fusedLocationClient;
 
     boolean responseOk = false;
     boolean startAsyncTask = false;
@@ -169,6 +169,14 @@ public class MapsFragment extends Fragment
         service = new LiveLocationService(getActivity());
         Bundle args = getArguments();
         isFindLocation = service.isFindMyVehicleAllowed(args);
+
+        if (isFindLocation)
+        {
+            distanceLayout.setVisibility(View.VISIBLE);
+            getMyLocation();
+            // startFindMyVehicle();
+        }
+
         //Log.d("MapFrag_L", "isFindLocation "+isFindLocation);
 
         // end work for find my vehicle
@@ -179,16 +187,10 @@ public class MapsFragment extends Fragment
         }
         getData(); // from APIs
         getLastTimeSaved(); // for future movements
-        getMyLocation();
 
-        if (isFindLocation)
-        {
-            distanceLayout.setVisibility(View.VISIBLE);
-            // startFindMyVehicle();
-        }
     }
 
-    public void getCurrentLocation()
+    /*public void getCurrentLocation()
     {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
@@ -203,9 +205,9 @@ public class MapsFragment extends Fragment
              }
          }
      });
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -216,7 +218,7 @@ public class MapsFragment extends Fragment
                 getCurrentLocation();
             }
         }
-    }
+    }*/
 
     public void getData()
     {
@@ -336,7 +338,7 @@ public class MapsFragment extends Fragment
             if (!isCancelled2)
             {
                 Log.d("TSTAct_2222", "#mHandlerTaskpostDelayed ");
-                mHandler2.postDelayed(mHandlerTask2, 2300);
+                mHandler2.postDelayed(mHandlerTask2, 4000);
             }
 
         }
@@ -603,6 +605,8 @@ public class MapsFragment extends Fragment
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
+            isFindLocation = false;
+            distanceLayout.setVisibility(View.GONE);
         }
     }
 

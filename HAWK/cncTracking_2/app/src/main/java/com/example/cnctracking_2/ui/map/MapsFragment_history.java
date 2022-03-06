@@ -91,8 +91,8 @@ public class MapsFragment_history extends Fragment {
                 int width = getResources().getDisplayMetrics().widthPixels;
                 int height = getResources().getDisplayMetrics().heightPixels;
                 int padding = (int) (width * 0.10); // offset from edges of the map 10% of screen
-
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+                int paddingHeight = (int) (height * 0.40);
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width,  (height - paddingHeight), padding);
 
                 googleMap.moveCamera(cu);
 
