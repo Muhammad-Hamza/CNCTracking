@@ -14,7 +14,7 @@ class DateTimeUtil {
             val calendar = Calendar.getInstance()
             calendar.time = Date(time)
             val sdf = SimpleDateFormat(FORMAT_DATE_TIME_LOGGING)
-            sdf.timeZone = TimeZone.getTimeZone("UTC")
+            sdf.timeZone = TimeZone.getTimeZone("GMT")
 
             return sdf.format(calendar.time)
         }
@@ -22,9 +22,8 @@ class DateTimeUtil {
         fun getTime(time:Long): String?
         {
             val sdf = SimpleDateFormat(FORMAT_TIME_BOOKING)
-            sdf.timeZone = TimeZone.getTimeZone("UTC")
+            sdf.timeZone = TimeZone.getTimeZone("GMT")
            return sdf.format(Date(time))
         }
     }
-
 }
