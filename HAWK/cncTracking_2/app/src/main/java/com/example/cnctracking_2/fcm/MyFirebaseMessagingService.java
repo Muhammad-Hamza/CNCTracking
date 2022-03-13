@@ -33,7 +33,8 @@ import com.google.firebase.messaging.RemoteMessage;
  * <action android:name="com.google.firebase.MESSAGING_EVENT" />
  * </intent-filter>
  */
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class MyFirebaseMessagingService extends FirebaseMessagingService
+{
 
     private static final String TAG = "MyFirebaseMsgService";
 
@@ -43,49 +44,61 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
     // [START receive_message]
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    @Override public void onMessageReceived(RemoteMessage remoteMessage)
+    {
 
         // TODO(developer): Handle FCM messages here.
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        if (remoteMessage.getData()!= null) {
+        if (remoteMessage.getData() != null)
+        {
             sendNotification(remoteMessage);
         }
     }
 
-    @Override
-    public void onNewToken(String token) {
+    @Override public void onNewToken(String token)
+    {
         Log.d(TAG, "Refreshed token: " + token);
         sendRegistrationToServer(token);
     }
 
-    private void handleNow() {
+    private void handleNow()
+    {
         Log.d(TAG, "Short lived task is done.");
     }
 
-    private void sendRegistrationToServer(String token) {
-//        fcmId
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+    private void sendRegistrationToServer(String token)
+    {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                "UserData",
+                Context.MODE_PRIVATE);
         sharedPreferences.edit().putString("fcmId", token).apply();
     }
 
-    private Uri getSoundURI(String soundType){
+    private Uri getSoundURI(String soundType)
+    {
         Uri sound = null; //Here is FILE_NAME is the name of file that you want to play
 
-        switch (soundType){
-            case "1":{
-                 sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.notification); //Here is FILE_NAME is the name of file that you want to play
+        switch (soundType)
+        {
+            case "1":
+            {
+                sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext()
+                        .getPackageName() + "/" + R.raw.notification); //Here is FILE_NAME is the name of file that you want to play
 
                 break;
             }
-            case "2":{
-                sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.emergency); //Here is FILE_NAME is the name of file that you want to play
+            case "2":
+            {
+                sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext()
+                        .getPackageName() + "/" + R.raw.emergency); //Here is FILE_NAME is the name of file that you want to play
 
                 break;
             }
-            case "3":{
-                sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.ignition); //Here is FILE_NAME is the name of file that you want to play
+            case "3":
+            {
+                sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext()
+                        .getPackageName() + "/" + R.raw.ignition); //Here is FILE_NAME is the name of file that you want to play
 
                 break;
             }
@@ -94,41 +107,49 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         return sound;
     }
-    private void sendNotification(RemoteMessage remoteMessage) {
+
+    private void sendNotification(RemoteMessage remoteMessage)
+    {
         String messageBody = remoteMessage.getData().get("title");
         Intent intent = new Intent(this, Splash.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                                                                0 /* Request code */,
+                                                                intent,
+                                                                PendingIntent.FLAG_ONE_SHOT);
 
         String channelId = getString(R.string.default_notification_channel_id);
 
-        try {
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), getSoundURI(remoteMessage.getData().get("playSound")));
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!getSharedPreferences("settings", MODE_PRIVATE).getBoolean("muteNotifications", false))
+        {
+            try
+            {
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(),
+                                                         getSoundURI(remoteMessage.getData()
+                                                                             .get("playSound")));
+                r.play();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .build();
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.logohawk)
-                        .setContentTitle(remoteMessage.getData().get("body"))
-                        .setContentText(messageBody)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
+                                                                                        channelId).setSmallIcon(
+                R.drawable.logohawk)
+                .setContentTitle(remoteMessage.getData().get("body"))
+                .setContentText(messageBody)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
             NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                                                                  "Channel human readable title",
+                                                                  NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
 

@@ -1,10 +1,13 @@
 package com.example.cnctracking_2;
 
+import static com.example.cnctracking_2.ui.search.FavFragment.DEFAULT;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +29,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.cnctracking_2.config.APIManager;
+import com.example.cnctracking_2.ui.SettingsActivity;
 import com.example.cnctracking_2.ui.dashboard.DashboardWithHeader;
 import com.example.cnctracking_2.ui.notifications.NotifcationActivity;
 import com.example.cnctracking_2.ui.report.ReportActivity;
@@ -33,7 +44,14 @@ import com.example.cnctracking_2.ui.search.Search;
 import com.example.cnctracking_2.util.ConstantUtil;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener
 {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -43,8 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String password, loginName, userRole;
     TextView userSideMenu, toolbarTitle;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    @Override protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -75,11 +92,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Tie DrawerLayout events to the ActionBarToggle
         drawer.addDrawerListener(drawerToggle);
 
-//        toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar1, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.bringToFront();
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
+        //        toggle = new ActionBarDrawerToggle(
+        //                this, drawer, toolbar1, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //        drawer.bringToFront();
+        //        drawer.addDrawerListener(toggle);
+        //        toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -107,14 +124,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_search, R.id.nav_slideshow).setDrawerLayout(drawer).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home,
+                                                               R.id.nav_search,
+                                                               R.id.nav_slideshow).setDrawerLayout(
+                drawer).build();
 
         //  DashboardWithHeader bottomSheet = new DashboardWithHeader();
         //bottomSheet.show(getSupportFragmentManager(),
         // "ModalBottomSheet");
 
         Fragment fragment = new DashboardWithHeader();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
+                .addToBackStack(null)
+                .commit();
 
 /*        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
@@ -149,22 +172,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
-        return new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        return new ActionBarDrawerToggle(this,
+                                         drawer,
+                                         toolbar,
+                                         R.string.navigation_drawer_open,
+                                         R.string.navigation_drawer_close);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    @Override public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-    @Override
-    public boolean onSupportNavigateUp()
+    @Override public boolean onSupportNavigateUp()
     {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController,
+                                       mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
     private void setNavigationViewListener()
@@ -185,11 +211,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void changeFragment(Fragment fragment, Bundle bundle)
     {
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
+                .addToBackStack(null)
+                .commit();
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item)
+    @Override public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
         //  Toast.makeText(MainActivity.this,"a "+item.getItemId(), Toast.LENGTH_SHORT).show();
         Fragment fragment;
@@ -199,20 +227,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_search:
 
                 fragment = new Search();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
+                        .addToBackStack(null)
+                        .commit();
                 // changeFragment(fragment);
                 //  Toast.makeText(MainActivity.this,"Search", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_slideshow:
-                SharedPreferences sp1 = getSharedPreferences("user", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp1.edit();
-                editor.remove("isUserExist");
-                editor.apply();
-                finish();
+
+                logout();
                 break;
             case R.id.nav_home:
                 fragment = new DashboardWithHeader();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
+                        .addToBackStack(null)
+                        .commit();
                 // changeFragment(fragment);
                 // Toast.makeText(MainActivity.this,"Home", Toast.LENGTH_SHORT).show();
                 break;
@@ -225,15 +256,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 break;
 
+                case R.id.nav_settings:
+                Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(settingIntent);
+                break;
+
         }
         item.setChecked(true);
         if (item.getTitle().equals("Slideshow"))
         {
             setTitle("Dashboard");
-        } else
+        }
+        else
         {
             if (!item.getTitle().equals("Notifications"))
+            {
                 setTitle(item.getTitle());
+            }
         }
 
 
@@ -242,15 +281,86 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    @Override
-    public void onBackPressed()
+    private void logout()
+    {
+        String url = APIManager.getLogout();
+
+        StringRequest sr = new StringRequest(Request.Method.POST,
+                                             url,
+                                             new Response.Listener<String>()
+                                             {
+                                                 @Override public void onResponse(String response)
+                                                 {
+                                                     JSONObject jsonResponse;
+                                                     try
+                                                     {
+                                                         jsonResponse = new JSONObject(response);
+                                                         Log.d("Logout",jsonResponse.toString());
+                                                         SharedPreferences sp1 = getSharedPreferences(
+                                                                 "user",
+                                                                 Context.MODE_PRIVATE);
+                                                         SharedPreferences.Editor editor = sp1.edit();
+                                                         editor.remove("isUserExist");
+                                                         editor.apply();
+                                                         finish();
+                                                     } catch (JSONException e)
+                                                     {
+                                                         e.printStackTrace();
+                                                         Toast.makeText(getApplicationContext(),
+                                                                        "Not Found!",
+                                                                        Toast.LENGTH_SHORT).show();
+                                                     }
+
+
+                                                 }
+                                             },
+                                             new Response.ErrorListener()
+                                             {
+                                                 @Override
+                                                 public void onErrorResponse(VolleyError error)
+                                                 {
+                                                     Toast.makeText(MainActivity.this,
+                                                                    "Connection Problem",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                 }
+                                             })
+        {
+            @Override protected Map<String, String> getParams()
+            {
+                SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
+                int userId = sp.getInt("userId", 0);
+                int moduleId = sp.getInt("moduleId", 0);
+                String password = sp.getString("password", DEFAULT);
+                String loginName = sp.getString("loginName", DEFAULT);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", loginName);
+                params.put("psw", password);
+                params.put("userId", "" + userId);
+                params.put("moduleId", "" + moduleId);
+                params.put("fcm", getSharedPreferences("UserData", Context.MODE_PRIVATE).getString("fcmId", ""));
+
+                return params;
+            }
+
+        };
+        Volley.newRequestQueue(this).add(sr);
+
+        sr.setRetryPolicy(new DefaultRetryPolicy(8000,
+                                                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+    }
+
+    @Override public void onBackPressed()
     {
         // Log.d("onBackPressed_1", ""+getSupportFragmentManager().getBackStackEntryCount());
 
         if (getSupportFragmentManager().getBackStackEntryCount() == 1)
         {
             showSettingsAlert();
-        } else
+        }
+        else
         {
             super.onBackPressed();
         }
@@ -266,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             alertDialog.setTitle(R.string.heading_dialog);
             // Setting Dialog Message
             alertDialog.setMessage(R.string.exit_dialog);
-//+" "+ Arrays.asList(eventCounts)
+            //+" "+ Arrays.asList(eventCounts)
             // On pressing Settings button
             alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
             {
@@ -288,7 +398,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             alertDialog.show();
         } catch (Exception e)
         {
-            Toast.makeText(getApplicationContext(), "Dialog box is not opening right now, pls try again later.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                           "Dialog box is not opening right now, pls try again later.",
+                           Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

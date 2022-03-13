@@ -34,6 +34,9 @@ public class APIManager {
 
         return domain + appName + "SaveFavoriteFleetAPI";
     }
+    public static String getLogout() {
+        return domain + appName + "LogoutAPI";
+    }
     public static String getLiveTrackingAPI() {
 
         return domain + appName + "LiveTrackingAPI";
