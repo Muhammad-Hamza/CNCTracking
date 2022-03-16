@@ -263,18 +263,17 @@ public class MainActivity extends AppCompatActivity
 
         }
         item.setChecked(true);
-        if (item.getTitle().equals("Slideshow"))
+        if (item.getTitle().equals("Slideshow") )
         {
             setTitle("Dashboard");
         }
         else
         {
-            if (!item.getTitle().equals("Notifications"))
+            if (item.getTitle().equals("Search"))
             {
                 setTitle(item.getTitle());
             }
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
