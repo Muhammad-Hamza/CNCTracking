@@ -1,7 +1,12 @@
 package com.example.cnctracking_2.ui.login;
 
+import static com.example.cnctracking_2.ui.search.FavFragment.DEFAULT;
+
+import android.Manifest;
 import android.app.Activity;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -9,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -54,7 +61,9 @@ import com.google.android.play.core.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Login extends AppCompatActivity {
@@ -75,9 +84,12 @@ public class Login extends AppCompatActivity {
     private static final int REQ_CODE_VERSION_UPDATE = 530;
     private AppUpdateManager appUpdateManager;
     private InstallStateUpdatedListener installStateUpdatedListener;
-
+    public static final int REQUEST_LOCATION_STATE = 1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if(isUserExist()){
+            performLogin();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
@@ -160,6 +172,9 @@ public class Login extends AppCompatActivity {
             }
         });
 */
+        if (Build.VERSION.SDK_INT >= 23) {
+            checkAndRequestPermissions();
+        }
         rememberCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -250,14 +265,7 @@ public class Login extends AppCompatActivity {
                                                         saveSharedPref(loginName, psw, userRole, jsonResponse.getBoolean("immobilizerAllow"));
                                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                                         //Intent i = new Intent(UserLogin.this, ListActivity.class);
-                                                        Intent i = new Intent(Login.this, MainActivity.class);
-                                                        i.putExtra("password", psw);
-                                                        i.putExtra("userRole", userRole);
-                                                        i.putExtra("loginName", loginName);
-                                                        i.putExtra("userId", userId);
-
-                                                        startActivity(i);
-                                                        finish();
+                                                        performLogin();
                                                     } else {
                                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                                                     }
@@ -281,6 +289,8 @@ public class Login extends AppCompatActivity {
                                         params.put("psw", psw);
                                         params.put("macAddress", "");
                                         params.put("fcmId", sharedPreferences.getString("fcmId", ""));
+
+                                        Log.d("fcm", params.get("fcmId"));
                                         //TODO asher this will crash the API better is to save the token in Sharedpref from the service's onToken method
                                         //and use that SP here
 //                                    params.put("fcmId",FirebaseMessaging.getInstance().getToken().getResult());
@@ -315,6 +325,21 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void performLogin(){
+        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
+        int uId = sp.getInt("userId", 0);
+        String uRole = sp.getString("userRole", DEFAULT);
+        String pass = sp.getString("password", DEFAULT);
+        String login = sp.getString("loginName", DEFAULT);
+        Intent i = new Intent(Login.this, MainActivity.class);
+        i.putExtra("password", pass);
+        i.putExtra("userRole", uRole);
+        i.putExtra("loginName", login);
+        i.putExtra("userId", uId);
+
+        startActivity(i);
+        finish();
+    }
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
@@ -328,14 +353,18 @@ public class Login extends AppCompatActivity {
     public void saveSharedPref(String name, String psw, String role, boolean immobilzeAllow) {
         SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-
-
         editor.putString("loginName", name);
+        editor.putBoolean("isUserExist", true);
         editor.putString("password", psw);
         editor.putString("userRole", role);
         editor.putInt("userId", userId);
         editor.putBoolean("immobilizerAllow", immobilzeAllow);
         editor.commit();
+    }
+
+    public boolean isUserExist(){
+        SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
+        return sp.getBoolean("isUserExist",false);
     }
 
     @Override
@@ -488,4 +517,41 @@ public class Login extends AppCompatActivity {
         if (appUpdateManager != null && installStateUpdatedListener != null)
             appUpdateManager.unregisterListener(installStateUpdatedListener);
     }
+
+    private boolean checkAndRequestPermissions() {
+
+        int permissionMAPS = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        //int readCOntactPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+       /* if (readCOntactPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }*/
+        if (permissionMAPS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_LOCATION_STATE);
+            return false;
+        }
+
+        return true;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case REQUEST_LOCATION_STATE:
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 }
