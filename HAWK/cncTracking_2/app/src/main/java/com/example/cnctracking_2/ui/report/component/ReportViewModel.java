@@ -39,13 +39,13 @@ public class ReportViewModel extends AndroidViewModel
 
     public void getReportsData(Activity activity, int moduleId, ReportFetchListener mListener) {
         //  Log.d("getHistory", "1");
-//        SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
+        SharedPreferences sp = activity.getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
 //        int userId = sp.getInt("userId", 0);
 //        String regNo = sp.getString("regNo", "N/A");
-//        String deviceType = sp.getString("deviceType", "N/A");
+        String deviceType = sp.getString("deviceType", "N/A");
 //        int moduleId = sp.getInt("moduleId", 0);
-//        String password = sp.getString("password", "N/A");
-//        String loginName = sp.getString("loginName", "N/A");
+        String password = sp.getString("password", "N/A");
+        String loginName = sp.getString("loginName", "N/A");
         try {
             String url = APIManager.getReportsData();
             //    Log.d("Frag1_1", url +" - "+ loginName +" - "+ password);
@@ -75,13 +75,9 @@ public class ReportViewModel extends AndroidViewModel
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
-//                    params.put("name", loginName);
-                    params.put("name", "ZEESHAN");
-//                    params.put("psw", password);
-                    params.put("psw", "1234");
-//                    params.put("fleetName", deviceType);
-                    params.put("fleetName", "BUE-745");
-//                    params.put("moduleId", ""+moduleId );
+                    params.put("name", loginName);
+                    params.put("psw", password);
+                    params.put("fleetName", deviceType);
                     if (moduleId != -1) {
                         params.put("moduleId", "" + moduleId);
                     } else {

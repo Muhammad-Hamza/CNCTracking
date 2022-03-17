@@ -65,12 +65,9 @@ public class MaintenanceViewModel extends ViewModel {
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
-//                    params.put("name", loginName);
-                    params.put("name", "ZEESHAN");
-//                    params.put("psw", password);
-                    params.put("psw", "1234");
-//                    params.put("moduleId", ""+moduleId );
-                    params.put("fleetId", "452");
+                    params.put("name", loginName);
+                    params.put("psw", password);
+                    params.put("moduleId", ""+moduleId );
                     return params;
                 }
 
