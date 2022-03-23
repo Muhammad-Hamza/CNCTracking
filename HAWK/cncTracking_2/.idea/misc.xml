@@ -12,16 +12,22 @@
         <entry key="..\:/HAWK/cncTracking_2/app/src/main/res/layout/listitem_report.xml" value="0.2421875" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/drawable/ic_back_arrow_white.xml" value="0.1495" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.19" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/drawable/navigation_view_icon_tint_selector.xml" value="0.186" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/drawable/navigation_view_text_selector.xml" value="0.186" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/drawable/ripple_navigation_selector.xml" value="0.186" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/activity_main.xml" value="0.1929084001688476" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/content.xml" value="0.195382642154767" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/content_main.xml" value="0.1" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/fragment_info.xml" value="0.195382642154767" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/fragment_report.xml" value="0.1929084001688476" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/fragment_search2.xml" value="0.23802083333333332" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/listitem_maintenance_new.xml" value="0.195382642154767" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/listitem_report.xml" value="0.23802083333333332" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/listitem_search.xml" value="0.195382642154767" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/nav_header_main.xml" value="0.195382642154767" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/search_adapter.xml" value="0.23802083333333332" />
         <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/layout/temp_bottom_sheet.xml" value="0.195382642154767" />
+        <entry key="..\:/Hamza bhai/CNCTracking/HAWK/cncTracking_2/app/src/main/res/menu/activity_main_drawer.xml" value="0.195382642154767" />
       </map>
     </option>
   </component>

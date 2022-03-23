@@ -36,8 +36,7 @@
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
@@ -49,6 +48,9 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
+    <!--    app:itemBackground="@drawable/ripple_navigation_selector"-->
+    <!--    app:itemIconTint="@drawable/navigation_view_icon_tint_selector"-->
+    <!--    app:itemTextColor="@drawable/navigation_view_text_selector"-->
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

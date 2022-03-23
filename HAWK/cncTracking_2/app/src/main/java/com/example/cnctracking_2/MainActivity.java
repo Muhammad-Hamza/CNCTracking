@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +26,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -51,8 +54,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
-{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActionBarDrawerToggle drawerToggle;
@@ -60,9 +62,11 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     String password, loginName, userRole;
     TextView userSideMenu, toolbarTitle;
+    private NavigationView navigationView;
+//    private NavController navController;
 
-    @Override protected void onCreate(Bundle savedInstanceState)
-    {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbarMain);
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
 
 
         drawerToggle = setupDrawerToggle();
@@ -105,19 +109,15 @@ public class MainActivity extends AppCompatActivity
         userSideMenu = (TextView) headerView.findViewById(R.id.user_sidemenu);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             password = extras.getString("password");
             loginName = extras.getString("loginName");
             userRole = extras.getString("userRole");
-            try
-            {
+            try {
                 userSideMenu.setText(loginName);
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
             }
         }
-
         //  View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
 
         //toolbar = getSupportActionBar();
@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home,
-                                                               R.id.nav_search,
-                                                               R.id.nav_slideshow).setDrawerLayout(
+                R.id.nav_search,
+                R.id.nav_slideshow).setDrawerLayout(
                 drawer).build();
 
         //  DashboardWithHeader bottomSheet = new DashboardWithHeader();
@@ -168,39 +168,50 @@ public class MainActivity extends AppCompatActivity
         });*/
     }
 
-    private ActionBarDrawerToggle setupDrawerToggle()
-    {
+    private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
         return new ActionBarDrawerToggle(this,
-                                         drawer,
-                                         toolbar,
-                                         R.string.navigation_drawer_open,
-                                         R.string.navigation_drawer_close);
+                drawer,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu)
-    {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-    @Override public boolean onSupportNavigateUp()
-    {
+    @Override
+    public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController,
-                                       mAppBarConfiguration) || super.onSupportNavigateUp();
+                mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
-    private void setNavigationViewListener()
-    {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    private void setNavigationViewListener() {
+//        NavController navController = Navigation.findNavController(this, R.id.fragment_frame);
         navigationView.setNavigationItemSelectedListener(this);
+//        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+//            @Override
+//            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+//                if (controller.getCurrentDestination().getId() == R.id.nav_home) {
+//                    setItemChecked(0);
+//                } else if (controller.getCurrentDestination().getId() == R.id.nav_search) {
+//                    setItemChecked(1);
+//                } else if (controller.getCurrentDestination().getId() == R.id.nav_notifications) {
+//                    setItemChecked(2);
+//                } else if (controller.getCurrentDestination().getId() == R.id.nav_settings) {
+//                    setItemChecked(3);
+//                }
+//            }
+//        });
     }
 
-    private void changeFragment(Fragment fr)
-    {
+    private void changeFragment(Fragment fr) {
         FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_frame);
         fl.removeAllViews();
         FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
@@ -208,8 +219,7 @@ public class MainActivity extends AppCompatActivity
         transaction1.commit();
     }
 
-    public void changeFragment(Fragment fragment, Bundle bundle)
-    {
+    public void changeFragment(Fragment fragment, Bundle bundle) {
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
@@ -217,13 +227,12 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
-    @Override public boolean onNavigationItemSelected(@NonNull MenuItem item)
-    {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //  Toast.makeText(MainActivity.this,"a "+item.getItemId(), Toast.LENGTH_SHORT).show();
         Fragment fragment;
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.nav_search:
 
                 fragment = new Search();
@@ -231,6 +240,9 @@ public class MainActivity extends AppCompatActivity
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
                         .addToBackStack(null)
                         .commit();
+
+                setItemChecked(1);
+
                 // changeFragment(fragment);
                 //  Toast.makeText(MainActivity.this,"Search", Toast.LENGTH_SHORT).show();
                 break;
@@ -244,33 +256,33 @@ public class MainActivity extends AppCompatActivity
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
                         .addToBackStack(null)
                         .commit();
+                setItemChecked(0);
                 // changeFragment(fragment);
                 // Toast.makeText(MainActivity.this,"Home", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_notifications:
+                setItemChecked(2);
                 SharedPreferences sp = getSharedPreferences("SelectedID", Context.MODE_PRIVATE);
                 Bundle bundle = new Bundle();
                 bundle.putInt(ConstantUtil.PREF_EXTRA_BUNDLE_1, sp.getInt("moduleId", 0));
                 Intent intent = new Intent(getApplicationContext(), NotifcationActivity.class);
                 intent.putExtra("bundle", bundle);
                 startActivity(intent);
+
                 break;
 
-                case R.id.nav_settings:
+            case R.id.nav_settings:
+                setItemChecked(3);
                 Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
 
         }
-        item.setChecked(true);
-        if (item.getTitle().equals("Slideshow") )
-        {
+//        item.setChecked(true);
+        if (item.getTitle().equals("Slideshow")) {
             setTitle("Dashboard");
-        }
-        else
-        {
-            if (item.getTitle().equals("Search"))
-            {
+        } else {
+            if (item.getTitle().equals("Search")) {
                 setTitle(item.getTitle());
             }
         }
@@ -280,52 +292,65 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    private void logout()
-    {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_frame);
+        if (fragment != null) {
+//            Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+            if (fragment != null) {
+                if (fragment instanceof Search) {
+                    setItemChecked(1);
+//                    Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+                } else if (fragment instanceof DashboardWithHeader) {
+                    setItemChecked(0);
+//                    Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+//        if (Navigation.findNavController(this).)
+//        setItemChecked();
+    }
+
+    private void logout() {
         String url = APIManager.getLogout();
 
         StringRequest sr = new StringRequest(Request.Method.POST,
-                                             url,
-                                             new Response.Listener<String>()
-                                             {
-                                                 @Override public void onResponse(String response)
-                                                 {
-                                                     JSONObject jsonResponse;
-                                                     try
-                                                     {
-                                                         jsonResponse = new JSONObject(response);
-                                                         Log.d("Logout",jsonResponse.toString());
-                                                         SharedPreferences sp1 = getSharedPreferences(
-                                                                 "user",
-                                                                 Context.MODE_PRIVATE);
-                                                         SharedPreferences.Editor editor = sp1.edit();
-                                                         editor.remove("isUserExist");
-                                                         editor.apply();
-                                                         finish();
-                                                     } catch (JSONException e)
-                                                     {
-                                                         e.printStackTrace();
-                                                         Toast.makeText(getApplicationContext(),
-                                                                        "Not Found!",
-                                                                        Toast.LENGTH_SHORT).show();
-                                                     }
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonResponse;
+                        try {
+                            jsonResponse = new JSONObject(response);
+                            Log.d("Logout", jsonResponse.toString());
+                            SharedPreferences sp1 = getSharedPreferences(
+                                    "user",
+                                    Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp1.edit();
+                            editor.remove("isUserExist");
+                            editor.apply();
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Not Found!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
 
 
-                                                 }
-                                             },
-                                             new Response.ErrorListener()
-                                             {
-                                                 @Override
-                                                 public void onErrorResponse(VolleyError error)
-                                                 {
-                                                     Toast.makeText(MainActivity.this,
-                                                                    "Connection Problem",
-                                                                    Toast.LENGTH_SHORT).show();
-                                                 }
-                                             })
-        {
-            @Override protected Map<String, String> getParams()
-            {
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this,
+                                "Connection Problem",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
                 SharedPreferences sp = getSharedPreferences("user", Context.MODE_PRIVATE);
                 int userId = sp.getInt("userId", 0);
                 int moduleId = sp.getInt("moduleId", 0);
@@ -345,30 +370,38 @@ public class MainActivity extends AppCompatActivity
         Volley.newRequestQueue(this).add(sr);
 
         sr.setRetryPolicy(new DefaultRetryPolicy(8000,
-                                                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                                                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
 
     }
 
-    @Override public void onBackPressed()
-    {
+    @Override
+    public void onBackPressed() {
         // Log.d("onBackPressed_1", ""+getSupportFragmentManager().getBackStackEntryCount());
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1)
-        {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             showSettingsAlert();
-        }
-        else
-        {
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_frame);
+            if (fragment != null) {
+//            Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+                if (fragment != null) {
+                    if (fragment instanceof Search) {
+                        setItemChecked(1);
+//                    Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+                    } else if (fragment instanceof DashboardWithHeader) {
+                        setItemChecked(0);
+//                    Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
             super.onBackPressed();
         }
     }
 
-    public void showSettingsAlert()
-    {
-        try
-        {
+    public void showSettingsAlert() {
+        try {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
             // Setting Dialog Title
@@ -377,29 +410,24 @@ public class MainActivity extends AppCompatActivity
             alertDialog.setMessage(R.string.exit_dialog);
             //+" "+ Arrays.asList(eventCounts)
             // On pressing Settings button
-            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int which)
-                {
+            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
                     finish();
                 }
             });
 
             // on pressing cancel button
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int which)
-                {
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
             });
             // Showing Alert Message
             alertDialog.show();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(),
-                           "Dialog box is not opening right now, pls try again later.",
-                           Toast.LENGTH_SHORT).show();
+                    "Dialog box is not opening right now, pls try again later.",
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
@@ -417,4 +445,11 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }*/
+
+    private void setItemChecked(int itemIndex) {
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
+        navigationView.getMenu().getItem(itemIndex).setChecked(true);
+    }
 }

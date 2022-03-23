@@ -26,5 +26,8 @@
     <color name="text_color">#7E8181</color>
     <color name="text_color_dark">#6A6C6C</color>
     <color name="transparent_blue">#60334C97</color>
+    <color name="ripple_nav_color">#ffdbdb</color>
+    <color name="navigation_text_color">#005481</color>
+    <color name="navigation_text_color_default">#525252</color>
 
 </resources>
